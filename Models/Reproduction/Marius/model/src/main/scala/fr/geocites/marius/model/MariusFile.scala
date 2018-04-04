@@ -31,6 +31,18 @@ object MariusFile {
     }
   }
 
+
+  def distances : DistanceMatrix = {
+    val input = Source.fromInputStream(this.getClass.getClassLoader.getResourceAsStream("fr/geocites/marius/distances.csv"))
+
+    input.getLines.map {
+      l => l.split(",").map{_.toDouble}.toSeq
+    }.toSeq
+
+  }
+
+
+
   /** Read the header of the csv file */
   def header = content.next
 

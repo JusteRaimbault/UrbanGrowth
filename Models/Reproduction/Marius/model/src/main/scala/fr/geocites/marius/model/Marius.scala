@@ -17,8 +17,8 @@
 
 package fr.geocites.marius.model
 
-import java.awt.geom._
-import org.geotools.referencing._
+//import java.awt.geom._
+//import org.geotools.referencing._
 import math._
 import scala.util.{ Failure, Try, Success }
 import MariusFile._
@@ -32,7 +32,7 @@ object Marius {
    * @param p2 second coordinates
    * @return distance between the two locations
    */
-  def distance(p1: Position, p2: Position) = {
+  /*def distance(p1: Position, p2: Position) = {
     lazy val calc = new GeodeticCalculator
 
     val v1 = new Point2D.Double(p1.longitude, p1.latitude)
@@ -40,17 +40,23 @@ object Marius {
     calc.setStartingGeographicPoint(v1)
     calc.setDestinationGeographicPoint(v2)
     calc.getOrthodromicDistance
-  }
+  }*/
 
   /** Cache of the distance matrix between */
-  lazy val distanceMatrix: DistanceMatrix = {
+  /*lazy val distanceMatrix: DistanceMatrix = {
     val positions = MariusFile.positions.toVector
 
     positions.zipWithIndex.map {
       case (c1, i) =>
         positions.zipWithIndex.map { case (c2, _) => distance(c1, c2) }
     }
-  }
+  }*/
+
+
+  /**
+    * load distances from file
+    */
+  lazy val distanceMatrix: DistanceMatrix = MariusFile.distances
 
 }
 
