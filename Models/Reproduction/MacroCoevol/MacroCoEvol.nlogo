@@ -569,7 +569,7 @@ CHOOSER
 setup-type
 setup-type
 "synthetic" "gis"
-0
+1
 
 SLIDER
 1
@@ -657,7 +657,7 @@ CHOOSER
 network-type
 network-type
 "virtual" "physical" "real" "fixed"
-0
+3
 
 SLIDER
 6
@@ -835,7 +835,7 @@ SWITCH
 257
 fixed-dist?
 fixed-dist?
-1
+0
 1
 -1000
 
