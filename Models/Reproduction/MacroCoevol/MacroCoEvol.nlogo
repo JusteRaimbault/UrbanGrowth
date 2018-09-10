@@ -569,7 +569,7 @@ CHOOSER
 setup-type
 setup-type
 "synthetic" "gis"
-1
+0
 
 SLIDER
 1
