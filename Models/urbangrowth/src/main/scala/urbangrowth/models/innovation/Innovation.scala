@@ -2,10 +2,10 @@
 package urbangrowth.models.innovation
 
 import Jama.Matrix
-
 import java.io.File
 
 import urbangrowth.models.Model
+import urbangrowth.utils.io.FileUtils
 
 
 case class Innovation(
@@ -75,7 +75,10 @@ case class Innovation(
 object Innovation {
 
 
-  def apply(populationFile: File,distanceFile: File): Innovation = {
+  def apply(populationFile: File,
+            distanceFile: File): Innovation = {
+    val populationMatrix = FileUtils.parseMatrixFile(populationFile)
+    val distancesMatrix = FileUtils.parseMatrixFile(distanceFile)
 
   }
 
