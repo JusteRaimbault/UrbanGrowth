@@ -27,9 +27,14 @@ for(countrycode in countrycodes){
   cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
   vertices = apply(cities[,c("Long","Lat")],1,function(r){
     d=(V(graph)$x-r[1])^2+(V(graph)$y-r[2])^2
+    show(min(d))
     return(which(d==min(d)))
   })
-  cities=cities[!duplicated(vertices),]
+  
+  # there should not be any duplicate ?
+  #cities=cities[!duplicated(vertices),]
+  # vertices[duplicated(vertices)]
+  # cities[which(vertices==10334),]
   
   distances(graph,v = vertices[!duplicated(vertices)],to=vertices[!duplicated(vertices)])
   
