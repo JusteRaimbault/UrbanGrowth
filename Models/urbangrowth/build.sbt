@@ -7,7 +7,7 @@ version := "0.1-SNAPSHOT"
 
 enablePlugins(SbtOsgi)
 
-OsgiKeys.exportPackage := Seq("lutecia.*")
+OsgiKeys.exportPackage := Seq("urbangrowth.*")
 
 OsgiKeys.importPackage := Seq("*;resolution:=optional")
 

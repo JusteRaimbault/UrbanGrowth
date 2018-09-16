@@ -26,12 +26,12 @@ val model =
     """
       |import urbangrowth.models.coevolution._
       |import urbangrowth.indicators._
-      | val res = Coevolution(input.popFile, input.distFile, input.dateFile,input.growthRate,input.gravityWeight, input.gravityGamma, input.gravityDecay, 0.0, 1.0, 1.0).run()
+      | val res = Coevolution(input.popFile, input.distFile,null, input.dateFile,input.growthRate,input.gravityWeight, input.gravityGamma, input.gravityDecay, 0.0, 1.0, 1.0).run()
       | val logmse = res.logmse
       | val mselog = res.mselog
     """.stripMargin
   ) set (
-    //plugins += pluginsOf(urbangrowth),
+    //plugins += pluginsOf(urbangrowth.models.coevolution.Coevolution),
     inputs += (popFile,distFile,dateFile,growthRate,gravityWeight,gravityGamma,gravityDecay,id),
     outputs += (growthRate,gravityWeight,gravityGamma,gravityDecay,id),
     outputs += (logmse,mselog)
@@ -51,10 +51,10 @@ val fileSetting = ExplorationTask(
 val eval = fileSetting -< model
 
 
-val model = "intgib"
+val modelname = "intgib"
 val datestr = (new SimpleDateFormat("yyyyMMdd")).format(new Date()).toString
 val purpose = "TEST"
-val resdir = model+"_"+purpose+"_"+datestr
+val resdir = purpose+"_"+modelname+"_"+datestr
 
 val island =
   NSGA2Evolution(

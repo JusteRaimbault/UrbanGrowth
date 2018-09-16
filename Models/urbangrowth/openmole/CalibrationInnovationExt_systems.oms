@@ -1,0 +1,92 @@
+import java.util.Date
+import java.text.SimpleDateFormat
+
+logger.level("FINE")
+
+val growthRate = Val[Double]
+val innovationWeight = Val[Double]
+val gravityDecay = Val[Double]
+val innovationDecay = Val[Double]
+
+val id = Val[Int]
+
+// Reporters
+val logmse=Val[Double]
+val mselog=Val[Double]
+
+// config files
+val popFile=Val[File]
+val distFile=Val[File]
+val dateFile=Val[File]
+
+// Model
+val model =
+  ScalaTask(
+    """
+      |import urbangrowth.models.innovation._
+      |import urbangrowth.indicators._
+      | val res = Innovation(input.popFile, input.distFile,null, input.dateFile,input.id,input.growthRate,input.innovationWeight,input.gravityDecay,input.innovationDecay).run
+      | val logmse = res.logmse
+      | val mselog = res.mselog
+    """.stripMargin
+  ) set (
+    //plugins += pluginsOf(urbangrowth.models.coevolution.Coevolution),
+    inputs += (popFile,distFile,dateFile,growthRate,innovationWeight,gravityDecay,innovationDecay,id),
+    outputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id),
+    outputs += (logmse,mselog)
+  )
+val modelCapsule = Capsule(model)
+
+val popFileNames = Seq("FR_pops.csv","CN_pops.csv")
+val distFileNames = Seq("FR_dist.csv","CN_dist.csv")
+val datesFileNames = Seq("FR_dates.csv","CN_dates.csv")
+
+def calib(i: Int) = {
+  val fileSetting = ExplorationTask(
+    (popFile in Seq( workDirectory / "data" / popFileNames(i))) x
+    (distFile in Seq(workDirectory / "data"/ distFileNames(i))) x
+    (dateFile in Seq(workDirectory / "data" / datesFileNames(i)))
+  ) set(
+    inputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id),
+    outputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id)
+  )
+
+  val eval = fileSetting -< model
+
+
+  val modelname = "innovation"
+  val datestr = (new SimpleDateFormat("yyyyMMdd")).format(new Date()).toString
+  val purpose = "TEST"
+  val resdir = purpose+"_"+modelname+"_"+"_"+i+"_"+datestr
+
+  val island =
+  NSGA2Evolution(
+    genome =
+      Seq(
+        growthRate in Range(0.0, 0.05),
+        innovationWeight in Range(0.0,0.05),
+        gravityDecay in Range(0.1,20000.0),
+        innovationDecay in Range(0.1,20000.0)
+      ),
+      mu = 200,
+      objectives = Seq(mselog,logmse),
+      evaluation = eval,
+      termination = 2 hours,
+      parallelism = 200,
+      distribution = Island(100)
+  )
+
+
+  // Define the hook to save the results
+  val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
+
+  val grid = EGIEnvironment("vo.complex-systems.eu")
+  //val local = LocalEnvironment(20)
+
+  island on grid hook savePopulation
+  //island on local hook savePopulation
+}
+
+val firstCapsule = Capsule(EmptyTask())
+val runs = (0 to 1 by 1).map(calib)
+runs.map(firstCapsule -- _).reduce(_ & _)
