@@ -5,6 +5,17 @@ name := "urbangrowth"
 
 version := "0.1-SNAPSHOT"
 
+enablePlugins(SbtOsgi)
+
+OsgiKeys.exportPackage := Seq("lutecia.*")
+
+OsgiKeys.importPackage := Seq("*;resolution:=optional")
+
+OsgiKeys.privatePackage := Seq("!scala.*,*")
+
+OsgiKeys.requireCapability := """osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))""""
+
+
 resolvers += Resolver.sonatypeRepo("snapshots")
 resolvers += Resolver.sonatypeRepo("staging")
 resolvers += Resolver.mavenCentral
