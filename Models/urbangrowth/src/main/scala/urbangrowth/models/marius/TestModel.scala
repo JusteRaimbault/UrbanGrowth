@@ -40,5 +40,32 @@ object TestModel {
     */
 
 
+  //val path = new File("/tmp/mariusmodel_log.csv")
+  //path.delete
+  //val out = Resource.fromFile(path)
+  //out.append("step, arokato, population, wealth \n")
+  /*val populations: ArrayBuffer[Array[Double]] = new ArrayBuffer[Array[Double]]
+  for {
+    (s, i) <- TestModel.testModel
+      .states.zipWithIndex
+    ss <- s
+  } {
+    val cities = ss.cities
+    populations.append(cities.map{_.population}.toArray)
+    /*for {
+      (city, arokato) <- (cities zip MariusFile.arokatos)
+    } {
+      def line = Seq(i, arokato, city.population, city.wealth)
+      out.append(line.mkString("", ",", "\n"))
+    }*/
+    //val totalWealth = cities.map(_.wealth).sum
+    //val totalPop = cities.map(_.population).sum
+    //println(s"State $i, total wealth $totalWealth, total population $totalPop")
+  }
+  val popMatrix = new Matrix(populations.toArray)
+  println(Indicators.logmse(popMatrix.transpose(),TestModel.testModel.modelConfiguration.startingCities
+*/
+
+
 
 }

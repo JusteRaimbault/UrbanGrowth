@@ -18,7 +18,8 @@ dem <- raster(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/DEM/raw/DEM_geotif
 #country = as_Spatial(countries[countries$CNTR_ID=='FR',])
 
 #countrycodes = c('FR','BR','CN','IN','RU','ZA','US')
-countrycodes = c('CN','IN','RU','ZA','US')
+#countrycodes = c('CN','IN','RU','ZA','US')
+countrycodes=c('ZA','US')
 cityfiles = list('FR'='France','BR'='Brazil','CN'='China','IN'='India','RU'='Russia','ZA'='South-Africa','US'='USA')
 
 for(countrycode in countrycodes){
@@ -30,7 +31,7 @@ for(countrycode in countrycodes){
   vertices = apply(cities[,c("Long","Lat")],1,function(r){
     d=(V(graph)$x-r[1])^2+(V(graph)$y-r[2])^2
     #show(min(d))
-    return(which(d==min(d)))
+    return(which(d==min(d))[1])
   })
   cities$vertices=vertices
   

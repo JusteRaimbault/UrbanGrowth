@@ -5,15 +5,18 @@ import java.io.File
 
 import Jama.Matrix
 import urbangrowth.indicators.Indicators
+import urbangrowth.models.innovation.Innovation
 
 import scala.collection.mutable.ArrayBuffer
 
 
 object Test extends App {
 
-  TestModels.testMarius()
+  TestModels.testInnovation()
 
-  TestModels.testIntGib()
+  //TestModels.testMarius()
+
+  //TestModels.testIntGib()
 
 }
 
@@ -21,6 +24,16 @@ object Test extends App {
 
 object TestModels {
 
+  def testInnovation(): Unit = {
+    val pop = new File("data/processed/FR_pops.csv")
+    val dists = new File("data/processed/FR_dist.csv")
+    val dates = new File("data/processed/FR_dates.csv")
+    val rng = new scala.util.Random
+    //val model = Innovation(pop,dists,dates,rng.nextInt,0.02,0.0001,200.0,50.0)
+    val model = Innovation(pop,dists,dates,rng.nextInt,0.02,0.0001,200.0,50.0,1.0,2.0,0.5,5.0,0.1)
+    val res = model.run()
+    println(res)
+  }
 
 
   def testMarius(): Unit = {
@@ -28,32 +41,6 @@ object TestModels {
     import urbangrowth.models.marius.TestModel
 
     println(TestModel.testModel.run())
-
-    //val path = new File("/tmp/mariusmodel_log.csv")
-    //path.delete
-    //val out = Resource.fromFile(path)
-    //out.append("step, arokato, population, wealth \n")
-    /*val populations: ArrayBuffer[Array[Double]] = new ArrayBuffer[Array[Double]]
-    for {
-      (s, i) <- TestModel.testModel
-        .states.zipWithIndex
-      ss <- s
-    } {
-      val cities = ss.cities
-      populations.append(cities.map{_.population}.toArray)
-      /*for {
-        (city, arokato) <- (cities zip MariusFile.arokatos)
-      } {
-        def line = Seq(i, arokato, city.population, city.wealth)
-        out.append(line.mkString("", ",", "\n"))
-      }*/
-      //val totalWealth = cities.map(_.wealth).sum
-      //val totalPop = cities.map(_.population).sum
-      //println(s"State $i, total wealth $totalWealth, total population $totalPop")
-    }
-    val popMatrix = new Matrix(populations.toArray)
-    println(Indicators.logmse(popMatrix.transpose(),TestModel.testModel.modelConfiguration.startingCities
-*/
 
   }
 
