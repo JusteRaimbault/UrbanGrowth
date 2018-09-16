@@ -11,4 +11,4 @@ resolvers += Resolver.mavenCentral
 
 libraryDependencies += "gov.nist.math" % "jama" % "1.0.3"
 
-libraryDependencies += "org.geotools" % "gt-referencing" % "9.3"
+//libraryDependencies += "org.geotools" % "gt-referencing" % "9.3"

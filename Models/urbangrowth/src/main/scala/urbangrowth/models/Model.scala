@@ -1,12 +1,12 @@
 
 package urbangrowth.models
 
-import Jama.Matrix
+import urbangrowth.indicators.Result
 
 trait Model {
 
   //def setup(): Model
 
-  def run(): Matrix
+  def run(): Result
 
 }

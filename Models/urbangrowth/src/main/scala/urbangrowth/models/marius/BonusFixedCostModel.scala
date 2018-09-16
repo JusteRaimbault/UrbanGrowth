@@ -1,26 +1,45 @@
 
 package urbangrowth.models.marius
 
+import java.io.File
+
 
 /** Model with fixed costs and bonuses */
-class BonusFixedCostModel(
-                           val economicMultiplier: Double,
-                           val sizeEffectOnSupply: Double,
-                           val sizeEffectOnDemand: Double,
-                           val distanceDecay: Double,
-                           val wealthToPopulationExponent: Double,
-                           val populationToWealthExponent: Double,
-                           val bonusMultiplier: Double,
-                           val fixedCost: Double) extends Marius with Bonus with FixedCost with DefaultValues
+case class BonusFixedCostModel(
+                           modelDistanceMatrix: DistanceMatrix,
+                           modelConfiguration: MariusConfiguration,
+                           economicMultiplier: Double,
+                           sizeEffectOnSupply: Double,
+                           sizeEffectOnDemand: Double,
+                           distanceDecay: Double,
+                           wealthToPopulationExponent: Double,
+                           populationToWealthExponent: Double,
+                           bonusMultiplier: Double,
+                           fixedCost: Double) extends Marius with Bonus with FixedCost //with DefaultValues
+{
+  override def distanceMatrix: DistanceMatrix = modelDistanceMatrix
+
+  override def configuration: MariusConfiguration = modelConfiguration
+
+  override def maxStep: Int = modelConfiguration.dates.length - 1
+}
+
+object BonusFixedCostModel {
+  def apply(distanceMatrixFile: File,
+            confFile: File,
+            datesFile: File,
+            economicMultiplier: Double,
+            sizeEffectOnSupply: Double,
+            sizeEffectOnDemand: Double,
+            distanceDecay: Double,
+            wealthToPopulationExponent: Double,
+            populationToWealthExponent: Double,
+            bonusMultiplier: Double,
+            fixedCost: Double): BonusFixedCostModel =
+    BonusFixedCostModel(MariusFile.distances(distanceMatrixFile),MariusFile.configFromFile(confFile,datesFile) ,economicMultiplier,sizeEffectOnSupply,
+      sizeEffectOnDemand, distanceDecay, wealthToPopulationExponent, populationToWealthExponent,bonusMultiplier,fixedCost)
+}
 
 
-object TestModel extends BonusFixedCostModel(
-  bonusMultiplier = 197.948890779081,
-  fixedCost = 0.256524806806571,
-  distanceDecay = 0.672263161474518,
-  sizeEffectOnSupply = 1.00175638801509,
-  sizeEffectOnDemand = 1.07926078029368,
-  economicMultiplier = 0.34380934416368,
-  populationToWealthExponent = 1.08660127543912,
-  wealthToPopulationExponent = 0.380435604357353
-)
+
+

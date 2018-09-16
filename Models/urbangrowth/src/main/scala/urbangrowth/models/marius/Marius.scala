@@ -39,13 +39,17 @@ object Marius {
   /**
     * load distances from file
     */
-  lazy val distanceMatrix: DistanceMatrix = MariusFile.distances
+  //lazy val distanceMatrix: DistanceMatrix = MariusFile.distances
 
 }
 
 import Marius._
 
 trait Marius {
+
+  def distanceMatrix: DistanceMatrix
+
+  def configuration: MariusConfiguration
 
   /** Number of simulation steps */
   def maxStep: Int
@@ -70,8 +74,8 @@ trait Marius {
 
   /** Create the initial state of the cities */
   def initialCities: Seq[City] = {
-    val populations = MariusFile.initialPopulations.toSeq
-    val wealths = rescaleWealth(MariusFile.initialPopulations.map(populationToWealth), populations)
+    val populations = configuration.initialPopulations.toSeq
+    val wealths = rescaleWealth(configuration.initialPopulations.map(populationToWealth), populations)
 
     (populations zip wealths).map {
       case (p, w) => City(population = p, wealth = w)
@@ -133,12 +137,12 @@ trait Marius {
     * @return the subsequent state
     */
   def nextState(state: State): State = {
-    def updatedCities =
+    def updatedCities: Seq[City] =
       (state.cities zip updatedWealths(state)).map {
         case (city, updatedWealth) =>
           city.copy(
             wealth = updatedWealth,
-            population = updatedPopulation(city, updatedWealth)
+            population = updatedPopulation(city, updatedWealth,configuration.dates(state.step + 1) - configuration.dates(state.step))
           )
       }
     state.copy(cities = updatedCities, step = state.step + 1)
@@ -171,9 +175,9 @@ trait Marius {
     * @param updatedWealth the updated wealth
     * @return the updated population
     */
-  def updatedPopulation(city: City, updatedWealth: Double): Double = {
+  def updatedPopulation(city: City, updatedWealth: Double,deltaT: Double): Double = {
     assert(updatedWealth >= 0, s"Negative wealth before conversion toPop $updatedWealth")
-    val deltaPopulation = (wealthToPopulation(updatedWealth) - wealthToPopulation(city.wealth)) / economicMultiplier
+    val deltaPopulation = deltaT*(wealthToPopulation(updatedWealth) - wealthToPopulation(city.wealth)) / economicMultiplier
     val updatedPopulation = city.population + deltaPopulation
     assert(updatedPopulation >= 0, s"Negative population $updatedPopulation")
     updatedPopulation

@@ -6,13 +6,29 @@ import java.io.File
 import Jama.Matrix
 
 import urbangrowth.models.Model
+import urbangrowth.indicators._
 import urbangrowth.utils.io.FileUtils
 import urbangrowth.utils.math.MatrixUtils
 
 case class Coevolution(
+                        /**
+                          * Target pop matrix
+                          */
                         populationMatrix: Matrix,
+
+                        /**
+                          * Distance matrix
+                          */
                         distancesMatrix: Matrix,
+
+                        /**
+                          * Network feedback distance matrix
+                          */
                         feedbackDistancesMatrix: Matrix,
+
+                        /**
+                          * Dates
+                          */
                         dates: Array[Double],
                         growthRate: Double,
                         gravityWeight: Double,
@@ -23,7 +39,13 @@ case class Coevolution(
                         feedbackDecay: Double
                       ) extends Model {
 
-  override def run(): Matrix = Coevolution.run(model = this)
+  override def run(): Result = Coevolution.run(model = this)
+
+  override def toString: String = "Coevolution model with parameters"+
+   "\n\tgrowthRate = "+growthRate+"\n\tgravityWeight = "+gravityWeight+
+  "\n\tgravityGamma = "+gravityGamma+"\n\tgravityDecay = "+gravityDecay+
+  "\n\tfeedbackWeight = "+feedbackWeight+"\n\tfeedbackGamma = "+feedbackGamma+
+  "\n\tfeedbackDecay = "+feedbackDecay
 
 }
 
@@ -53,9 +75,16 @@ object Coevolution {
             feedbackGamma: Double,
             feedbackDecay: Double
            ) : Coevolution = {
+
     val populationMatrix = FileUtils.parseMatrixFile(populationsFile)
     val distancesMatrix = FileUtils.parseMatrixFile(distancesFile)
-    val feedbackDistancesMatrix = FileUtils.parseMatrixFile(feedbackDistancesFile)
+
+    val feedbackDistancesMatrix = if(feedbackDistancesFile!=null){
+       FileUtils.parseMatrixFile(feedbackDistancesFile)
+    }else{
+      new Matrix(populationMatrix.getRowDimension,(populationMatrix.getRowDimension*(populationMatrix.getRowDimension-1))/2,0.0)
+    }
+
     val dates = FileUtils.parseSimple(datesFile)
     Coevolution(populationMatrix,distancesMatrix,feedbackDistancesMatrix,dates,
       growthRate,gravityWeight,gravityGamma,gravityDecay,feedbackWeight,feedbackGamma,feedbackDecay
@@ -66,30 +95,18 @@ object Coevolution {
   /**
     *  Run the model
     */
-  def run(model: Coevolution): Matrix = {
-    val growthRate = model.growthRate;val gravityWeight=model.gravityWeight;val gravityGamma = model.gravityGamma;val gravityDecay=model.gravityDecay
-    val feedbackWeight = model.feedbackWeight;val feedbackGamma = model.feedbackGamma;val feedbackDecay = model.feedbackDecay
-    val populationMatrix = model.populationMatrix
-    val distancesMatrix = model.distancesMatrix
-    val feedbackDistancesMatrix = model.feedbackDistancesMatrix
-    val dates = model.dates
+  def run(model: Coevolution): Result = {
+
+    println("Running "+model.toString)
+
+    import model._
 
     val n = populationMatrix.getRowDimension()
     val p = populationMatrix.getColumnDimension()
-    var res = new Matrix(n, p)
+    val res = new Matrix(n, p)
     res.setMatrix(0, n - 1, 0, 0, populationMatrix.getMatrix(0, n - 1, 0, 0))
 
-    //println("mean feedback mat : " + feedbackDistancesMatrix.getArray().flatten.sum / (feedbackDistancesMatrix.getRowDimension() * feedbackDistancesMatrix.getColumnDimension()))
-
-    //println(distancesMatrix.get(2, 3))
-    // mutate potential distances matrices with exp and constants
-    // in place mutation DOES NOT WORK
-    //if (gravityAlpha == 0) {
     val gravityDistanceWeights = new Matrix(distancesMatrix.getArray().map { _.map { d => Math.exp(-d / gravityDecay) } })
-    /*} else {
-      setDiag(distancesMatrix, 1.0)
-      distancesMatrix = new Matrix(distancesMatrix.getArray().map { _.map { d => Math.pow(gravityDecay / d, gravityAlpha) } })
-    }*/
     val feedbackDistanceWeights = new Matrix(feedbackDistancesMatrix.getArray().map { _.map { d => Math.exp(-d / feedbackDecay) } })
 
     //println("mean dist mat : " + distancesMatrix.getArray().flatten.sum / (distancesMatrix.getRowDimension() * distancesMatrix.getColumnDimension()))
@@ -98,7 +115,6 @@ object Coevolution {
     for (t <- 1 to p - 1) {
       // get time between two dates
       val delta_t = dates(t) - dates(t - 1)
-      //println(delta_t)
 
       val prevpop = res.getMatrix(0, n - 1, t - 1, t - 1).copy()
       val totalpop = prevpop.getArray().flatten.sum
@@ -124,7 +140,7 @@ object Coevolution {
 
     }
 
-    return res
+    return(Result(populationMatrix,res))
   }
 
   /**
