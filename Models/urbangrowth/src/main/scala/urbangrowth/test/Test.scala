@@ -25,12 +25,23 @@ object Test extends App {
 object TestModels {
 
   def testInnovation(): Unit = {
-    val pop = new File("data/processed/FR_pops.csv")
-    val dists = new File("data/processed/FR_dist.csv")
-    val dates = new File("data/processed/FR_dates.csv")
+    //val pop = new File("data/processed/FR_pops.csv")
+    val pop = new File("data/processed/CN_pops.csv")
+    //val dists = new File("data/processed/FR_dist.csv")
+    val dists = new File("data/processed/CN_dist.csv")
+    //val dates = new File("data/processed/FR_dates.csv")
+    val dates = new File("data/processed/CN_dates.csv")
     val rng = new scala.util.Random
     //val model = Innovation(pop,dists,dates,rng.nextInt,0.02,0.0001,200.0,50.0)
-    val model = Innovation(pop,dists,dates,rng.nextInt,0.02,0.0001,200.0,50.0,1.0,2.0,0.5,5.0,0.1)
+    //val model = Innovation(pop,dists,dates,rng.nextInt,0.02,0.0001,200.0,50.0,1.0,2.0,0.5,5.0,0.1)
+    val model = Innovation(pop,dists,dates,
+      seed = -1161271605,
+      growthRate = 0.01284419236844148,
+      innovationWeight = 0.042505126533442794,
+      gravityDecay = 5102.56734023802,
+      innovationDecay = 2356.9672351346862
+    )
+
     val res = model.run()
     println(res)
   }

@@ -145,8 +145,11 @@ object Innovation {
 
     import model._
 
+    rng.setSeed(seed.toLong)
+
     val n = populationMatrix.getRowDimension
     val p = populationMatrix.getColumnDimension
+    //println("n = "+n+" ; p = "+p)
 
     /**
       * Select a city hierarchically to population
@@ -157,7 +160,7 @@ object Innovation {
     def selectCityHierarchically(currentPopulations: Array[Double]): Int = {
       val r = rng.nextDouble
       val ptot = currentPopulations.map{math.pow(_,newInnovationHierarchy)}.sum
-      currentPopulations.map{math.pow(_,newInnovationHierarchy)/ptot}.scanLeft(0.0)(_+_).indexWhere(_>r)
+      Seq(Seq(0,currentPopulations.map{math.pow(_,newInnovationHierarchy)/ptot}.scanLeft(0.0)(_+_).indexWhere(_>r)).max,n-1).min
     }
 
     /**
@@ -168,8 +171,9 @@ object Innovation {
       * @return
       */
     def newInnovationMatrix(previousInnovMatrix: Matrix,currentPopulations: Array[Double],time: Int): Matrix = {
-      val innovativeCityIndex = selectCityHierarchically(currentPopulations)
-      val diffrates = new Matrix(n,p)
+      val innovativeCityIndex: Int = selectCityHierarchically(currentPopulations)
+      println("Innovative city : "+innovativeCityIndex)
+      val diffrates: Matrix = new Matrix(n,p)
       diffrates.set(innovativeCityIndex,time,earlyAdoptersRate)
       previousInnovMatrix.set(innovativeCityIndex,time,previousInnovMatrix.get(innovativeCityIndex,time)-earlyAdoptersRate)
       diffrates
