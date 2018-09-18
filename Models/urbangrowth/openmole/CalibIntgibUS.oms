@@ -43,7 +43,7 @@ val modelCapsule = Capsule(model)
 val fileSetting = ExplorationTask(
   (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
   (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
-  (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"FR_dates.csv"))) x
+  (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv"))) x
   (id in Seq(1))
 ) set(
   inputs += (growthRate,gravityWeight,gravityGamma,gravityDecay),

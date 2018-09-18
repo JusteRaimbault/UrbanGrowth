@@ -1,4 +1,4 @@
-val countrycode = "EU"
+val countrycode = "US"
 
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -79,9 +79,12 @@ val island =
 // Define the hook to save the results
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
-//val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(50)
+val grid = EGIEnvironment("vo.complex-systems.eu")
+//val local = LocalEnvironment(50)
 
 
-//island on grid hook savePopulation
-island on local hook savePopulation
+island on grid hook savePopulation
+//island on local hook savePopulation
+
+
+
