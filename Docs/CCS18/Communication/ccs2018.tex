@@ -1,0 +1,266 @@
+\documentclass[english,11pt]{beamer}
+
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\Proba}{\mathbb{P}}
+
+\newcommand{\Covb}[2]{\ensuremath{\Cov\!\left[#1,#2\right]}}
+\newcommand{\Eb}[1]{\ensuremath{\E\!\left[#1\right]}}
+\newcommand{\Pb}[1]{\ensuremath{\Proba\!\left[#1\right]}}
+\newcommand{\Varb}[1]{\ensuremath{\Var\!\left[#1\right]}}
+
+% norm
+\newcommand{\norm}[1]{\| #1 \|}
+
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+
+
+
+
+
+\usepackage{mathptmx,amsmath,amssymb,graphicx,bibentry,bbm,babel,ragged2e}
+
+\makeatletter
+
+\newcommand{\noun}[1]{\textsc{#1}}
+\newcommand{\jitem}[1]{\item \begin{justify} #1 \end{justify} \vfill{}}
+\newcommand{\sframe}[2]{\frame{\frametitle{#1} #2}}
+
+\newenvironment{centercolumns}{\begin{columns}[c]}{\end{columns}}
+%\newenvironment{jitem}{\begin{justify}\begin{itemize}}{\end{itemize}\end{justify}}
+
+\usetheme{Warsaw}
+\setbeamertemplate{footline}[text line]{}
+\setbeamercolor{structure}{fg=purple!50!blue, bg=purple!50!blue}
+
+\setbeamersize{text margin left=15pt,text margin right=15pt}
+
+\setbeamercovered{transparent}
+
+
+\@ifundefined{showcaptionsetup}{}{%
+ \PassOptionsToPackage{caption=false}{subfig}}
+\usepackage{subfig}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{multirow}
+
+
+\makeatother
+
+\begin{document}
+
+
+
+
+
+\title{A systematic comparison of interaction models for systems of cities}
+
+\author{J.~Raimbault$^{1,2,\ast}$\\
+\texttt{juste.raimbault@polytechnique.edu}
+}
+
+
+\institute{$^{1}$Complex Systems Institute, Paris, UPS CNRS 3611 ISC-PIF\\
+$^{2}$UMR CNRS 8504 G{\'e}ographie-cit{\'e}s
+}
+
+
+\date{CCS 2018\\\smallskip
+Thessaloniki\\\smallskip
+September 25th 2018
+}
+
+\frame{\maketitle}
+
+
+
+% Understanding patterns of growth for cities is a crucial issue for its practical and policy implications e.g. regarding sustainability, but also from a theoretical point of view regarding the validation of theories for urban systems. A particular entry is taken by the Evolutive Urban Theory [1] which postulates interactions between cities as main drivers of their growth. Within this framework, numerous concurrent models have been introduced for the evolution of systems of cities, and applied on diverse case studies, but there is to the best of our knowledge no systematic comparison of performances across models and application cases. This contribution makes a first step towards such a systematic benchmark. We consider simple models simulating population of cities only, but including heterogenous underlying processes and assumptions. More precisely, we compare (i) the Favaro-Pumain model for the diffusion of innovation [2]; (ii) the Marius multi-model based on economic exchanges [3]; and (iii) a model including flows within abstract physical networks parametrized on elevation data [4]. These models are calibrated on a large scale harmonized dataset [5] including the European, former Soviet Union, Chinese, Brazilian, South-African, Indian and USA systems of cities on a time period covering 1960-2010. Calibrations are done for different versions of each model including more or less parameters, using distributed genetic algorithms on a computation grid through the intermediary of the OpenMOLE model exploration software [6]. Calibration results show that: (i) at a fixed number of parameters, no model performs particularly better on all urban systems, suggesting the complementary of the innovation, economic, and network dimensions taken into account by the different models; and (ii) when adjusting for the number of parameters with an empirical information criterion [4], we find that additional components generally improve performances for all models, what reveals a high effective dimensionality of urban systems. This work confirms the need for multiple complementary approaches to model urban systems and sketches a framework allowing systematic benchmarks of concurrent models for complex urban systems.
+
+
+
+
+\sframe{Urban systems}{
+
+\centering
+
+	
+	%\includegraphics[width=\textwidth]{figures/}
+	
+	\footnotesize
+\textit{Source: }
+
+
+}
+
+
+\sframe{Modeling urban growth}{
+
+\centering
+
+}
+
+
+
+
+\sframe{Urban systems interaction models}{
+
+\centering
+
+Comparison of three approaches based on the evolutionary urban theory \cite{pumain1997pour} capturing different dimensions of urban systems:
+\begin{itemize}
+	\item The Favaro-Pumain model for the diffusion of innovation \cite{favaro2011gibrat}
+	\item 
+\end{itemize}
+
+
+
+}
+
+
+
+
+\sframe{Model calibration}{
+
+Computationally intensive: high-dimensional parameter space and possible spatial setup.
+
+\medskip
+
+$\rightarrow$ use of grid computing, made smooth with the OpenMOLE software \url{https://next.openmole.org/}
+
+\centering
+
+\smallskip
+
+\includegraphics[height=0.35\textheight]{figures/openmole.png}
+
+\smallskip
+
+\raggedright\justify
+
+\footnotesize \textit{OpenMOLE: (i) embed any model as a black box; (ii) transparent access to main High Performance Computing environments; (iii) model exploration and calibration methods.}
+
+}
+
+
+
+\sframe{Discussion}{
+
+\justify
+
+\vspace{-1cm}
+
+\textbf{Implications}
+
+$\rightarrow$ 
+
+\smallskip
+
+$\rightarrow$ 
+
+\bigskip
+
+
+
+\textbf{Developments}
+
+
+$\rightarrow$ 
+
+\smallskip
+
+$\rightarrow$ 
+
+\smallskip
+
+$\rightarrow$ More elaborated method to compare models in a ``fair'' way (correcting for additional parameters, open question for models of simulation).
+
+
+}
+
+
+
+\sframe{Conclusion}{
+
+
+\justify
+
+\vspace{-1cm}
+
+$\rightarrow$ % model coupling / benchmarking
+
+\medskip
+
+$\rightarrow$ Multiple perspectives on urban systems ? \textbf{Need for more interdisciplinarity.}
+
+\bigskip
+
+\footnotesize
+
+\textbf{Related works}
+
+Raimbault, J. (2018). Indirect evidence of network effects in a system of cities. Environment and Planning B: Urban Analytics and City Science, 2399808318774335.
+
+\url{https://halshs.archives-ouvertes.fr/halshs-01788559}
+
+\medskip	
+
+Raimbault, J. (2018). Modeling the co-evolution of cities and networks. \textit{Forthcoming in Handbook of cities and networks, Rozenblat C., Niel Z., eds.} arXiv:1804.09430.
+
+\medskip
+
+
+Raimbault, J. (2018). Caractérisation et modélisation de la co-évolution des réseaux de transport et des territoires (Doctoral dissertation, Université Paris 7 Denis Diderot). \url{https://halshs.archives-ouvertes.fr/tel-01857741}
+
+
+
+
+\medskip
+
+\textbf{Open repository} (code, data and results) at\\\texttt{https://github.com/JusteRaimbault/UrbanGrowth}\\\medskip
+\textbf{Acknowledgments} : I thank the \textit{European Grid Infrastructure} and its \textit{National Grid Initiatives} (\textit{France-Grilles} in particular) to give the technical support and the infrastructure.
+
+
+}
+
+
+
+
+
+
+\sframe{Reserve slides}{
+
+\centering
+
+\Large
+
+\textbf{Reserve Slides}
+
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apalike}
+\bibliography{/Users/juste/ComplexSystems/CityNetwork/Biblio/Bibtex/CityNetwork,biblio}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
