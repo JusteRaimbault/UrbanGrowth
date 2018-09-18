@@ -47,10 +47,10 @@ val model =
   )
 val modelCapsule = Capsule(model)
 
-val popFileNames = Seq("FR_pops.csv","CN_pops.csv")
-val distFileNames = Seq("FR_dist.csv","CN_dist.csv")
-val datesFileNames = Seq("FR_dates.csv","CN_dates.csv")
-val systems = Seq("FR","CN")
+val popFileNames = Seq("BR_pops.csv","CN_pops.csv","FR_pops.csv","RU_pops.csv","US_pops.csv","ZA_pops.csv")//"IN_pops.csv"
+val distFileNames = Seq("BR_dist.csv","CN_dist.csv","FR_dist.csv","RU_dist.csv","US_dist.csv","ZA_dist.csv")//"IN_dist.csv"
+val datesFileNames = Seq("BR_dates.csv","CN_dates.csv","FR_dates.csv","RU_dates.csv","US_dates.csv","ZA_dates.csv")//"IN_dates.csv"
+val systems = Seq("BR","CN","FR","RU","US","ZA")//,"IN"
 
 def calib(i: Int) = {
   val fileSetting = ExplorationTask(
@@ -65,7 +65,7 @@ def calib(i: Int) = {
   val eval = fileSetting -< model
 
 
-  val modelname = "innovation"
+  val modelname = "innovationExt"
   val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
   val purpose = "TEST"
   val resdir = purpose+"_"+modelname+"_"+systems(i)+"_"+datestr
@@ -106,4 +106,4 @@ def calib(i: Int) = {
 
 val firstCapsule = Capsule(EmptyTask())
 val runs = (0 to 1 by 1).map(calib)
-runs.map(firstCapsule -- _).reduce(_ & _)
+runs.map(firstCapsule -- _).reduce(_ -- _)

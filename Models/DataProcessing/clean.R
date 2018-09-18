@@ -26,6 +26,7 @@ write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.na
 countrycode = 'IN'
 cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
 cities = cities[,c("ID","Name","Long","Lat","X1961","X1981","X1991","X2001","X2011")]
+cities=cities[apply(cities[,c("X1961","X1981","X1991","X2001","X2011")],1,function(r){length(which(is.na(r)))==0}),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 

@@ -37,10 +37,10 @@ val model =
   )
 val modelCapsule = Capsule(model)
 
-val popFileNames = Seq("BR_pops.csv","CN_pops.csv","FR_pops.csv","IN_pops.csv","RU_pops.csv","US_pops.csv","ZA_pops.csv")
-val distFileNames = Seq("BR_dist.csv","CN_dist.csv","FR_dist.csv","IN_dist.csv","RU_dist.csv","US_dist.csv","ZA_dist.csv")
-val datesFileNames = Seq("BR_dates.csv","CN_dates.csv","FR_dates.csv","IN_dates.csv","RU_dates.csv","US_dates.csv","ZA_dates.csv")
-val systems = Seq("BR","CN","FR","IN","RU","US","ZA")
+val popFileNames = Seq("BR_pops.csv","CN_pops.csv","FR_pops.csv","RU_pops.csv","US_pops.csv","ZA_pops.csv")//"IN_pops.csv"
+val distFileNames = Seq("BR_dist.csv","CN_dist.csv","FR_dist.csv","RU_dist.csv","US_dist.csv","ZA_dist.csv")//"IN_dist.csv"
+val datesFileNames = Seq("BR_dates.csv","CN_dates.csv","FR_dates.csv","RU_dates.csv","US_dates.csv","ZA_dates.csv")//"IN_dates.csv"
+val systems = Seq("BR","CN","FR","RU","US","ZA")//,"IN"
 
 def calib(i: Int) = {
   val fileSetting = ExplorationTask(
@@ -57,7 +57,7 @@ def calib(i: Int) = {
 
   val modelname = "innovation"
   val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
-  val purpose = "TEST"
+  val purpose = "CALIB"
   val resdir = purpose+"_"+modelname+"_"+systems(i)+"_"+datestr
 
   val island =
@@ -74,7 +74,7 @@ def calib(i: Int) = {
       objectives = Seq(mselog,logmse),
       evaluation = eval,
       termination = 2 hours,
-      parallelism = 25,
+      parallelism = 50,
       distribution = Island(10)
   )
 
@@ -83,12 +83,12 @@ def calib(i: Int) = {
   val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
   //val grid = EGIEnvironment("vo.complex-systems.eu",openMOLEMemory = 2000 megabytes)
-  val local = LocalEnvironment(25)
+  val local = LocalEnvironment(50)
 
   //island on grid hook savePopulation
   island on local hook savePopulation
 }
 
 val firstCapsule = Capsule(EmptyTask())
-val runs = (0 to 1 by 1).map(calib)
-runs.map(firstCapsule -- _).reduce(_ & _)
+val runs = (0 to 5 by 1).map(calib)
+runs.map(firstCapsule -- _).reduce(_ -- _)

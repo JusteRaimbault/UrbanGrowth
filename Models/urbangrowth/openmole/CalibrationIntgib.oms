@@ -65,10 +65,11 @@ val island =
         gravityGamma in Range(0.1,10.0),
         gravityDecay in Range(0.1,20000.0)
       ),
+    mu=200,
     objectives = Seq(mselog,logmse),
     evaluation = eval,
-    termination = 15 minutes,
-    parallelism = 20,
+    termination = 2 hours,
+    parallelism = 50,
     distribution = Island(20)
 )
 
@@ -77,7 +78,7 @@ val island =
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(20)
+val local = LocalEnvironment(50)
 
 
 //island on grid hook savePopulation
