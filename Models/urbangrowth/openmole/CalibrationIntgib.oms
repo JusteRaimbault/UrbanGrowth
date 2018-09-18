@@ -1,3 +1,5 @@
+val countrycode = "EU"
+
 import java.util.Date
 import java.text.SimpleDateFormat
 
@@ -31,7 +33,7 @@ val model =
       | val mselog = res.mselog
     """.stripMargin
   ) set (
-    //plugins += pluginsOf(urbangrowth.models.coevolution.Coevolution),
+    plugins += pluginsOf(urbangrowth.models.coevolution.Coevolution),
     inputs += (popFile,distFile,dateFile,growthRate,gravityWeight,gravityGamma,gravityDecay,id),
     outputs += (growthRate,gravityWeight,gravityGamma,gravityDecay,id),
     outputs += (logmse,mselog)
@@ -39,9 +41,9 @@ val model =
 val modelCapsule = Capsule(model)
 
 val fileSetting = ExplorationTask(
-  (popFile in Seq( workDirectory / "data" / "FR_pops.csv")) x
-  (distFile in Seq(workDirectory / "data"/ "FR_dist.csv")) x
-  (dateFile in Seq(workDirectory / "data" / "FR_dates.csv")) x
+  (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
+  (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
+  (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"FR_dates.csv"))) x
   (id in Seq(1))
 ) set(
   inputs += (growthRate,gravityWeight,gravityGamma,gravityDecay),
@@ -52,9 +54,9 @@ val eval = fileSetting -< model
 
 
 val modelname = "intgib"
-val datestr = (new SimpleDateFormat("yyyyMMdd")).format(new Date()).toString
+val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
 val purpose = "TEST"
-val resdir = purpose+"_"+modelname+"_"+datestr
+val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
 val island =
   NSGA2Evolution(
@@ -68,18 +70,18 @@ val island =
     mu=200,
     objectives = Seq(mselog,logmse),
     evaluation = eval,
-    termination = 2 hours,
-    parallelism = 50,
-    distribution = Island(20)
+    termination = 1 hours,
+    parallelism = 500,
+    distribution = Island(10)
 )
 
 
 // Define the hook to save the results
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
-//val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(50)
+val grid = EGIEnvironment("vo.complex-systems.eu")
+//val local = LocalEnvironment(50)
 
 
-//island on grid hook savePopulation
-island on local hook savePopulation
+island on grid hook savePopulation
+//island on local hook savePopulation
