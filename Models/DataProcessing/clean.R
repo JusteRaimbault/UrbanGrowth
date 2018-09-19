@@ -22,7 +22,9 @@ colnames(cities)<-c("ID","Name","Long","Lat","X1961","X1971","X1981","X1991","X2
 #cities[apply(cities,1,function(r){length(which(is.na(r)))>0}),]
 # remove nas (20 rows)
 cities=cities[apply(cities,1,function(r){length(which(is.na(r)))==0}),]
-cities = cities[cities$X2011>=median(cities$X2011),]
+#cities = cities[cities$X2011>=median(cities$X2011),]
+# for memory purposes, diminish significantly the number of cities
+cities = cities[cities$X2011>=quantile(cities$X2011,0.75),]
 write.table(cities,file=paste0(targetDir,'Europe.csv'),row.names = F,sep=",")
 
 
