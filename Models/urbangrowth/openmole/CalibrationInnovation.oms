@@ -40,11 +40,10 @@ val model =
 val modelCapsule = Capsule(model)
 
 
-def calib(i: Int) = {
-  val fileSetting = ExplorationTask(
+ val fileSetting = ExplorationTask(
     (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
     (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
-    (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"FR_dates.csv")))
+    (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv")))
   ) set(
     inputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id),
     outputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id)
@@ -85,3 +84,6 @@ val local = LocalEnvironment(50)
 
 //island on grid hook savePopulation
 island on local hook savePopulation
+
+
+
