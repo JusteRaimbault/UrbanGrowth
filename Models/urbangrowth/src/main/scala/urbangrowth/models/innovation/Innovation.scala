@@ -89,7 +89,10 @@ case class Innovation(
 
   override def run(): Result = Innovation.run(this)
 
-  override def toString: String = "Innovation model"
+  override def toString: String = "Innovation model with parameters"+
+     "\n\tgrowthRate = "+growthRate+"\n\tinnovationWeight = "+innovationWeight+"\n\tgravityDecay = "+gravityDecay+
+     "\n\tinnovationDecay = "+innovationDecay+"\n\tinnovationUtility = "+innovationUtility+"\n\tinnovationUtilityGrowth = "+innovationUtilityGrowth+
+     "\n\tearlyAdoptersRate = "+earlyAdoptersRate+"\n\tnewInnovationHierarchy = "+newInnovationHierarchy+"\n\tnewInnovationPopulationProportion = "+newInnovationPopulationProportion
 
 }
 

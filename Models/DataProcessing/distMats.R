@@ -13,7 +13,8 @@ countrycodes = c('EU','BR','CN','IN','RU','ZA','US')
 # 'FR'='France'
 cityfiles = list('EU'='Europe','BR'='Brazil','CN'='China','IN'='India','RU'='Russia','ZA'='South-Africa','US'='USA')
 
-withGraph = F
+#withGraph = F
+withGraph = T
 
 if(withGraph){
   dem <- raster(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/DEM/raw/DEM_geotiff/alwdgg.tif'))

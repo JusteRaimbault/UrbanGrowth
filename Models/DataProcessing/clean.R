@@ -24,7 +24,7 @@ colnames(cities)<-c("ID","Name","Long","Lat","X1961","X1971","X1981","X1991","X2
 cities=cities[apply(cities,1,function(r){length(which(is.na(r)))==0}),]
 #cities = cities[cities$X2011>=median(cities$X2011),]
 # for memory purposes, diminish significantly the number of cities
-cities = cities[cities$X2011>=quantile(cities$X2011,0.75),]
+cities = cities[cities$X2011>=quantile(cities$X2011,0.85),]
 write.table(cities,file=paste0(targetDir,'Europe.csv'),row.names = F,sep=",")
 
 
@@ -39,7 +39,8 @@ write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.na
 countrycode = 'BR'
 cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
 cities = cities[,c("ID","Name","Long","Lat","X1960","X1970","X1980","X1991","X2000","X2010")]
-cities = cities[cities$X2010>=median(cities$X2010),]
+#cities = cities[cities$X2010>=median(cities$X2010),]
+cities = cities[cities$X2010>=quantile(cities$X2010,0.7),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 
@@ -48,7 +49,8 @@ countrycode = 'IN'
 cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
 cities = cities[,c("ID","Name","Long","Lat","X1961","X1981","X1991","X2001","X2011")]
 cities=cities[apply(cities[,c("X1961","X1981","X1991","X2001","X2011")],1,function(r){length(which(is.na(r)))==0}),]
-cities = cities[cities$X2011>=median(cities$X2011),]
+#cities = cities[cities$X2011>=median(cities$X2011),]
+cities = cities[cities$X2011>=quantile(cities$X2011,0.75),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 
@@ -62,7 +64,8 @@ cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/
 cities = cities[,c("ID","Name","Long","Lat","X1959","X1970","X1979","X1989","X2002","X2010")]
 for(j in 5:ncol(cities)){cities[,j]=as.numeric(as.character(cities[,j]))}
 cities[cities==0.0]=0.1
-cities = cities[cities$X2010>=median(cities$X2010),]
+#cities = cities[cities$X2010>=median(cities$X2010),]
+cities = cities[cities$X2010>=quantile(cities$X2010,0.7),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 # South Africa

@@ -5,8 +5,9 @@ library(rgdal)
 
 extractRaster <- function(dem,countries,countrycode){
   country = countries[countries$CNTR_ID==countrycode,]
-  country = SpatialPolygons(list(Polygons(list(country@polygons[[1]]@Polygons[[1]]),ID="id")),proj4string = country@proj4string)
+  if(countrycode!='EU'){country = SpatialPolygons(list(Polygons(list(country@polygons[[1]]@Polygons[[1]]),ID="id")),proj4string = country@proj4string)}
   ext <- extent(country)
+  if(countrycode=='EU'){ext = extent(matrix(c(-17,28,33,66 ),nrow=2))}
   
   rows=rowFromY(dem,ext@ymax):rowFromY(dem,ext@ymin)
   cols=colFromX(dem,ext@xmin):colFromX(dem,ext@xmax)
