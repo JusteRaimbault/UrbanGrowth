@@ -4,7 +4,9 @@ import sys,os,shutil
 
 SOURCE=sys.argv[1]
 TARGET=sys.argv[2]
-MULTIPLE=sys.argv[3]
+MULTIPLE=False
+if len(sys.argv) > 3:
+    MULTIPLE=True
 
 def getLatestGen(dir):
     files = os.listdir(dir)
@@ -20,8 +22,8 @@ for dir in sourcedirs :
         os.mkdir(TARGET+'/'+dir)
     gen = getLatestGen(SOURCE+'/'+dir)
     gens = [gen]
-    if len(MULTIPLE) > 0 :
-        gens = range((gen - 1000),gen,step = 100)
+    if MULTIPLE :
+        gens = range((int(gen) - 1000),int(gen),100)
     for gen in gens :
-        if not os.path.isfile(TARGET+'/'+dir+'/population'+gen+'.csv'):
-            shutil.copy(SOURCE+'/'+dir+'/population'+gen+'.csv',TARGET+'/'+dir+'/population'+gen+'.csv')
+        if not os.path.isfile(TARGET+'/'+dir+'/population'+str(gen)+'.csv') and os.path.isfile(SOURCE+'/'+dir+'/population'+str(gen)+'.csv'):
+            shutil.copy(SOURCE+'/'+dir+'/population'+str(gen)+'.csv',TARGET+'/'+dir+'/population'+str(gen)+'.csv')
