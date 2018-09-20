@@ -6,6 +6,8 @@ library(ggplot2)
 
 source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 
+source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
+
 # parameters : where calibration results are stored and where to store result figures
 sourcedir = 'calibration/'
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Calibration/')
@@ -44,6 +46,17 @@ systembounds=list(
   'EU'=c('logmse'=40,'mselog'=1000),
   'CN'=c('logmse'=40,'mselog'=2000)
 )
+
+### CV check
+
+for(popdir in paste0(sourcedir,popdirs)){
+  fdiff = frontDiffs(popdir)
+  plot(fdiff$gens,fdiff$dists)
+}
+
+
+
+### Analysis
 
 populations = list()
 

@@ -1,1 +1,1 @@
-cat $1| awk -F"," '{print "echo '\''val countrycode = \""$2"\"'\'' > Calib"$1$2".oms ; tail -n +2 Calibration"$1".oms >> Calib"$1$2".oms ; #openmole --script Calib"$1$2".oms --password-file omlpsswd --mem 512G"}'|sh
+cat $1| awk -F"," '{print "echo '\''val countrycode = \""$2"\"'\'' > Calib"$1$2".oms ; tail -n +2 Calibration"$1".oms >> Calib"$1$2".oms ; openmole --script Calib"$1$2".oms --password-file omlpsswd --mem 512G"}'|sh
