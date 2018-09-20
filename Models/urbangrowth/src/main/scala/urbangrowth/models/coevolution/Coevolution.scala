@@ -76,10 +76,14 @@ object Coevolution {
             feedbackDecay: Double
            ) : Coevolution = {
 
-    val populationMatrix = FileUtils.parseMatrixFile(populationsFile)
-    val distancesMatrix = FileUtils.parseMatrixFile(distancesFile)
+    val populationMatrix: Matrix = FileUtils.parseMatrixFile(populationsFile)
+    val distancesMatrix: Matrix = if(distancesFile!=null){
+      FileUtils.parseMatrixFile(distancesFile)
+    }else{
+      new Matrix(populationMatrix.getRowDimension,populationMatrix.getRowDimension,0.0)
+    }
 
-    val feedbackDistancesMatrix = if(feedbackDistancesFile!=null){
+    val feedbackDistancesMatrix: Matrix = if(feedbackDistancesFile!=null){
        FileUtils.parseMatrixFile(feedbackDistancesFile)
     }else{
       new Matrix(populationMatrix.getRowDimension,(populationMatrix.getRowDimension*(populationMatrix.getRowDimension-1))/2,0.0)
