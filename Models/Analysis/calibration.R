@@ -14,38 +14,61 @@ latestgen <- function(dir){max(as.integer(sapply(strsplit(sapply(strsplit(list.f
 
 # population dirs listed by hand
 
-models = c('intgib')
-systems = c('ZA','CN','US')
+models = c('intgib','innovation')
+systems = c('ZA','CN','US','BR','EU','IN','RU')
 
 popdirs = list(
   'intgib_ZA'='CALIB_intgib_ZA_20180919_052829',
   'intgib_CN'='CALIB_intgib_CN_20180918_231457',
-  'intgib_US'='CALIB_intgib_US_20180918_175315'
+  'intgib_US'='CALIB_intgib_US_20180918_175315',
+  'intgib_BR'='CALIB_intgib_BR_20180919_143214',
+  'intgib_EU'='CALIB_intgib_EU_20180919_163321',
+  'intgib_IN'='CALIB_intgib_IN_20180919_183427',
+  'intgib_RU'='CALIB_intgib_RU_20180919_203608',
+  'innovation_ZA'='CALIB_innovation_ZA_20180920_064141',
+  'innovation_CN'='CALIB_innovation_CN_20180920_003846',
+  'innovation_US'='CALIB_innovation_US_20180920_084300',
+  'innovation_BR'='CALIB_innovation_BR_20180919_223752',
+  #'innovation_EU'=''
+  'innovation_IN'='CALIB_innovation_IN_20180920_023945',
+  'innovation_RU'='CALIB_innovation_RU_20180920_044043'
 )
 
 populations = list()
 
+popcolnames=c()
 for(popname in names(popdirs)){
   populations[[popname]] = read.csv(paste0(sourcedir,popdirs[[popname]],'/population',latestgen(paste0(sourcedir,popdirs[[popname]])),'.csv'))
+  popcolnames=append(popcolnames,colnames(populations[[popname]]))
 }
-
+popcolnames=unique(c(popcolnames,'model','system'))
 
 # aggregate with model and system
-pop = data.frame()
+pop = data.frame(matrix(rep(0,length(popcolnames)),ncol=length(popcolnames)))
+colnames(pop)=popcolnames
 for(model in models){
   for(system in systems){
     currentdata = populations[[paste0(model,'_',system)]]
     if(!is.null(currentdata)){
-      pop=rbind(pop,cbind(currentdata,model=rep(model,nrow(currentdata)),system=rep(system,nrow(currentdata))))
+      show(paste0(model,'_',system))
+      show(dim(currentdata))
+      for(col in popcolnames[!popcolnames%in%colnames(currentdata)]){currentdata[,col]=rep(NA,nrow(currentdata))}
+      currentdata[,"system"]=rep(system,nrow(currentdata));currentdata[,"model"]=rep(model,nrow(currentdata))
+      #pop=rbind(pop,cbind(currentdata,model=rep(model,nrow(currentdata)),system=rep(system,nrow(currentdata))))
+      pop=rbind(pop,currentdata)
     }
   }
 }
-pop=as.tbl(pop)
+pop=as.tbl(pop[2:nrow(pop),])
 
 
 #######
 
 # compare all models and systems
+
+g = ggplot(pop,aes(x = mselog,y=logmse,color=model))
+g+geom_point()+facet_wrap(~system,scales = 'free')
+
 g = ggplot(pop,aes(x = mselog,y=logmse,color=as.character(gravityWeight>0)))
 g+geom_point()+facet_wrap(~system,scales = 'free')
 

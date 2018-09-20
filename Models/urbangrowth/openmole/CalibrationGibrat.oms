@@ -28,7 +28,7 @@ val model =
       | val mselog = res.mselog
     """.stripMargin
   ) set (
-    //plugins += pluginsOf(urbangrowth.models.coevolution.Coevolution),
+    plugins += pluginsOf(urbangrowth.models.coevolution.Coevolution),
     inputs += (popFile,dateFile,growthRate,id),
     outputs += (growthRate,id),
     outputs += (logmse,mselog)
@@ -62,9 +62,9 @@ val island =
       mu = 200,
       objectives = Seq(mselog,logmse),
       evaluation = eval,
-      termination = 30 minutes,
-      parallelism = 50,
-      distribution = Island(10)
+      termination = 15 minutes,
+      parallelism = 30,
+      distribution = Island(5)
 )
 
 
@@ -72,7 +72,7 @@ val island =
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(50)
+val local = LocalEnvironment(30)
 
 //island on grid hook savePopulation
 island on local hook savePopulation
