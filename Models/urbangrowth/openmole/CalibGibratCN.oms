@@ -1,4 +1,4 @@
-val countrycode = "EU"
+val countrycode = "CN"
 
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -23,7 +23,7 @@ val model =
     """
       |import urbangrowth.models.coevolution._
       |import urbangrowth.indicators._
-      | val res = Coevolution(input.popFile,null,null, input.dateFile,input.growthRate,0.0, 1.0, 1.0, 0.0, 1.0, 1.0).run()
+      | val res = Coevolution(input.popFile,null,null, input.dateFile,input.growthRate,input.gravityWeight, input.gravityGamma, input.gravityDecay, 0.0, 1.0, 1.0).run()
       | val logmse = res.logmse
       | val mselog = res.mselog
     """.stripMargin
