@@ -40,7 +40,7 @@ val model =
 val modelCapsule = Capsule(model)
 
 
-  val fileSetting = ExplorationTask(
+ val fileSetting = ExplorationTask(
     (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
     (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
     (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv")))
@@ -71,7 +71,7 @@ val modelCapsule = Capsule(model)
       objectives = Seq(mselog,logmse),
       evaluation = eval,
       termination = 2 hours,
-      parallelism = 200,
+      parallelism = 50,
       distribution = Island(10)
   )
 
@@ -79,10 +79,11 @@ val modelCapsule = Capsule(model)
 // Define the hook to save the results
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
-val grid = EGIEnvironment("vo.complex-systems.eu")
-//val local = LocalEnvironment(50)
+//val grid = EGIEnvironment("vo.complex-systems.eu",openMOLEMemory = 2000 megabytes)
+val local = LocalEnvironment(50)
 
-island on grid hook savePopulation
-//island on local hook savePopulation
+//island on grid hook savePopulation
+island on local hook savePopulation
+
 
 
