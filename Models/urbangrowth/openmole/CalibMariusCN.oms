@@ -1,4 +1,4 @@
-val countrycode = "EU"
+val countrycode = "CN"
 
 import java.util.Date
 import java.text.SimpleDateFormat

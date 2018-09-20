@@ -14,7 +14,7 @@ latestgen <- function(dir){max(as.integer(sapply(strsplit(sapply(strsplit(list.f
 
 # population dirs listed by hand
 
-models = c('intgib','innovation')
+models = c('intgib','innovation','gibrat')
 systems = c('ZA','CN','US','BR','EU','IN','RU')
 
 popdirs = list(
@@ -31,7 +31,18 @@ popdirs = list(
   'innovation_BR'='CALIB_innovation_BR_20180919_223752',
   #'innovation_EU'=''
   'innovation_IN'='CALIB_innovation_IN_20180920_023945',
-  'innovation_RU'='CALIB_innovation_RU_20180920_044043'
+  'innovation_RU'='CALIB_innovation_RU_20180920_044043',
+  'gibrat_BR'='CALIB_gibrat_BR_20180920'
+)
+
+systembounds=list(
+  'BR'=c('logmse'=40,'mselog'=1500),
+  'IN'=c('logmse'=33,'mselog'=300),
+  'ZA'=c('logmse'=40,'mselog'=25000),
+  'US'=c('logmse'=40,'mselog'=21000),
+  'RU'=c('logmse'=50,'mselog'=65000),
+  'EU'=c('logmse'=40,'mselog'=1000),
+  'CN'=c('logmse'=40,'mselog'=2000)
 )
 
 populations = list()
@@ -54,6 +65,8 @@ for(model in models){
       show(dim(currentdata))
       for(col in popcolnames[!popcolnames%in%colnames(currentdata)]){currentdata[,col]=rep(NA,nrow(currentdata))}
       currentdata[,"system"]=rep(system,nrow(currentdata));currentdata[,"model"]=rep(model,nrow(currentdata))
+      #filter with system bounds
+      currentdata = currentdata[currentdata$logmse<systembounds[[system]][['logmse']]&currentdata$mselog<systembounds[[system]][['mselog']],]
       #pop=rbind(pop,cbind(currentdata,model=rep(model,nrow(currentdata)),system=rep(system,nrow(currentdata))))
       pop=rbind(pop,currentdata)
     }
