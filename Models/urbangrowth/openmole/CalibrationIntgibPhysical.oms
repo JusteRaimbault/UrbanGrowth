@@ -9,7 +9,6 @@ val growthRate = Val[Double]
 val gravityWeight = Val[Double]
 val gravityGamma = Val[Double]
 val gravityDecay = Val[Double]
-val gravityAlpha = Val[Double]
 
 val id = Val[Int]
 
@@ -42,7 +41,7 @@ val modelCapsule = Capsule(model)
 
 val fileSetting = ExplorationTask(
   (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
-  (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_gdist_alpha0',alpha0,'_n0',n0,'.csv"))) x
+  (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_gdist_alpha03_n03.csv"))) x
   (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv"))) x
   (id in Seq(1))
 ) set(
@@ -53,7 +52,7 @@ val fileSetting = ExplorationTask(
 val eval = fileSetting -< model
 
 
-val modelname = "intgib"
+val modelname = "intgibphysical"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
 val purpose = "CALIB"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
@@ -67,12 +66,12 @@ val island =
         gravityGamma in Range(0.1,10.0),
         gravityDecay in Range(0.1,20000.0)
       ),
-    mu=200,
+    mu=100,
     objectives = Seq(mselog,logmse),
     evaluation = eval,
-    termination = 2 hours,
-    parallelism = 50,
-    distribution = Island(10)
+    termination = 30 minutes,
+    parallelism = 20
+    //distribution = Island(10)
 )
 
 
@@ -80,7 +79,7 @@ val island =
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(50)
+val local = LocalEnvironment(20)
 
 
 //island on grid hook savePopulation

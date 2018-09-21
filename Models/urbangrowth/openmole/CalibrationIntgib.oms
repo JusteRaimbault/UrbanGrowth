@@ -1,5 +1,5 @@
 val countrycode = "BR"
- 
+
 import java.util.Date
 import java.text.SimpleDateFormat
 
@@ -54,7 +54,7 @@ val eval = fileSetting -< model
 
 val modelname = "intgib"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
-val purpose = "TEST"
+val purpose = "CALIB"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
 val island =
@@ -69,7 +69,7 @@ val island =
     mu=100,
     objectives = Seq(mselog,logmse),
     evaluation = eval,
-    termination = 5 minutes,
+    termination = 30 minutes,
     parallelism = 20
 )
 //distribution = Island(10)
@@ -84,6 +84,3 @@ val local = LocalEnvironment(20)
 
 //island on grid hook savePopulation
 island on local hook savePopulation
-
-
-

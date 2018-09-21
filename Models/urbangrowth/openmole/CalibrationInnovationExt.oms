@@ -80,13 +80,13 @@ val island =
         newInnovationHierarchy in Range(0.1,5.0),
         newInnovationPopulationProportion in Range(0.1,0.9)
       ),
-      mu = 200,
+      mu = 100,
       stochastic = Stochastic(seed = id),
       objectives = Seq(mselog,logmse),
       evaluation = eval,
-      termination = 2 hours,
-      parallelism = 50,
-      distribution = Island(10)
+      termination = 1 hours,
+      parallelism = 20
+      //distribution = Island(10)
   )
 
 
@@ -94,7 +94,7 @@ val island =
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(50)
+val local = LocalEnvironment(20)
 
 //island on grid hook savePopulation
 island on local hook savePopulation

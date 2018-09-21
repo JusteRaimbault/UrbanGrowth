@@ -14,9 +14,9 @@ object Test extends App {
 
   //TestModels.testInnovation()
 
-  TestModels.testMarius()
+  //TestModels.testMarius()
 
-  //TestModels.testIntGib()
+  TestModels.testIntGib()
 
 }
 
@@ -65,13 +65,13 @@ object TestModels {
     import urbangrowth.indicators.Indicators
 
     //val pop = new File("data/coevolution/interactiongibrat/pop50.csv")
-    val pop = new File("data/processed/FR_pops.csv")
+    val pop = new File("data/processed/BR_pops.csv")
     //val dists = new File("data/coevolution/interactiongibrat/dist50.csv")
-    val dists = new File("data/processed/FR_dist.csv")
+    val dists = new File("data/processed/BR_dist.csv")
     //val fdists = new File("data/coevolution/interactiongibrat/distMat_Ncities50_alpha03_n03.csv")
     val fdists = null
     //val fdates = new File("data/coevolution/interactiongibrat/dates.csv")
-    val fdates = new File("data/processed/FR_dates.csv")
+    val fdates = new File("data/processed/BR_dates.csv")
     val model = Coevolution(pop, dists, fdists, fdates,0.02, 0.0015, 2.0, 500.0, 0.0, 2.0, 50.0)
 
     //var res: Matrix = null

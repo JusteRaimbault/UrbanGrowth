@@ -16,38 +16,39 @@ latestgen <- function(dir){max(as.integer(sapply(strsplit(sapply(strsplit(list.f
 
 # population dirs listed by hand
 
-models = c('intgib','innovation','gibrat','innovationext')
+models = c('intgib','innovation','gibrat','innovationext','marius')
 systems = c('ZA','CN','US','BR','EU','IN','RU')
 
 popdirs = list(
-  'intgib_ZA'='CALIB_intgib_ZA_20180919_052829',
-  'intgib_CN'='CALIB_intgib_CN_20180918_231457',
-  'intgib_US'='CALIB_intgib_US_20180918_175315',
-  'intgib_BR'='CALIB_intgib_BR_20180919_143214',
-  'intgib_EU'='CALIB_intgib_EU_20180919_163321',
-  'intgib_IN'='CALIB_intgib_IN_20180919_183427',
-  'intgib_RU'='CALIB_intgib_RU_20180919_203608',
-  'innovation_ZA'='CALIB_innovation_ZA_20180920_064141',
-  'innovation_CN'='CALIB_innovation_CN_20180920_003846',
-  'innovation_US'='CALIB_innovation_US_20180920_084300',
-  'innovation_BR'='CALIB_innovation_BR_20180919_223752',
+  #'intgib_ZA'='CALIB_intgib_ZA_20180919_052829',
+  'intgib_CN'='TEST_intgib_CN_20180921_161721',
+  #'intgib_US'='CALIB_intgib_US_20180918_175315',
+  'intgib_BR'='TEST_intgib_BR_20180921_155908',
+  #'intgib_EU'='CALIB_intgib_EU_20180919_163321',
+  #'intgib_IN'='CALIB_intgib_IN_20180919_183427',
+  #'intgib_RU'='CALIB_intgib_RU_20180919_203608',
+  #'innovation_ZA'='CALIB_innovation_ZA_20180920_064141',
+  #'innovation_CN'='CALIB_innovation_CN_20180920_003846',
+  #'innovation_US'='CALIB_innovation_US_20180920_084300',
+  #'innovation_BR'='CALIB_innovation_BR_20180919_223752',
   #'innovation_EU'='',
-  'innovation_IN'='CALIB_innovation_IN_20180920_023945',
-  'innovation_RU'='CALIB_innovation_RU_20180920_044043',
-  'gibrat_ZA'='CALIB_gibrat_ZA_20180920',
+  #'innovation_IN'='CALIB_innovation_IN_20180920_023945',
+  #'innovation_RU'='CALIB_innovation_RU_20180920_044043',
+  #'gibrat_ZA'='CALIB_gibrat_ZA_20180920',
   #'gibrat_CN'='',
-  'gibrat_US'='CALIB_gibrat_US_20180920',
-  'gibrat_BR'='CALIB_gibrat_BR_20180920',
-  'gibrat_EU'='CALIB_gibrat_EU_20180920',
-  'gibrat_IN'='CALIB_gibrat_IN_20180920',
-  'gibrat_RU'='CALIB_gibrat_RU_20180920',
-  'innovationext_ZA'='CALIB_innovationext_ZA_20180921_081251',
-  'innovationext_CN'='CALIB_innovationext_CN_20180921_020951',
+  #'gibrat_US'='CALIB_gibrat_US_20180920',
+  #'gibrat_BR'='CALIB_gibrat_BR_20180920',
+  #'gibrat_EU'='CALIB_gibrat_EU_20180920',
+  #'gibrat_IN'='CALIB_gibrat_IN_20180920',
+  #'gibrat_RU'='CALIB_gibrat_RU_20180920',
+  #'innovationext_ZA'='CALIB_innovationext_ZA_20180921_081251',
+  #'innovationext_CN'='CALIB_innovationext_CN_20180921_020951',
   #'innovationext_US'='',
-  'innovationext_BR'='CALIB_innovationext_BR_20180921_000851',
+  #'innovationext_BR'='CALIB_innovationext_BR_20180921_000851',
   #'innovationext_EU'='',
-  'innovationext_IN'='CALIB_innovationext_IN_20180921_041049',
-  'innovationext_RU'='CALIB_innovationext_RU_20180921_061152'
+  #'innovationext_IN'='CALIB_innovationext_IN_20180921_041049',
+  #'innovationext_RU'='CALIB_innovationext_RU_20180921_061152',
+  'marius_EU'='CALIB_marius_EU_20180921_154514'
 )
 
 systembounds=list(
@@ -62,10 +63,10 @@ systembounds=list(
 
 ### CV check
 
-for(popdir in paste0(sourcedir,popdirs)){
-  fdiff = frontDiffs(popdir)
-  plot(fdiff$gens,fdiff$dists)
-}
+#for(popdir in paste0(sourcedir,popdirs)){
+#  fdiff = frontDiffs(popdir)
+#  plot(fdiff$gens,fdiff$dists)
+#}
 
 
 

@@ -24,7 +24,8 @@ colnames(cities)<-c("ID","Name","Long","Lat","X1961","X1971","X1981","X1991","X2
 cities=cities[apply(cities,1,function(r){length(which(is.na(r)))==0}),]
 #cities = cities[cities$X2011>=median(cities$X2011),]
 # for memory purposes, diminish significantly the number of cities
-cities = cities[cities$X2011>=quantile(cities$X2011,0.85),]
+#cities = cities[cities$X2011>=quantile(cities$X2011,0.85),]
+cities = cities[cities$X2011>=quantile(cities$X2011,0.97),]
 write.table(cities,file=paste0(targetDir,'Europe.csv'),row.names = F,sep=",")
 
 
@@ -32,6 +33,7 @@ write.table(cities,file=paste0(targetDir,'Europe.csv'),row.names = F,sep=",")
 # for china do not remove below medium-sized as already well aggregated, no small areas in the db
 countrycode = 'CN'
 cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
+cities = cities[cities$X2000>=quantile(cities$X2000,0.8),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 # brazil : remove altitude
@@ -40,7 +42,8 @@ countrycode = 'BR'
 cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
 cities = cities[,c("ID","Name","Long","Lat","X1960","X1970","X1980","X1991","X2000","X2010")]
 #cities = cities[cities$X2010>=median(cities$X2010),]
-cities = cities[cities$X2010>=quantile(cities$X2010,0.7),]
+#cities = cities[cities$X2010>=quantile(cities$X2010,0.7),]
+cities = cities[cities$X2010>=quantile(cities$X2010,0.93),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 
@@ -50,7 +53,7 @@ cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/
 cities = cities[,c("ID","Name","Long","Lat","X1961","X1981","X1991","X2001","X2011")]
 cities=cities[apply(cities[,c("X1961","X1981","X1991","X2001","X2011")],1,function(r){length(which(is.na(r)))==0}),]
 #cities = cities[cities$X2011>=median(cities$X2011),]
-cities = cities[cities$X2011>=quantile(cities$X2011,0.75),]
+cities = cities[cities$X2011>=quantile(cities$X2011,0.94),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 
@@ -65,7 +68,7 @@ cities = cities[,c("ID","Name","Long","Lat","X1959","X1970","X1979","X1989","X20
 for(j in 5:ncol(cities)){cities[,j]=as.numeric(as.character(cities[,j]))}
 cities[cities==0.0]=0.1
 #cities = cities[cities$X2010>=median(cities$X2010),]
-cities = cities[cities$X2010>=quantile(cities$X2010,0.7),]
+cities = cities[cities$X2010>=quantile(cities$X2010,0.94),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 # South Africa
@@ -77,7 +80,8 @@ cities=cities[!is.na(cities$X2001),];
 # keep after 1960 and put negligible values instead of nas (Bantoustans)
 cities = cities[,c("ID","Name","Long","Lat","X1960","X1970","X1980","X1991","X1996","X2001")]
 cities[is.na(cities)]=0.1
-cities = cities[cities$X2001>=median(cities$X2001),]
+#cities = cities[cities$X2001>=median(cities$X2001),]
+cities = cities[cities$X2001>=quantile(cities$X2001,0.6),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 # US
@@ -90,7 +94,8 @@ cities=cities[!is.na(cities$X2010),];
 # -> model with appearing cities ? much more complicated..
 cities = cities[,c("ID","Name","Long","Lat","X1960","X1970","X1980","X1990","X2000","X2010")]
 cities[is.na(cities)]=0.1
-cities = cities[cities$X2010>=median(cities$X2010),]
+#cities = cities[cities$X2010>=median(cities$X2010),]
+cities = cities[cities$X2010>=quantile(cities$X2010,0.87),]
 write.table(cities,file=paste0(targetDir,cityfiles[[countrycode]],'.csv'),row.names = F,sep=",")
 
 

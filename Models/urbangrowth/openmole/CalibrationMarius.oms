@@ -1,4 +1,4 @@
-val countrycode = "EU"
+val countrycode = "BR"
 
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -62,7 +62,7 @@ val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toStr
 val purpose = "CALIB"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
-val island =
+val evolution =
   NSGA2Evolution(
     genome =
       Seq(
@@ -73,20 +73,22 @@ val island =
         populationToWealthExponent in Range(0.1,10.0),
         wealthToPopulationExponent in Range(0.1,10.0)
       ),
-      mu = 200,
+      mu = 100,
       objectives = Seq(mselog,logmse),
       evaluation = eval,
-      termination = 2 hours,
-      parallelism = 50,
-      distribution = Island(10)
+      termination = 30 minutes,
+      parallelism = 20
   )
+
+  //,distribution = Island(10)
 
 
 // Define the hook to save the results
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(50)
+val local = LocalEnvironment(20)
 
 //island on grid hook savePopulation
-island on local hook savePopulation
+//island on local hook savePopulation
+evolution on local hook savePopulation
