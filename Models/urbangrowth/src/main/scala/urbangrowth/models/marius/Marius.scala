@@ -180,12 +180,13 @@ trait Marius {
     //assert(updatedWealth >= 0, s"Negative wealth before conversion toPop $updatedWealth")
     // negative wealth can not happen (cf updatedWealth function)
     val wealthpopupdated = wealthToPopulation(updatedWealth)
-    val deltaPopulation = deltaT*( - wealthToPopulation(city.wealth)) / economicMultiplier
+    val wealthpop = wealthToPopulation(city.wealth)
+    val deltaPopulation = deltaT*(wealthpopupdated - wealthpop) / economicMultiplier
     val updatedPopulation = city.population + deltaPopulation
     //assert(updatedPopulation >= 0, s"Negative population $updatedPopulation")
     //this does not make sense, take 0 if negative. Then some conservation equations may not hold ?
     //assert(!updatedPopulation.isInfinite,s"Infinite pop $updatedPopulation")
-    assert(updatedPopulation<1e9,s"divergent population : updatedWealth $updatedWealth wealthtopop updatedWealth")
+    assert(updatedPopulation<1e9,s"divergent population : updatedWealth $updatedWealth wealthtopop $wealthpop wealthpopupdated $wealthpopupdated")
 
     if (updatedPopulation >= 0.0) updatedPopulation else 0.0
   }
