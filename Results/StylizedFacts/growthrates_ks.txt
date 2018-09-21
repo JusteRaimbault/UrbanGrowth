@@ -1,0 +1,47 @@
+
+table(distrs)
+distrs
+gamma lnorm  unif 
+    1    14    17 
+> table(data.frame(distrs,systems,years))
+, , years = 1970
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  gamma  0  0  1  0  0  0  0
+  lnorm  0  0  0  0  0  1  1
+  unif   1  0  0  0  1  0  0
+
+, , years = 1980
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  gamma  0  0  0  0  0  0  0
+  lnorm  0  0  1  0  0  1  1
+  unif   1  0  0  1  1  0  0
+
+, , years = 1990
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  gamma  0  0  0  0  0  0  0
+  lnorm  0  0  1  0  0  1  1
+  unif   1  1  0  1  1  0  0
+
+, , years = 2000
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  gamma  0  0  0  0  0  0  0
+  lnorm  1  1  0  0  0  1  0
+  unif   0  0  1  1  1  0  1
+
+, , years = 2010
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  gamma  0  0  0  0  0  0  0
+  lnorm  1  1  0  0  1  0  0
+  unif   0  0  1  1  0  1  1
+
+

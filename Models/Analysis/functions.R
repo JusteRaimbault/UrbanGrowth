@@ -1,6 +1,7 @@
 
 library(sp)
 
+
 #'
 #' Get successive distances between pareto fronts
 #'
@@ -20,5 +21,7 @@ frontDiffs <- function(popdirectory,objectives=c('logmse','mselog')){
   }
   return(list(gens=gens[2:length(gens)],dists=dists))
 }
+
+
 
 

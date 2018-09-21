@@ -1,0 +1,40 @@
+table(distrs)
+distrs
+lnorm 
+   39 
+> table(data.frame(distrs,systems,years))
+, , years = 1960
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  lnorm  1  0  1  0  1  1  1
+
+, , years = 1970
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  lnorm  1  0  1  1  1  1  1
+
+, , years = 1980
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  lnorm  1  1  1  1  1  1  1
+
+, , years = 1990
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  lnorm  1  1  1  1  1  1  1
+
+, , years = 2000
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  lnorm  1  1  1  1  1  1  1
+
+, , years = 2010
+
+       systems
+distrs  BR CN EU IN RU US ZA
+  lnorm  1  1  1  1  1  1  1
