@@ -1,0 +1,100 @@
+val countrycode = "ZA"
+
+import java.util.Date
+import java.text.SimpleDateFormat
+
+logger.level("FINE")
+
+val growthRate = Val[Double]
+val innovationWeight = Val[Double]
+val gravityDecay = Val[Double]
+val innovationDecay = Val[Double]
+val innovationUtility = Val[Double]
+val innovationUtilityGrowth = Val[Double]
+val earlyAdoptersRate = Val[Double]
+val newInnovationHierarchy = Val[Double]
+val newInnovationPopulationProportion = Val[Double]
+
+
+val id = Val[Int]
+
+// Reporters
+val logmse=Val[Double]
+val mselog=Val[Double]
+
+// config files
+val popFile=Val[File]
+val distFile=Val[File]
+val dateFile=Val[File]
+
+// Model
+val model =
+  ScalaTask(
+    """
+      |import urbangrowth.models.innovation._
+      |import urbangrowth.indicators._
+      | val res = Innovation(input.popFile, input.distFile, input.dateFile,input.id,input.growthRate,
+      |    input.innovationWeight,input.gravityDecay,input.innovationDecay,input.innovationUtility,
+      |    input.innovationUtilityGrowth,input.earlyAdoptersRate,input.newInnovationHierarchy,
+      |    input.newInnovationPopulationProportion
+      |      ).run
+      | val logmse = res.logmse
+      | val mselog = res.mselog
+    """.stripMargin
+  ) set (
+    plugins += pluginsOf(urbangrowth.models.innovation.Innovation),
+    inputs += (popFile,distFile,dateFile,growthRate,innovationWeight,gravityDecay,innovationDecay,innovationUtility,innovationUtilityGrowth,earlyAdoptersRate,newInnovationHierarchy,newInnovationPopulationProportion,id),
+    outputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,innovationUtility,innovationUtilityGrowth,earlyAdoptersRate,newInnovationHierarchy,newInnovationPopulationProportion,id),
+    outputs += (logmse,mselog)
+  )
+val modelCapsule = Capsule(model)
+
+val fileSetting = ExplorationTask(
+    (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
+    (distFile in Seq(workDirectory / "data"/ "processed" / (countrycode+"_dist.csv"))) x
+    (dateFile in Seq(workDirectory / "data"/ "processed" / (countrycode+"_dates.csv")))
+) set(
+    inputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,innovationUtility,innovationUtilityGrowth,earlyAdoptersRate,newInnovationHierarchy,newInnovationPopulationProportion,id),
+    outputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,innovationUtility,innovationUtilityGrowth,earlyAdoptersRate,newInnovationHierarchy,newInnovationPopulationProportion,id)
+)
+
+val eval = fileSetting -< model
+
+
+val modelname = "innovationext"
+val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
+val purpose = "CALIB"
+val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
+
+val island =
+  NSGA2Evolution(
+    genome =
+      Seq(
+        growthRate in Range(0.0, 0.05),
+        innovationWeight in Range(0.0,0.05),
+        gravityDecay in Range(0.1,20000.0),
+        innovationDecay in Range(0.1,20000.0),
+        innovationUtility in Range(1.0,3.0),
+        innovationUtilityGrowth in Range(1.0,3.0),
+        earlyAdoptersRate in Range(0.01,0.5),
+        newInnovationHierarchy in Range(0.1,5.0),
+        newInnovationPopulationProportion in Range(0.1,0.9)
+      ),
+      mu = 200,
+      stochastic = Stochastic(seed = id),
+      objectives = Seq(mselog,logmse),
+      evaluation = eval,
+      termination = 2 hours,
+      parallelism = 50,
+      distribution = Island(10)
+  )
+
+
+// Define the hook to save the results
+val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
+
+//val grid = EGIEnvironment("vo.complex-systems.eu")
+val local = LocalEnvironment(50)
+
+//island on grid hook savePopulation
+island on local hook savePopulation
