@@ -6,15 +6,15 @@ import java.io.File
 object TestModel {
 
   def testModel: SimpleModel = SimpleModel(
-    new File("data/processed/FR_dist.csv"),
-    new File( "data/processed/FR_pops.csv"),
-    new File("data/processed/FR_dates.csv"),
-     0.34380934416368,
-    1.00175638801509,
-    1.07926078029368,
-    0.672263161474518,
-    0.380435604357353,
-    1.08660127543912
+    new File("data/processed/BR_dist.csv"),
+    new File( "data/processed/BR_pops.csv"),
+    new File("data/processed/BR_dates.csv"),
+    economicMultiplier= 5.9059803,
+    sizeEffectOnSupply =3.60315698509,
+    sizeEffectOnDemand=3.30481631293628,
+    distanceDecay=1.698876633327205,
+    wealthToPopulationExponent=1.18720491738353,
+    populationToWealthExponent=1.1140844912
   )
 
   /*

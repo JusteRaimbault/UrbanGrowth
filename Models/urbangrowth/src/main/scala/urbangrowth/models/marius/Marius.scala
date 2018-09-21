@@ -118,7 +118,7 @@ trait Marius {
     }.takeWhileInclusive {
       _ match {
         case Success(s) => !ended(s)
-        case Failure(_) => false
+        case Failure(e) => {println(e.getMessage);false}
       }
     }
 
@@ -128,7 +128,7 @@ trait Marius {
     * @param state a state of the model
     * @return true if the simulation is finished
     */
-  def ended(state: State) = state.step >= maxStep
+  def ended(state: State): Boolean = state.step >= maxStep
 
   /**
     * The next state of the model
@@ -145,6 +145,7 @@ trait Marius {
             population = updatedPopulation(city, updatedWealth,configuration.dates(state.step + 1) - configuration.dates(state.step))
           )
       }
+    //println(state.step)
     state.copy(cities = updatedCities, step = state.step + 1)
   }
 
@@ -176,11 +177,17 @@ trait Marius {
     * @return the updated population
     */
   def updatedPopulation(city: City, updatedWealth: Double,deltaT: Double): Double = {
-    assert(updatedWealth >= 0, s"Negative wealth before conversion toPop $updatedWealth")
-    val deltaPopulation = deltaT*(wealthToPopulation(updatedWealth) - wealthToPopulation(city.wealth)) / economicMultiplier
+    //assert(updatedWealth >= 0, s"Negative wealth before conversion toPop $updatedWealth")
+    // negative wealth can not happen (cf updatedWealth function)
+    val wealthpopupdated = wealthToPopulation(updatedWealth)
+    val deltaPopulation = deltaT*( - wealthToPopulation(city.wealth)) / economicMultiplier
     val updatedPopulation = city.population + deltaPopulation
-    assert(updatedPopulation >= 0, s"Negative population $updatedPopulation")
-    updatedPopulation
+    //assert(updatedPopulation >= 0, s"Negative population $updatedPopulation")
+    //this does not make sense, take 0 if negative. Then some conservation equations may not hold ?
+    //assert(!updatedPopulation.isInfinite,s"Infinite pop $updatedPopulation")
+    assert(updatedPopulation<1e9,s"divergent population : updatedWealth $updatedWealth wealthtopop updatedWealth")
+
+    if (updatedPopulation >= 0.0) updatedPopulation else 0.0
   }
 
   /**
@@ -189,7 +196,11 @@ trait Marius {
     * @param population the population the city
     * @return the supply
     */
-  def supply(population: Double): Double = economicMultiplier * pow(population, sizeEffectOnSupply)
+  def supply(population: Double): Double = {
+    val supply = economicMultiplier * pow(population, sizeEffectOnSupply)
+    assert(!supply.isInfinite,s"Infinite supply : pop $population")
+    supply
+  }
 
   /**
     * Demand of a city from its population
@@ -197,7 +208,11 @@ trait Marius {
     * @param population the population the city
     * @return the demand
     */
-  def demand(population: Double): Double = economicMultiplier * pow(population, sizeEffectOnDemand)
+  def demand(population: Double): Double = {
+    val demand = economicMultiplier * pow(population, sizeEffectOnDemand)
+    assert(!demand.isInfinite,s"Infinite demand : pop $population")
+    demand
+  }
 
   /**
     * Technical data structure to memoize the matrix computation
@@ -230,12 +245,12 @@ trait Marius {
                         demands: Seq[Double]): Seq[Double] = {
     val transacted = Transacted(cities, supplies, demands, transactions(cities, network, supplies, demands))
 
-    def unsatisfieds =
+    def unsatisfieds: Seq[Double] =
       for {
         (d, i) <- transacted.demands.zipWithIndex
       } yield d - transacted.transactedToSum(i)
 
-    def unsolds =
+    def unsolds: Seq[Double] =
       for {
         (s, i) <- transacted.supplies.zipWithIndex
       } yield s - transacted.transactedFromSum(i)
@@ -276,8 +291,8 @@ trait Marius {
           val fromIPSum = fromInteractionPotentialSum(from)
           assert(fSupply >= 0 && tDemand >= 0, s"supply or demand not good, $fSupply $tDemand")
 
-          val normalisedIPFrom = ip / fromIPSum
-          val normalisedIPTo = ip / toIPSum
+          val normalisedIPFrom = if(fromIPSum > 0) ip / fromIPSum else 0.0
+          val normalisedIPTo = if(toIPSum > 0 ) ip / toIPSum else 0.0
 
           val t = min(normalisedIPFrom * fSupply, normalisedIPTo * tDemand)
           assert(!t.isNaN, s"Transacted is NaN: from $from to $to , ip%from : $normalisedIPFrom supplyfrom  $fSupply todemand $tDemand ip%to $normalisedIPTo  fromipsum $fromIPSum toipsum $toIPSum")
@@ -310,9 +325,11 @@ trait Marius {
     * @param distance distance between the cities
     * @return
     */
-  def interactionPotential(mass1: Double, mass2: Double, distance: Double) = {
-    val potential = (mass1 * mass2) / math.pow(distance, distanceDecay)
-    assert(potential >= 0, s"Error in potential computing gave $potential for $mass1 $mass2 $distance")
+  def interactionPotential(mass1: Double, mass2: Double, distance: Double): Double = {
+    val potential: Double = (math.abs(mass1) * math.abs(mass2)) / math.pow(distance, distanceDecay)
+    // this can not happen
+    //assert(potential >= 0, s"Error in potential computing gave $potential for $mass1 $mass2 $distance")
+    assert(!potential.isNaN,s"distance $distance mass1 $mass1 mass2 $mass2")
     potential
   }
 
@@ -322,7 +339,7 @@ trait Marius {
     * @param wealth the stock of wealth
     * @return the matching population
     */
-  def wealthToPopulation(wealth: Double) = pow(wealth, wealthToPopulationExponent)
+  def wealthToPopulation(wealth: Double): Double = pow(wealth, wealthToPopulationExponent)
 
   /**
     * Stub for bonuses injection. No bonuses are modeled in this version.

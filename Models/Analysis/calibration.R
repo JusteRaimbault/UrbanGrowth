@@ -16,7 +16,7 @@ latestgen <- function(dir){max(as.integer(sapply(strsplit(sapply(strsplit(list.f
 
 # population dirs listed by hand
 
-models = c('intgib','innovation','gibrat')
+models = c('intgib','innovation','gibrat','innovationext')
 systems = c('ZA','CN','US','BR','EU','IN','RU')
 
 popdirs = list(
@@ -31,10 +31,23 @@ popdirs = list(
   'innovation_CN'='CALIB_innovation_CN_20180920_003846',
   'innovation_US'='CALIB_innovation_US_20180920_084300',
   'innovation_BR'='CALIB_innovation_BR_20180919_223752',
-  #'innovation_EU'=''
+  #'innovation_EU'='',
   'innovation_IN'='CALIB_innovation_IN_20180920_023945',
   'innovation_RU'='CALIB_innovation_RU_20180920_044043',
-  'gibrat_BR'='CALIB_gibrat_BR_20180920'
+  'gibrat_ZA'='CALIB_gibrat_ZA_20180920',
+  #'gibrat_CN'='',
+  'gibrat_US'='CALIB_gibrat_US_20180920',
+  'gibrat_BR'='CALIB_gibrat_BR_20180920',
+  'gibrat_EU'='CALIB_gibrat_EU_20180920',
+  'gibrat_IN'='CALIB_gibrat_IN_20180920',
+  'gibrat_RU'='CALIB_gibrat_RU_20180920',
+  'innovationext_ZA'='CALIB_innovationext_ZA_20180921_081251',
+  'innovationext_CN'='CALIB_innovationext_CN_20180921_020951',
+  #'innovationext_US'='',
+  'innovationext_BR'='CALIB_innovationext_BR_20180921_000851',
+  #'innovationext_EU'='',
+  'innovationext_IN'='CALIB_innovationext_IN_20180921_041049',
+  'innovationext_RU'='CALIB_innovationext_RU_20180921_061152'
 )
 
 systembounds=list(

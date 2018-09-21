@@ -29,6 +29,8 @@ object Indicators {
     * @return
     */
   def logmse(m: Matrix,target: Matrix): Double = {
+    println(m.getColumnDimension)
+    println(m.getRowDimension)
     val sqdiff = m.minus(target).arrayTimes(m.minus(target))
     return Math.log(sqdiff.getArray().flatten.sum)
   }

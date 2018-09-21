@@ -12,9 +12,9 @@ import scala.collection.mutable.ArrayBuffer
 
 object Test extends App {
 
-  TestModels.testInnovation()
+  //TestModels.testInnovation()
 
-  //TestModels.testMarius()
+  TestModels.testMarius()
 
   //TestModels.testIntGib()
 
