@@ -127,24 +127,89 @@ table(data.frame(distrs,systems,years))
 ######
 # correlation of growth rates as a function of distance - in time
 
-countrycode = 'US'
-cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
+#countrycode = 'US'
 
+# hand def colsnames (different number and names for europe)
+popcolnames=list('EU'=c("Pop_1961","Pop_1971","Pop_1981","Pop_1991","Pop_2001","Pop_2011"),
+                 'US'=c("X1960","X1970","X1980","X1990","X2000","X2010"),
+                 'BR'=c("X1960","X1970","X1980","X1990","X2000","X2010"),
+                 'CN'=c("X1964","X1982","X1990","X2000"),
+                 'BR'=c("X1960","X1970","X1980","X1991","X2000","X2010"),
+                 'RU'=c("X1959","X1970","X1979","X1989","X2002","X2010"),
+                 'ZA'=c("X1959","X1970","X1979","X1989","X2002","X2010")
+                 )
+
+for(countrycode in countrycodes){
+  show(countrycode)
+  if(countrycode!='EU'){
+     cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
+  }else{
+    cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/tradeve/agglo.csv'),sep = ";")
+  }
 #apply(cities,2,function(col){length(which(is.na(col)))})
-
-cities = cities[!is.na(cities$X2010),c("Long","Lat","X1960","X1970","X1980","X1990","X2000","X2010")]
+  cities = cities[,c('Long','Lat',popcolnames[[countrycode]])]
+  
+#cities = cities[!is.na(cities$X2010),c("Long","Lat","X1960","X1970","X1980","X1990","X2000","X2010")]
 cities=cities[apply(cities,1,function(r){length(which(is.na(r)))==0}),]
+#plot(SpatialPoints(cities[,c('Long','Lat')]))
 
+#distmat = spDists(SpatialPoints(cities[,c('Long','Lat')],proj4string = crs("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")))
 distmat = spDists(as.matrix(cities[,c('Long','Lat')]),longlat = T)
 
-cities=cities[,c("X1960","X1970","X1980","X1990","X2000","X2010")]
+cities=cities[,popcolnames[[countrycode]]]
 
 growthrates = t(apply(cities,1,function(r){diff(r)/r[2:(length(r))]}))
+flatmat = c(distmat)
 
-quantiles = c(0.0,0.25,0.5,0.75,1)
+#quantiles = c(0.0,0.25,0.5,0.75,1)
+for(quantiles in list(seq(0.0,1.0,0.25),seq(0.0,1.0,0.1),seq(0.0,1.0,0.05))){
 
-quantile(c(distmat),quantiles)
+#periods = list('full'=colnames(growthrates))
+#periods = list('1970'="X1970",'1980'="X1980",'1990'="X1990",'2000'="X2000",'2010'="X2010")
+# generate periods
+  for(periods in generatePeriods(popcolnames[[countrycode]]))
+  
+dists = c();corrs=c();corrmin=c();corrmax=c();cperiods=c()
+# TODO add N
+for(i in 2:length(quantiles)){
+  show(i)
+  # include both extrs to include max
+  flatinds = which(flatmat>=quantile(flatmat[flatmat>0],quantiles[i-1])&flatmat<=quantile(flatmat[flatmat>0],quantiles[i]))
+  rows = floor(flatinds / ncol(distmat))+1;cols=flatinds%%ncol(distmat)+1
+  currentdists = flatmat[flatinds]
+  #uids = unique(paste0(rows,"-",cols))
+  # quite dirty
+  uids = unique(sapply(1:length(rows),function(i){paste0(sort(c(rows[i],cols[i])),collapse='-')}))
+  suids = strsplit(uids,'-')
+  urows=sapply(suids,function(l){as.numeric(l[1])});ucols=sapply(suids,function(l){as.numeric(l[2])})
+  for(periodname in names(periods)){
+    currentg = growthrates[,periods[[periodname]]]
+    # data on which correlation is estimated is x = x_i_t, y = x_j_t
+    if(!is.null(dim(currentg))){# shitty behavior to project by default
+      rho = cor.test(x=unlist(c(currentg[urows,])),y=unlist(c(currentg[ucols,])))
+    }else{
+      rho = cor.test(x=unlist(c(currentg[urows])),y=unlist(c(currentg[ucols])))
+    }
+    dists=append(dists,mean(currentdists));corrs=append(corrs,rho$estimate);
+    corrmin=append(corrmin,rho$conf.int[1]);corrmax=append(corrmax,rho$conf.int[2]);cperiods=append(cperiods,periodname)
+  }
+}
+# -> time window and distance bin which maximize the quality of estimation of correlation : which criteria ?
+# ex. : average ratio rho / size of confidence int ; quantity of overlap between two successive points
 
-#which(distmat<774)
+g=ggplot(data.frame(rho=corrs,rhomin=corrmin,rhomax=corrmax,distance=dists,period=cperiods),aes(x=distance,y=rho,ymin=rhomin,ymax=rhomax,group=period,color=period))
+g+geom_line()+geom_point()+geom_errorbar()+
+  xlab("")
 
+
+}
+}
+
+
+
+##### Summary stats (pop in time)
+
+## developments : - nonstat in time for some city systems ?
+# - calib at the second order on correlation curves (-> new methodo approach - link with correlated synthetic data !)
+# (many things are connected)
 
