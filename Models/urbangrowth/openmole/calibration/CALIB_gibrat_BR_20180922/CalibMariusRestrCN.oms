@@ -1,4 +1,4 @@
-val countrycode = "IN"
+val countrycode = "CN"
 
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -64,8 +64,8 @@ val evolution =
     genome =
       Seq(
         economicMultiplier in Range(0.0, 100.0),
-        sizeEffectOnSupply in Range(1.0, 20.0),
-        sizeEffectOnDemand in Range(1.0, 20.0),
+        sizeEffectOnSupply in Range(1.0, 10.0),
+        sizeEffectOnDemand in Range(1.0, 10.0),
         distanceDecay in Range(0.0, 10.0)
       ),
       mu = 100,
@@ -84,5 +84,4 @@ val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / res
 val local = LocalEnvironment(20)
 
 //island on grid hook savePopulation
-evolution on local hook savePopulation
-
+island on local hook savePopulation
