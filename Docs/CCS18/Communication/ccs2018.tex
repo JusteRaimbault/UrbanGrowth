@@ -71,7 +71,7 @@ $^{2}$UMR CNRS 8504 G{\'e}ographie-cit{\'e}s
 
 \date{CCS 2018\\\smallskip
 Thessaloniki\\\smallskip
-September 25th 2018
+September 24th 2018
 }
 
 \frame{\maketitle}
@@ -83,15 +83,17 @@ September 25th 2018
 
 
 
-\sframe{Urban systems}{
+\sframe{The long time memory of urban systems}{
 
 \centering
 
+	\includegraphics[width=0.52\textwidth]{figures/rotundagalerius.jpg}
+	\hspace{0.2cm}
+	\includegraphics[width=0.42\textwidth]{figures/whitetower.png}
 	
-	%\includegraphics[width=\textwidth]{figures/}
 	
 	\footnotesize
-\textit{Source: }
+\textit{Source: Wikipedia}
 
 
 }
@@ -101,16 +103,44 @@ September 25th 2018
 
 \centering
 
-% meso / micro
+% meso / micro - macro
 
-% macro
+\begin{columns}
+	\begin{column}{0.5\textwidth}
+		Macroscopic urban system
+		\medskip
+		%\centering
+		\includegraphics[width=\textwidth]{figures/macrogrowth.png}
+		\footnotesize
+		\justify
+		Raimbault, J. (2018). Indirect evidence of network effects in a system of cities. \textit{Environment and Planning B: Urban Analytics and City Science}, 2399808318774335.
+		\nocite{raimbault2018indirect}
+	\end{column}
+	\begin{column}{0.5\textwidth}
+		Mesoscopic territorial systems
+		\medskip
+		%\centering
+		\includegraphics[width=\textwidth]{figures/mesogrowth.png}
+		
+		\footnotesize
+		\justify
+		Raimbault, J. (2018). Calibration of a density-based model of urban morphogenesis. PloS one, 13(9), e0203516.
+		\nocite{raimbault2018calibration}
+	\end{column}
+\end{columns}
+
 
 
 }
 
 
 \sframe{An evolutionary urban theory}{
+
+From \cite{pumain1997pour} to \cite{pumain2018evolutionary}: systems of cities as co-evolutive systems in which interactions are crucial
+
 \centering
+
+\includegraphics[height=0.7\textheight]{figures/evolurbantheory.pdf}
 
 \footnotesize
 \textit{\cite{raimbault2017applied} Citation network analysis of core publications in the evolutionary urban theory}
@@ -123,13 +153,22 @@ September 25th 2018
 
 \sframe{Towards a systematic model comparison}{
 
-\centering
+\justify
+
+$\rightarrow$ several models in this context have been introduced, but never compared (e.g. in terms of explanative power)
+
+\medskip
+
+$\rightarrow$ multidimensionality of urban systems and the potential complementarity between very different processes
 
 % research question
 
 % before coupling models, benchmarking them !
 
-\textbf{Research objective : }
+\bigskip
+\bigskip
+
+\textbf{Research objective : } \textit{Benchmark interaction models for systems of cities developed in the frame of the evolutionary urban theory, on several comparable systems of cities.}
 
 }
 
@@ -139,9 +178,13 @@ September 25th 2018
 
 \sframe{Urban systems interaction models}{
 
-\centering
+%\centering
+\justify
 
 Comparison of three approaches based on the evolutionary urban theory \cite{pumain1997pour} capturing different dimensions of urban systems:
+
+\bigskip
+
 \begin{itemize}
 	\item The Favaro-Pumain model for the diffusion of innovation \cite{favaro2011gibrat}
 	\item The Marius model family based on economic exchanges \cite{cottineau2014evolution}
@@ -151,62 +194,135 @@ Comparison of three approaches based on the evolutionary urban theory \cite{puma
 }
 
 
-\sframe{Network interaction model}{
+\sframe{Description of models}{
 
 % increasing complexity for the presentation of models
 
+\begin{columns}
+	\begin{column}{0.33\textwidth}
+		\textbf{Network interaction model}
+		
+		\medskip
+
+		\begin{itemize}
+			\item Endogenous growth
+			\item Interactions inducing growth through gravity potential
+			\item Static physical network taken into account (geographical shortest path with topography)
+		\end{itemize}
+		
+	\end{column}
+	\vrule{}
+	\begin{column}{0.33\textwidth}
+		%\vspace{-1cm}
+		\textbf{Favaro-Pumain model}
+		
+		\medskip
+		
+		\begin{itemize}
+			\item Endogenous growth
+			\item Innovation emerge and diffuse in cities
+			\item Growth rates adapted according to utility of innovation and level of adaptation
+		\end{itemize}
+			
+	\end{column}
+	\vrule{}
+	\begin{column}{0.33\textwidth}
+		\textbf{Marius model}
+		
+		\medskip
+		
+		\begin{itemize}
+			\item Cities produce economic goods
+			\item Economic exchanges are estimated according to gravity flows
+			\item Populations grow depending on final economic balances
+		\end{itemize}
+
+		
+	\end{column}
+\end{columns}
+
+
 
 
 
 }
 
-
-
-\sframe{The Favaro-Pumain model}{
-
-}
 
 
 
 
 \sframe{Datasets}{
 
-\centering
+%\centering
 
 % geodivercity harmonization of datasets
 
-Harmonized dataset, explored in particular by \cite{pumain2015multilevel} (built by 
+\justify
+
+\textbf{Dataset}
+
+Harmonized dataset, explored in particular by \cite{pumain2015multilevel} (built in the context of Geodivercity ERC)
+
+\bigskip
+
+\textbf{Data preprocessing}
+
+\begin{itemize}
+	\item Remove small cities and medium-sized cities (\cite{adam2006medium} for definition of medium-sized) for scalability of simulations
+	\item Shortest paths matrices (direct and taking into account topography, using the EEA world DEM) computed a priori and cached (\textit{no evolution of the network})
+\end{itemize}
+
 
 
 }
 
-
-
-\sframe{Data preprocessing}{
-\centering
-
-Remove small cities (\cite{adam2006medium} for definition of medium-sized)
-
-}
 
 
 \sframe{Stylized facts}{
-\centering
+%\centering
 
 % - fit distributions of growth rates
 % - cluster by type of distrib ?
 
+\textit{Population distributions mainly log-normal (75\% with KS-test, all with AIC); consistent hierarchies in time.}
+
+\medskip
+
+\includegraphics[width=0.49\textwidth]{figures/popdistribs.png}\includegraphics[width=0.49\textwidth]{figures/popranksize.png}
+
 }
+
+\sframe{Stylized facts}{
+
+\textit{Growth rates distributions evolve considerably in time}
+
+\medskip
+
+\includegraphics[width=\textwidth]{figures/growthrates_byyear.png}
+
+}
+
+\sframe{Stylized facts}{
+
+\textit{Correlation as a function of distance: long-range correlations in several systems}
+
+\medskip
+
+\includegraphics[width=0.49\textwidth]{figures/corrsdist_US_quantiles21_periods5.png}\includegraphics[width=0.49\textwidth]{figures/corrsdist_EU_quantiles21_periods5.png}
+
+%\smallskip
+
+%$\rightarrow$ \textit{non-linear models good candidates}
+
+
+}
+
 
 
 
 \sframe{Model calibration}{
 
-Computationally intensive: high-dimensional parameter space and possible spatial setup.
-
-\medskip
-
-$\rightarrow$ use of grid computing, made smooth with the OpenMOLE software \url{https://next.openmole.org/}
+Bi-objective calibration of 7 models for 7 city systems $\rightarrow$ use of genetic algorithms on grid, made smooth with the OpenMOLE software \url{https://next.openmole.org/}
 
 \centering
 
@@ -220,27 +336,56 @@ $\rightarrow$ use of grid computing, made smooth with the OpenMOLE software \url
 
 \footnotesize \textit{OpenMOLE: (i) embed any model as a black box; (ii) transparent access to main High Performance Computing environments; (iii) model exploration and calibration methods.}
 
+\bigskip
+
+\textbf{Come to the Satellite on Wednesday, and apply to the summer school !} 
+\\(\texttt{https://exmodelo.org/})
+
 }
 
-\sframe{Model calibration}{
 
-% number of runs (equivalent / year) ; caracs of NSGA2 ; convergence for each model/system
-
-}
-
-
-\sframe{Results: comparison of models on the different systems}{
+\sframe{Comparison of models on all systems}{
 
 % global overview : Pareto plots / tabular of % effective pareto front for each system
 % (requires the extraction of effective fronts)
 
+\centering
+
+\includegraphics[width=\textwidth]{figures/allmodels_allsystems.png}
+
+\footnotesize
+\textit{Systems driven by economic exchanges: EU, US, RU, ZA}
+
 }
 
-\sframe{Results: particular cases}{
+\sframe{Indian urban system: direct interactions}{
 
 % systems on which the behavior is particularly interesting ?
 
+\centering\includegraphics[width=0.9\textwidth]{figures/IN_zoomed.png}
+
 }
+
+
+\sframe{Brazilian urban system: multiple factors}{
+
+\centering\includegraphics[width=0.9\textwidth,height=0.8\textheight]{figures/BR_zoomed.png}
+
+\footnotesize
+\textit{Importance of topography; innovation processes mostly.}
+
+}
+
+\sframe{China: a tight competition}{
+
+\centering\includegraphics[width=0.9\textwidth,height=0.8\textheight]{figures/CN_zoomed.png}
+
+\footnotesize
+\textit{No clear best model: other processes in play ? (strong top-down planning)}
+
+}
+
+
 
 %\sframe{Results: influence of parameters}{
 % add if cool results
@@ -249,6 +394,26 @@ $\rightarrow$ use of grid computing, made smooth with the OpenMOLE software \url
 \sframe{Results: empirical AIC}{
 % TODO : select optimal points / run empirical AIC
 % OR : run on all points of the Pareto front ? -> local OK
+
+\textit{Comparing Gibrat and Network model by correcting for the number of parameters \cite{raimbault2018indirect}: additional parameters actually improve the fit (but not always)}
+
+\bigskip
+
+\centering
+
+% gib - intgib
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+System & $\Delta AIC$ (log) & $\Delta BIC$ (log) & $\Delta AIC$ (mse) & $\Delta BIC$ (mse) \\\hline
+ZA & 33.82658 & 29.40496 &  -838.07184 &  -842.49347\\
+CN & 20.67713 & 16.78273 & 13.40767 & 9.51327\\
+BR & -263.27003 & -267.71575 & -407.55220 & -411.99792\\
+IN & -85.01949 & -89.24206 & -188.16703 & -192.38960\\
+RU & 50.60535 & 46.24233 & 104.94806 &  100.58503\\\hline
+\end{tabular}
+
+% marius - mariusrestr
+
 
 }
 
@@ -262,11 +427,11 @@ $\rightarrow$ use of grid computing, made smooth with the OpenMOLE software \url
 
 \textbf{Implications}
 
-$\rightarrow$ 
+$\rightarrow$ Complementarity of economic, innovation and direct interaction processes
 
 \smallskip
 
-$\rightarrow$ 
+$\rightarrow$ High dimensionality of urban systems
 
 \bigskip
 
@@ -276,17 +441,28 @@ $\rightarrow$
 
 % future perspective : towards integrative theories / coupling of these models for multi-dimensional grasp of urban systems (more work needed to understand model coupling and role of parameters in fit improvement)
 % Compare these models on synthetic city systems / with suited indicators (here relatively data-driven approach)
+% - nonstat in time for some city systems ?
+% - calib at the second order on correlation curves (-> new methodo approach - link with correlated synthetic data !) (many things are connected)
+% saturation of models ?
+% Rq : issue in calib algos (restricted vs full models : strange behavior ex the bifurcation in intgib % gibrat
 
-
-$\rightarrow$ 
+$\rightarrow$ Still points on robustness to be investigated: influence of stochasticity, convergence of GA, saturation of parameters, number of cities.
 
 \smallskip
 
-$\rightarrow$ 
+$\rightarrow$ Towards integrated models coupling these different components ?
 
 \smallskip
 
-$\rightarrow$ More elaborated method to compare models in a ``fair'' way (correcting for additional parameters, open question for models of simulation).
+$\rightarrow$ Compare on synthetic systems of cities with appropriate indicators \cite{raimbault2018unveiling}.
+
+\smallskip
+
+$\rightarrow$ Calibrate at the second order (correlations), non-stationary in time.
+
+\smallskip
+
+$\rightarrow$ More elaborated method to compare models in a ``fair'' way (correcting for additional parameters, open question for models of simulation): model reduction ? 
 
 
 }
@@ -300,9 +476,13 @@ $\rightarrow$ More elaborated method to compare models in a ``fair'' way (correc
 
 \vspace{-1cm}
 
-$\rightarrow$ % model coupling / benchmarking
+$\rightarrow$ First step towards systematic benchmarks and multi-modeling. \textbf{Need for more systematic model exploration.} % model coupling / benchmarking
 
-\medskip
+\smallskip
+
+$\rightarrow$ Model integration and multi-scalarity ? \textbf{Need for more integrated models.}
+
+\smallskip
 
 $\rightarrow$ Multiple perspectives on urban systems ? \textbf{Need for more interdisciplinarity.}
 
@@ -316,11 +496,11 @@ Raimbault, J. (2018). Indirect evidence of network effects in a system of cities
 
 \url{https://halshs.archives-ouvertes.fr/halshs-01788559}
 
-\medskip	
+\smallskip	
 
 Raimbault, J. (2018). Modeling the co-evolution of cities and networks. \textit{Forthcoming in Handbook of cities and networks, Rozenblat C., Niel Z., eds.} arXiv:1804.09430.
 
-\medskip
+\smallskip
 
 
 Raimbault, J. (2018). Caract{\'e}risation et mod{\'e}lisation de la co-{\'e}volution des r{\'e}seaux de transport et des territoires (Doctoral dissertation, Université Paris 7 Denis Diderot). \url{https://halshs.archives-ouvertes.fr/tel-01857741}
@@ -328,10 +508,10 @@ Raimbault, J. (2018). Caract{\'e}risation et mod{\'e}lisation de la co-{\'e}volu
 
 
 
-\medskip
+\smallskip
 
-\textbf{Open repository} (code, data and results) at\\\texttt{https://github.com/JusteRaimbault/UrbanGrowth}\\\medskip
-\textbf{Acknowledgments} : I thank the \textit{European Grid Infrastructure} and its \textit{National Grid Initiatives} (\textit{France-Grilles} in particular) to give the technical support and the infrastructure.
+\textbf{Open repository} at \texttt{https://github.com/JusteRaimbault/UrbanGrowth}\\\smallskip
+\textbf{Acknowledgments}: thanks to the \textit{EGI} for access to the infrastructure.
 
 
 }
@@ -351,6 +531,23 @@ Raimbault, J. (2018). Caract{\'e}risation et mod{\'e}lisation de la co-{\'e}volu
 
 }
 
+
+\sframe{Model calibration}{
+
+% number of runs (equivalent / year) ; caracs of NSGA2 ; convergence for each model/system
+
+Genetic algorithm NSGA2:
+
+\bigskip
+
+\begin{itemize}
+	\item Around 40000 generations (4e6 model runs)
+	\item Population $\mu = 100$
+	\item Convergence tested with hypervolume relative variation
+\end{itemize}
+
+
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%
