@@ -1,7 +1,8 @@
 
 package urbangrowth.utils.io
 
-import java.io.{BufferedReader, File, FileReader}
+import java.io._
+
 import Jama.Matrix
 
 
@@ -22,7 +23,7 @@ object FileUtils {
     res.toArray
   }
 
-  def parseSimple(f: File) = {
+  def parseSimple(f: File): Array[Double] = {
     val reader = new BufferedReader(new FileReader(f))
     var currentLine = reader.readLine()
     var res = List(currentLine.toDouble)
@@ -31,6 +32,15 @@ object FileUtils {
       if (currentLine != null) res = res :+ currentLine.toDouble
     }
     res.toArray
+  }
+
+  def exportCSV(f: File,m: Matrix,delimiter: String = ","): Unit ={
+    val writer = new BufferedWriter(new FileWriter(f))
+    m.getArray.foreach{
+      case row =>
+        writer.write(row.map{case d => String.format("%f",d.asInstanceOf[AnyRef])}.mkString(delimiter));writer.newLine()
+    }
+    writer.close()
   }
 
 }

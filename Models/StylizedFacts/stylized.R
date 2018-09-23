@@ -227,6 +227,7 @@ for(countrycode in countrycodes){
 
 
 ##### Summary stats (pop in time)
+# -> ok done in geodivercity papers
 
 ## developments : - nonstat in time for some city systems ?
 # - calib at the second order on correlation curves (-> new methodo approach - link with correlated synthetic data !)
