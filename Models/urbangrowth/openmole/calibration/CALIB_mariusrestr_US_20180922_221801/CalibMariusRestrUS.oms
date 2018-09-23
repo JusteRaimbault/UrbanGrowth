@@ -1,4 +1,4 @@
-val countrycode = "RU"
+val countrycode = "US"
 
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -9,8 +9,6 @@ val economicMultiplier = Val[Double]
 val sizeEffectOnSupply = Val[Double]
 val sizeEffectOnDemand = Val[Double]
 val distanceDecay = Val[Double]
-val wealthToPopulationExponent = Val[Double]
-val populationToWealthExponent = Val[Double]
 
 val id = Val[Int]
 
@@ -31,33 +29,32 @@ val model =
       |import urbangrowth.indicators._
       | val res = SimpleModel(input.distFile,input.popFile,input.dateFile,
       |      input.economicMultiplier,input.sizeEffectOnSupply, input.sizeEffectOnDemand,
-      |      input.distanceDecay, input.wealthToPopulationExponent, input.populationToWealthExponent).run()
+      |      input.distanceDecay, 1.0,1.0).run()
       | val logmse = res.logmse
       | val mselog = res.mselog
     """.stripMargin
   ) set (
     plugins += pluginsOf(urbangrowth.models.marius.SimpleModel),
-    inputs += (popFile,distFile,dateFile,economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent,id),
-    outputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent,id),
+    inputs += (popFile,distFile,dateFile,economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,id),
+    outputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,id),
     outputs += (logmse,mselog)
   )
 val modelCapsule = Capsule(model)
 
-
 val fileSetting = ExplorationTask(
     (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
-    (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
+    (distFile in Seq(workDirectory / "data"/ "processed" / (countrycode+"_dist.csv"))) x
     (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv"))) x
     (id in Seq(1))
-  ) set(
-    inputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent),
-    outputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent)
+) set(
+    inputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay),
+    outputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay)
 )
 
 val eval = fileSetting -< model
 
 
-val modelname = "marius"
+val modelname = "mariusrestr"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
 val purpose = "CALIB"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
@@ -69,18 +66,16 @@ val evolution =
         economicMultiplier in Range(0.0, 100.0),
         sizeEffectOnSupply in Range(1.0, 20.0),
         sizeEffectOnDemand in Range(1.0, 20.0),
-        distanceDecay in Range(0.0, 10.0),
-        populationToWealthExponent in Range(0.1,10.0),
-        wealthToPopulationExponent in Range(0.1,10.0)
+        distanceDecay in Range(0.0, 10.0)
       ),
       mu = 100,
       objectives = Seq(mselog,logmse),
       evaluation = eval,
       termination = 30 minutes,
       parallelism = 20
+      //distribution = Island(10)
   )
 
-  //,distribution = Island(10)
 
 // Define the hook to save the results
 val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / resdir)
@@ -89,6 +84,5 @@ val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / res
 val local = LocalEnvironment(20)
 
 //island on grid hook savePopulation
-//island on local hook savePopulation
 evolution on local hook savePopulation
 
