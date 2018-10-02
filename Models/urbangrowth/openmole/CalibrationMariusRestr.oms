@@ -64,15 +64,15 @@ val evolution =
     genome =
       Seq(
         economicMultiplier in Range(0.0, 100.0),
-        sizeEffectOnSupply in Range(1.0, 20.0),
-        sizeEffectOnDemand in Range(1.0, 20.0),
+        sizeEffectOnSupply in Range(0.1, 20.0),
+        sizeEffectOnDemand in Range(0.1, 20.0),
         distanceDecay in Range(0.0, 10.0)
       ),
-      mu = 100,
+      mu = 400,
       objectives = Seq(mselog,logmse),
       evaluation = eval,
-      termination = 30 minutes,
-      parallelism = 20
+      termination = 240 minutes,
+      parallelism = 40
       //distribution = Island(10)
   )
 
@@ -81,7 +81,7 @@ val evolution =
 val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu",openMOLEMemory = 256 megabytes)
-val local = LocalEnvironment(20)
+val local = LocalEnvironment(40)
 
 //island on grid hook savePopulation
 evolution on local hook savePopulation
