@@ -127,24 +127,109 @@ table(data.frame(distrs,systems,years))
 ######
 # correlation of growth rates as a function of distance - in time
 
-countrycode = 'US'
-cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
+#countrycode = 'ZA'
+countrycodes = c('EU','BR','CN','IN','RU','ZA','US')
+#countrycodes = c('BR','CN','IN','RU','ZA','US')
 
-#apply(cities,2,function(col){length(which(is.na(col)))})
+# hand def colsnames (different number and names for europe)
+popcolnames=list('EU'=c("X1961","X1971","X1981","X1991","X2001","X2011"),
+                 'US'=c("X1960","X1970","X1980","X1990","X2000","X2010"),
+                 'BR'=c("X1960","X1970","X1980","X1991","X2000","X2010"),
+                 'CN'=c("X1964","X1982","X1990","X2000"),
+                 'IN'=c("X1951","X1961","X1981","X1991","X2001","X2011"),
+                 'RU'=c("X1959","X1970","X1979","X1989","X2002","X2010"),
+                 'ZA'=c("X1960","X1970","X1980","X1991","X1996","X2001")
+                 )
 
-cities = cities[!is.na(cities$X2010),c("Long","Lat","X1960","X1970","X1980","X1990","X2000","X2010")]
-cities=cities[apply(cities,1,function(r){length(which(is.na(r)))==0}),]
+corresdir=paste0(resdir,'corrs/');dir.create(corresdir)
 
-distmat = spDists(as.matrix(cities[,c('Long','Lat')]),longlat = T)
+generatePeriods<-function(cols){
+  res=list()
+  for(l in 1:length(cols)){
+    currentcols=list()
+    for(i in 1:(length(cols)-l+1)){
+      currentcols[[substring(cols[(i+l-1)],2)]]=cols[i:(i+l-1)]
+    }
+    res[[as.character(l)]]=currentcols
+  }
+  return(res)
+}
 
-cities=cities[,c("X1960","X1970","X1980","X1990","X2000","X2010")]
+for(countrycode in countrycodes){
+  show(countrycode)
+  if(countrycode!='EU'){
+    cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/data/',cityfiles[[countrycode]],'.csv'))
+  }else{
+    cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/Geodivercity/tradeve/agglo.csv'),sep = ";",dec=',')
+    colnames(cities)[6:13]=c('Long','Lat',"X1961","X1971","X1981","X1991","X2001","X2011")
+  }
+  #apply(cities,2,function(col){length(which(is.na(col)))})
+  cities = cities[,c('Long','Lat',popcolnames[[countrycode]])]
+  
+  #cities = cities[!is.na(cities$X2010),c("Long","Lat","X1960","X1970","X1980","X1990","X2000","X2010")]
+  cities=cities[apply(cities,1,function(r){length(which(is.na(r)))==0}),]
+  #plot(SpatialPoints(cities[,c('Long','Lat')]))
+  
+  #distmat = spDists(SpatialPoints(cities[,c('Long','Lat')],proj4string = crs("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")))
+  distmat = spDists(as.matrix(cities[,c('Long','Lat')]),longlat = T)
+  
+  cities=cities[,popcolnames[[countrycode]]]
+  deltats = diff(as.numeric(substring(colnames(cities),2)))
+  
+  growthrates = t(apply(cities,1,function(r){diff(r)/(r[2:(length(r))]*deltats)}))
+  flatmat = c(distmat)
+  
+  #quantiles = c(0.0,0.25,0.5,0.75,1)
+  for(quantiles in list(seq(0.0,1.0,0.25),seq(0.0,1.0,0.1),seq(0.0,1.0,0.05))){
+    
+    #periods = list('full'=colnames(growthrates))
+    #periods = list('1970'="X1970",'1980'="X1980",'1990'="X1990",'2000'="X2000",'2010'="X2010")
+    # generate periods
+    for(periods in generatePeriods(colnames(growthrates))){
+      
+      dists = c();corrs=c();corrmin=c();corrmax=c();cperiods=c()
+      # TODO add N
+      for(i in 2:length(quantiles)){
+        show(paste0(i,'/',length(quantiles)))
+        # include both extrs to include max
+        flatinds = which(flatmat>=quantile(flatmat[flatmat>0],quantiles[i-1])&flatmat<=quantile(flatmat[flatmat>0],quantiles[i]))
+        rows = floor(flatinds / ncol(distmat))+1;cols=flatinds%%ncol(distmat)+1
+        currentdists = flatmat[flatinds]
+        #uids = unique(paste0(rows,"-",cols))
+        # quite dirty
+        uids = unique(sapply(1:length(rows),function(i){paste0(sort(c(rows[i],cols[i])),collapse='-')}))
+        suids = strsplit(uids,'-')
+        urows=sapply(suids,function(l){as.numeric(l[1])});ucols=sapply(suids,function(l){as.numeric(l[2])})
+        for(periodname in names(periods)){
+          show('\tperiodname')
+          currentg = growthrates[,periods[[periodname]]]
+          # data on which correlation is estimated is x = x_i_t, y = x_j_t
+          if(!is.null(dim(currentg))){# shitty behavior to project by default
+            rho = cor.test(x=unlist(c(currentg[urows,])),y=unlist(c(currentg[ucols,])))
+          }else{
+            rho = cor.test(x=unlist(c(currentg[urows])),y=unlist(c(currentg[ucols])))
+          }
+          dists=append(dists,mean(currentdists));corrs=append(corrs,rho$estimate);
+          corrmin=append(corrmin,rho$conf.int[1]);corrmax=append(corrmax,rho$conf.int[2]);cperiods=append(cperiods,periodname)
+        }
+      }
+      # -> time window and distance bin which maximize the quality of estimation of correlation : which criteria ?
+      # ex. : average ratio rho / size of confidence int ; quantity of overlap between two successive points
+      
+      g=ggplot(data.frame(rho=corrs,rhomin=corrmin,rhomax=corrmax,distance=dists,period=cperiods),aes(x=distance,y=rho,ymin=rhomin,ymax=rhomax,group=period,color=period))
+      g+geom_line()+geom_point()+geom_errorbar()+
+        xlab("Distance")+ylab("Correlation")+scale_color_discrete(name="Period")+ggtitle(countrycode)+stdtheme
+      ggsave(file=paste0(corresdir,'corrsdist_',countrycode,'_quantiles',length(quantiles),'_periods',length(periods),'.png'),width=20,height=18,units='cm')
+    }
+  }
+}
 
-growthrates = t(apply(cities,1,function(r){diff(r)/r[2:(length(r))]}))
 
-quantiles = c(0.0,0.25,0.5,0.75,1)
 
-quantile(c(distmat),quantiles)
+##### Summary stats (pop in time)
+# -> ok done in geodivercity papers
 
-#which(distmat<774)
-
+## developments : - nonstat in time for some city systems ?
+# - calib at the second order on correlation curves (-> new methodo approach - link with correlated synthetic data !)
+# (many things are connected)
 
