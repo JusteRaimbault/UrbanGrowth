@@ -1,4 +1,4 @@
-val countrycode = "US"
+val countrycode = "BR"
 
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -23,8 +23,7 @@ val distFile=Val[File]
 val dateFile=Val[File]
 
 // Model
-val model =
-  ScalaTask(
+val model = ScalaTask(
     """
       |import urbangrowth.models.coevolution._
       |import urbangrowth.indicators._
@@ -64,27 +63,24 @@ val island =
       Seq(
         growthRate in Range(0.0, 0.05),
         gravityWeight in Range(0.0,0.05),
-        gravityGamma in Range(0.1,10.0),
-        gravityDecay in Range(0.1,20000.0)
+        gravityGamma in Range(0.0,10.0),
+        gravityDecay in Range(0.1,100000.0)
       ),
-    mu=200,
+    mu=400,
     objectives = Seq(mselog,logmse),
     evaluation = eval,
-    termination = 2 hours,
-    parallelism = 50,
-    distribution = Island(10)
+    termination = 240 minutes,
+    parallelism = 40
 )
+//distribution = Island(10)
 
 
 // Define the hook to save the results
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(50)
+val local = LocalEnvironment(40)
 
 
 //island on grid hook savePopulation
 island on local hook savePopulation
-
-
-

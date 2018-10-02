@@ -5,6 +5,8 @@ name := "urbangrowth"
 
 version := "0.1-SNAPSHOT"
 
+mainClass in (Compile, run) := Some("urbangrowth.Run")
+
 enablePlugins(SbtOsgi)
 
 OsgiKeys.exportPackage := Seq("urbangrowth.*")

@@ -9,7 +9,8 @@ if len(sys.argv) > 3:
     MULTIPLE=True
 
 def getLatestGen(dir):
-    files = os.listdir(dir)
+    files = [s for s in os.listdir(dir) if not s.startswith('Calib')]
+    #print(files)
     print(sorted(map(lambda s:int(s.split('population')[1].split('.')[0]),files),reverse=True)[0])
     return(str(sorted(map(lambda s : int(s.split('population')[1].split('.')[0]),files),reverse=True)[0]))
 

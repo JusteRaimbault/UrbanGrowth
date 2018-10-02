@@ -30,10 +30,10 @@ for(countrycode in countrycodes){
   cities <- read.csv(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/clean/',cityfiles[[countrycode]],'.csv'))
   
   if(withGraph){
-    extrdem = extractRaster(dem,countries,countrycode)
-    graph = geographicGraph(extrdem)
-    save(graph,file=paste0(targetDir,countrycode,'_graph.RData'))
-    
+    #extrdem = extractRaster(dem,countries,countrycode)
+    #graph = geographicGraph(extrdem)
+    #save(graph,file=paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/graphs/',countrycode,'_graph.RData'))
+    load(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/graphs/',countrycode,'_graph.RData'))
     
     vertices = apply(cities[,c("Long","Lat")],1,function(r){
       d=(V(graph)$x-r[1])^2+(V(graph)$y-r[2])^2
@@ -46,8 +46,8 @@ for(countrycode in countrycodes){
     slopes = atan(abs(E(graph)$slope)/(E(graph)$length*1000))*360/(2*pi)
     
     #alpha0 = 3;n0 = 3
-    for(alpha0 in 2:4){
-      for(n0 in 2:4){
+    for(alpha0 in 3:3){
+      for(n0 in 3:3){
         impedances = E(graph)$length*(1 + (slopes/alpha0)^n0)
         graphdists = distances(graph,v = cities$vertices,to=cities$vertices,weights = impedances)
         write.table(graphdists,file=paste0(targetDir,countrycode,'_gdist_alpha0',alpha0,'_n0',n0,'.csv'),row.names = F,col.names = F,sep=',')
