@@ -71,7 +71,7 @@ val modelCapsule = Capsule(model)
       objectives = Seq(mselog,logmse),
       evaluation = eval,
       termination = 8 hours,
-      parallelism = 40
+      parallelism = 20
   )
 
 //distribution = Island(10)
@@ -80,7 +80,7 @@ val modelCapsule = Capsule(model)
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu",openMOLEMemory = 2000 megabytes)
-val local = LocalEnvironment(40)
+val local = LocalEnvironment(20)
 
 //island on grid hook savePopulation
 island on local hook savePopulation

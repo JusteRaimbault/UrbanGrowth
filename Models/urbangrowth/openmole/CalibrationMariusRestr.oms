@@ -71,8 +71,8 @@ val evolution =
       mu = 400,
       objectives = Seq(mselog,logmse),
       evaluation = eval,
-      termination = 240 minutes,
-      parallelism = 40
+      termination = 5 hours,
+      parallelism = 20
       //distribution = Island(10)
   )
 
@@ -81,7 +81,7 @@ val evolution =
 val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / resdir)
 
 //val grid = EGIEnvironment("vo.complex-systems.eu",openMOLEMemory = 256 megabytes)
-val local = LocalEnvironment(40)
+val local = LocalEnvironment(20)
 
 //island on grid hook savePopulation
 evolution on local hook savePopulation
