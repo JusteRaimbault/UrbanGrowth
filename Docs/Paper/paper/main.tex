@@ -55,7 +55,8 @@
 
 %%%%%%%%%%%
 % CCS 2018 Abstract
-% A systematic comparison of interaction models for systems of cities%Understanding patterns of growth for cities is a crucial issue for its practical and policy implications e.g. regarding sustainability, but also from a theoretical point of view regarding the validation of theories for urban systems. A particular entry is taken by the Evolutive Urban Theory [1] which postulates interactions between cities as main drivers of their growth. Within this framework, numerous concurrent models have been introduced for the evolution of systems of cities, and applied on diverse case studies, but there is to the best of our knowledge no systematic comparison of performances across models and application cases. This contribution makes a first step towards such a systematic benchmark. We consider simple models simulating population of cities only, but including heterogenous underlying processes and assumptions. More precisely, we compare (i) the Favaro-Pumain model for the diffusion of innovation [2]; (ii) the Marius multi-model based on economic exchanges [3]; and (iii) a model including flows within abstract physical networks parametrized on elevation data [4]. These models are calibrated on a large scale harmonized dataset [5] including the European, former Soviet Union, Chinese, Brazilian, South-African, Indian and USA systems of cities on a time period covering 1960-2010. Calibrations are done for different versions of each model including more or less parameters, using distributed genetic algorithms on a computation grid through the intermediary of the OpenMOLE model exploration software [6]. Calibration results show that: (i) at a fixed number of parameters, no model performs particularly better on all urban systems, suggesting the complementary of the innovation, economic, and network dimensions taken into account by the different models; and (ii) when adjusting for the number of parameters with an empirical information criterion [4], we find that additional components generally improve performances for all models, what reveals a high effective dimensionality of urban systems. This work confirms the need for multiple complementary approaches to model urban systems and sketches a framework allowing systematic benchmarks of concurrent models for complex urban systems.
+% A systematic comparison of interaction models for systems of cities
+%Understanding patterns of growth for cities is a crucial issue for its practical and policy implications e.g. regarding sustainability, but also from a theoretical point of view regarding the validation of theories for urban systems. A particular entry is taken by the Evolutive Urban Theory [1] which postulates interactions between cities as main drivers of their growth. Within this framework, numerous concurrent models have been introduced for the evolution of systems of cities, and applied on diverse case studies, but there is to the best of our knowledge no systematic comparison of performances across models and application cases. This contribution makes a first step towards such a systematic benchmark. We consider simple models simulating population of cities only, but including heterogenous underlying processes and assumptions. More precisely, we compare (i) the Favaro-Pumain model for the diffusion of innovation [2]; (ii) the Marius multi-model based on economic exchanges [3]; and (iii) a model including flows within abstract physical networks parametrized on elevation data [4]. These models are calibrated on a large scale harmonized dataset [5] including the European, former Soviet Union, Chinese, Brazilian, South-African, Indian and USA systems of cities on a time period covering 1960-2010. Calibrations are done for different versions of each model including more or less parameters, using distributed genetic algorithms on a computation grid through the intermediary of the OpenMOLE model exploration software [6]. Calibration results show that: (i) at a fixed number of parameters, no model performs particularly better on all urban systems, suggesting the complementary of the innovation, economic, and network dimensions taken into account by the different models; and (ii) when adjusting for the number of parameters with an empirical information criterion [4], we find that additional components generally improve performances for all models, what reveals a high effective dimensionality of urban systems. This work confirms the need for multiple complementary approaches to model urban systems and sketches a framework allowing systematic benchmarks of concurrent models for complex urban systems.
 
 
 
@@ -120,15 +121,20 @@ Paper Charlotte : https://arxiv.org/pdf/1808.08113.pdf adding migration produces
 %%%%%%%%%%%%%
 \subsection{Diffusion of innovation}
 
+A model integrating innovation waves between cites was introduced and studied by \cite{favaro2011gibrat}.
+
 
 %%%%%%%%%%%%%
 \subsection{Economic exchanges}
 
+A model based on economic exchanges between cities was developed for the particular case of former Soviet Union by \cite{cottineau2014evolution}
+% be careful on genericity
 
 
 %%%%%%%%%%%%%
 \subsection{Network effects}
 
+A last model is focused on network effects, in particular the role of physical transportation networks.  
 
 
 
@@ -155,6 +161,10 @@ Paper Charlotte : https://arxiv.org/pdf/1808.08113.pdf adding migration produces
 %%%%%%%%%%%%%
 
 
+% table with all parameters ?
+
+
+
 
 %%%%%%%%%%%%%
 \section{Results}
@@ -179,6 +189,30 @@ Paper Charlotte : https://arxiv.org/pdf/1808.08113.pdf adding migration produces
 
 
 
+% long range correlation patterns
+
+In order to get a better insight into the role of interactions between cities in their growth pattern, we study growth rates correlations as a function of distance. This is an indirect and partial way to study interactions but does not require flow data.
+
+We define the relative growth rates by
+
+\[
+\tilde{r}_t = \frac{P(t) - P(t-1)}{P(t)}
+\]
+
+% rq : in continuous, equivalent to log-returns
+which are approximately derivatives of log-returns in the continuous limit.
+
+We show in Fig.~\ref{} correlations 
+
+
+%%%%%%%%%%%%%%%
+\begin{figure}
+	%\includegraphics[width=\textwidth]{figures/}
+	\caption{}
+\end{figure}
+%%%%%%%%%%%%%%%
+
+
 
 %%%%%%%%%%%%%
 \subsection{Benchmarking models}
@@ -192,6 +226,11 @@ Paper Charlotte : https://arxiv.org/pdf/1808.08113.pdf adding migration produces
 
 %%%%%%%%%%%%%
 \section{Discussion}
+
+
+\subsection{An open application to extend benchmarks}
+
+% do a minimal shiny app where users can submit their jobs
 
 
 
