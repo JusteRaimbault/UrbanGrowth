@@ -64,14 +64,14 @@ val evolution =
     genome =
       Seq(
         economicMultiplier in Range(0.0, 100.0),
-        sizeEffectOnSupply in Range(1.0, 20.0),
-        sizeEffectOnDemand in Range(1.0, 20.0),
+        sizeEffectOnSupply in Range(0.1, 20.0),
+        sizeEffectOnDemand in Range(0.1, 20.0),
         distanceDecay in Range(0.0, 10.0)
       ),
-      mu = 100,
+      mu = 400,
       objectives = Seq(mselog,logmse),
       evaluation = eval,
-      termination = 30 minutes,
+      termination = 5 hours,
       parallelism = 20
       //distribution = Island(10)
   )

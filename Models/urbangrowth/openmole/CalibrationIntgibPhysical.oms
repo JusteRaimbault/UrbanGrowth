@@ -63,13 +63,13 @@ val island =
       Seq(
         growthRate in Range(0.0, 0.05),
         gravityWeight in Range(0.0,0.05),
-        gravityGamma in Range(0.1,10.0),
-        gravityDecay in Range(0.1,20000.0)
+        gravityGamma in Range(0.0,10.0),
+        gravityDecay in Range(0.1,100000.0)
       ),
-    mu=100,
+    mu=400,
     objectives = Seq(mselog,logmse),
     evaluation = eval,
-    termination = 30 minutes,
+    termination = 5 hours,
     parallelism = 20
     //distribution = Island(10)
 )

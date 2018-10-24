@@ -59,10 +59,10 @@ val island =
       Seq(
         growthRate in Range(0.0, 0.1)
       ),
-      mu = 100,
+      mu = 400,
       objectives = Seq(mselog,logmse),
       evaluation = eval,
-      termination = 10 minutes,
+      termination = 120 minutes,
       parallelism = 20
       //distribution = Island(5)
 )
