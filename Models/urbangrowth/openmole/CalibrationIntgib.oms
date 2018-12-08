@@ -60,8 +60,6 @@ val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 val grid = EGIEnvironment("vo.complex-systems.eu")
 //val local = LocalEnvironment(20)
 
-val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
-
 
 val evolution =
   NSGA2Evolution(
@@ -79,6 +77,10 @@ val evolution =
     parallelism = 1000,
     distribution = Island(10 minutes)
 )
+
+
+val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / resdir)
+
 
 
 //island on grid hook savePopulation
