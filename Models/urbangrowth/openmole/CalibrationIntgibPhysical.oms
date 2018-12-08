@@ -54,7 +54,7 @@ val eval = fileSetting -< model
 
 val modelname = "intgibphysical"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
-val purpose = "CALIB"
+val purpose = "CALIB_GRID"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
 val grid = EGIEnvironment("vo.complex-systems.eu")
@@ -63,7 +63,7 @@ val grid = EGIEnvironment("vo.complex-systems.eu")
 val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 
-val island =
+val evolution =
   NSGA2Evolution(
     genome =
       Seq(
@@ -74,7 +74,7 @@ val island =
       ),
     mu=400,
     objectives = Seq(mselog,logmse),
-    evaluation = (eval on grid hook savePopulation),
+    evaluation = eval,
     termination = 100000,
     parallelism = 1000,
     distribution = Island(10 minutes)
@@ -83,4 +83,4 @@ val island =
 
 
 //island on grid hook savePopulation
-island
+(evolution on grid hook savePopulation)

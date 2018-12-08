@@ -54,7 +54,7 @@ val modelCapsule = Capsule(model)
 
   val modelname = "innovation"
   val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
-  val purpose = "CALIB"
+  val purpose = "CALIB_GRID"
   val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
 
@@ -64,7 +64,7 @@ val modelCapsule = Capsule(model)
   val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
 
 
-  val island =
+  val evolution =
   NSGA2Evolution(
     genome =
       Seq(
@@ -76,11 +76,11 @@ val modelCapsule = Capsule(model)
       mu = 400,
       stochastic = Stochastic(seed = id),
       objectives = Seq(mselog,logmse),
-      evaluation = (eval on grid hook savePopulation),
+      evaluation = eval,
       termination = 100000,
       parallelism = 1000,
       distribution = Island(10 minutes)
   )
 
 //island on grid hook savePopulation
-island
+(evolution on grid hook savePopulation)

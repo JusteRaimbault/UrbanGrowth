@@ -59,7 +59,7 @@ val eval = fileSetting -< model
 
 val modelname = "marius"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
-val purpose = "CALIB"
+val purpose = "CALIB_GRID"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
 val evolution =
@@ -75,11 +75,11 @@ val evolution =
       ),
       mu = 400,
       objectives = Seq(mselog,logmse),
-      evaluation = (eval on grid hook savePopulation),
+      evaluation = eval,
       termination = 100000,
       parallelism = 1000,
       distribution = Island(10 minutes)
   )
 
 //island on local hook savePopulation
-evolution
+(evolution on grid hook savePopulation)
