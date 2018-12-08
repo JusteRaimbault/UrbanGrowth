@@ -50,8 +50,14 @@ val eval = fileSetting -< model
 
 val modelname = "gibrat"
 val datestr = (new SimpleDateFormat("yyyyMMdd")).format(new Date()).toString
-val purpose = "CALIB"
+val purpose = "CALIB_GRID"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
+
+val grid = EGIEnvironment("vo.complex-systems.eu")
+//val local = LocalEnvironment(20)
+
+val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
+
 
 val island =
   NSGA2Evolution(
@@ -61,18 +67,11 @@ val island =
       ),
       mu = 400,
       objectives = Seq(mselog,logmse),
-      evaluation = eval,
-      termination = 120 minutes,
-      parallelism = 20
-      //distribution = Island(5)
+      evaluation = (eval on grid hook savePopulation),
+      termination = 100000,
+      parallelism = 1000,
+      distribution = Island(10 minutes)
 )
 
-
-// Define the hook to save the results
-val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
-
-//val grid = EGIEnvironment("vo.complex-systems.eu")
-val local = LocalEnvironment(20)
-
 //island on grid hook savePopulation
-island on local hook savePopulation
+island

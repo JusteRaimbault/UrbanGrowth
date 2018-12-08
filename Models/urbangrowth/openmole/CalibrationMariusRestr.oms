@@ -59,6 +59,12 @@ val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toStr
 val purpose = "CALIB"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
+
+val grid = EGIEnvironment("vo.complex-systems.eu")
+//val local = LocalEnvironment(20)
+
+val savePopulation = SavePopulationHook(island, workDirectory / "calib" / resdir)
+
 val evolution =
   NSGA2Evolution(
     genome =
@@ -70,19 +76,12 @@ val evolution =
       ),
       mu = 400,
       objectives = Seq(mselog,logmse),
-      evaluation = eval,
-      termination = 5 hours,
-      parallelism = 20
-      //distribution = Island(10)
+      evaluation = (eval on grid hook savePopulation),
+      termination = 100000,
+      parallelism = 1000,
+      distribution = Island(10 minutes)
   )
 
 
-// Define the hook to save the results
-val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / resdir)
-
-//val grid = EGIEnvironment("vo.complex-systems.eu",openMOLEMemory = 256 megabytes)
-val local = LocalEnvironment(20)
-
 //island on grid hook savePopulation
-evolution on local hook savePopulation
-
+evolution
