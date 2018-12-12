@@ -35,6 +35,7 @@ ggsave(file=paste0(resdir,'frontdiffs.png'),width=15,height=10,units='cm')
 pop29000 = read.csv(file=paste0(sourcedir,'population29000.csv'))
 pop30000 = read.csv(file=paste0(sourcedir,'population30000.csv'))
 pop31000 = read.csv(file=paste0(sourcedir,'population31000.csv'))
+pop96000 = read.csv(file=paste0(sourcedir,'population96000.csv'))
 
 g=ggplot(data.frame(rbind(cbind(pop29000,gen=rep("29",nrow(pop29000))),cbind(pop30000,gen=rep("30",nrow(pop30000))),cbind(pop31000,gen=rep("31",nrow(pop31000))))),aes(x=logmse,y=mselog,color=gen))
 g+geom_point()
@@ -58,10 +59,12 @@ ggsave(file=paste0(resdir,'volumes_nobounds.png'),width=15,height=10,units='cm')
 
 
 # compare with no grid
-oldcalib = 'CALIB_intgib_BR_20181003_154646'
+oldcalib = 'CALIB_intgib_BR_20180921_173302'
 #'CALIB_intgib_BR_20181003_154646/population42744.csv'
+#'CALIB_intgib_BR_20180921_173302/population39261.csv'
+local = cbind(read.csv(file=paste0(oldcalib,'/population39261.csv')),type='local')
 
-d = rbind(cbind(pop31000,type='grid'),cbind(read.csv(file=paste0(oldcalib,'/population42744.csv')),type='local'))
+d = rbind(cbind(pop96000,type='grid'),)
 g=ggplot(d,aes(x=logmse,y=mselog,color=type))
 g+geom_point()
 # -> what the fuck ? check num of cities

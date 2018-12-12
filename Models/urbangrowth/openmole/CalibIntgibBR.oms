@@ -54,11 +54,12 @@ val eval = fileSetting -< model
 
 val modelname = "intgib"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
-val purpose = "CALIB_GRID"
+//val purpose = "CALIB_GRID"
+val purpose = "CALIB"
 val resdir = purpose+"_"+modelname+"_"+countrycode+"_"+datestr
 
-val grid = EGIEnvironment("vo.complex-systems.eu")
-//val local = LocalEnvironment(20)
+//val grid = EGIEnvironment("vo.complex-systems.eu")
+val local = LocalEnvironment(50)
 
 
 val evolution =
@@ -73,9 +74,9 @@ val evolution =
     mu=400,
     objectives = Seq(mselog,logmse),
     evaluation = eval,
-    termination = 100000,
-    parallelism = 1000,
-    distribution = Island(10 minutes)
+    termination = 40000,
+    parallelism = 50//1000,
+    //distribution = Island(10 minutes)
 )
 
 
@@ -83,5 +84,5 @@ val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / res
 
 
 
-//island on grid hook savePopulation
-(evolution on grid hook savePopulation)
+(evolution on local hook savePopulation)
+//(evolution on grid hook savePopulation)
