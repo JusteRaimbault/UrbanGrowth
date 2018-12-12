@@ -1,5 +1,6 @@
 
 library(sp)
+library(hypervolume)
 
 
 runmodel<-function(args){
@@ -52,6 +53,7 @@ frontDiffs <- function(popdirectory,objectives=c('logmse','mselog')){
   gens = sapply(strsplit(files,'population'),function(l){sapply(strsplit(l[2],split = '.',fixed = T),function(l){as.numeric(l[1])})})
   dists = c()
   for(i in 2:length(files)){
+    show(i)
     prevfront=read.csv(file=paste0(popdirectory,'/',files[i-1]))
     currentfront=read.csv(file=paste0(popdirectory,'/',files[i]))
     #dists = append(dists,sum(c(dist(as.matrix(prevfront[,objectives]),as.matrix(currentfront[,objectives])))))
@@ -62,6 +64,75 @@ frontDiffs <- function(popdirectory,objectives=c('logmse','mselog')){
   }
   return(list(gens=gens[2:length(gens)],dists=dists))
 }
+
+
+
+#'
+#' Approximate hypervolumes for successive fronts
+hypervolumes<-function(popdirectory,indics){
+  files=list.files(popdirectory)
+  
+  #alldata = data.frame()
+  #for(file in files){alldata=rbind(alldata,read.csv(file=paste0(popdirectory,'/',file)))}
+  #sres=alldata[,indics]
+  #for(j in 1:ncol(sres)){sres[,j]=(sres[,j]-min(sres[,j]))/(max(sres[,j])-min(sres[,j]))}
+  #pca=prcomp(sres[,indics])
+  
+  gens = sort(sapply(strsplit(files,'population'),function(l){sapply(strsplit(l[2],split = '.',fixed = T),function(l){as.numeric(l[1])})}))
+  vols = c()
+  for(i in 2:length(gens)){
+    show(i)
+    currentfront=read.csv(file=paste0(popdirectory,'/population',gens[i],'.csv'))
+    sres=currentfront[,indics]
+    for(j in 1:ncol(sres)){sres[,j]=(sres[,j]-min(sres[,j]))/(max(sres[,j])-min(sres[,j]))}
+    #rot=as.matrix(currentfront[,indics])%*%pca$rotation
+    #vols=append(vols,get_volume(hypervolume(data=rot[,1:4],method = "box")))
+    show(dim(sres))
+    vols=append(vols,get_volume(hypervolume(data=sres,method = "box")))
+  }
+  
+  return(list(gens=gens[2:length(gens)],vols=vols))
+}
+
+
+#'
+#' Number of patterns
+patterns<-function(popdirectory){
+  files=list.files(popdirectory)
+  gens = sort(sapply(strsplit(files,'population'),function(l){sapply(strsplit(l[2],split = '.',fixed = T),function(l){as.numeric(l[1])})}))
+  pattnum=c()
+  for(i in 2:length(gens)){ 
+    show(i)
+    currentfront=read.csv(file=paste0(popdirectory,'/population',gens[i],'.csv'))
+    pattnum=append(pattnum,nrow(currentfront))
+  }
+  return(list(gens=gens[2:length(gens)],patterns=pattnum))
+}
+
+
+#'
+#'
+polygonVolumes <-function(popdirectory,bounds=c(Inf,Inf),objectives=c('logmse','mselog')){
+  files=list.files(popdirectory)
+  gens = sort(sapply(strsplit(files,'population'),function(l){sapply(strsplit(l[2],split = '.',fixed = T),function(l){as.numeric(l[1])})}))
+  volumes=c()
+  for(i in 2:length(gens)){ 
+    show(i)
+    currentfront=read.csv(file=paste0(popdirectory,'/population',gens[i],'.csv'))
+    currentfront = currentfront[,objectives]
+    for(j in 1:ncol(currentfront)){if(nrow(currentfront)>0){currentfront=currentfront[currentfront[,j]<bounds[j],]}}
+    vol=0
+    if(nrow(currentfront)>0){
+      currentpol = Polygon(currentfront[c(chull(x=currentfront[,objectives[1]],y=currentfront[,objectives[2]]),1),],hole = F)
+      vol=currentpol@area
+    }
+    volumes=append(volumes,nrow(currentfront))
+  }
+  return(list(gens=gens[2:length(gens)],volumes=volumes))
+}
+
+
+
 
 
 
