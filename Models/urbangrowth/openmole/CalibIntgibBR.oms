@@ -84,5 +84,5 @@ val savePopulation = SavePopulationHook(evolution, workDirectory / "calib" / res
 
 
 
-(evolution on local hook savePopulation)
+evolution on local hook savePopulation
 //(evolution on grid hook savePopulation)
