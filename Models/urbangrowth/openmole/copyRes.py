@@ -25,7 +25,7 @@ for dir in sourcedirs :
     gens = [gen]
     if MULTIPLE :
         #gens = range((int(gen) - 1000),int(gen),100)
-        gens = [1,10,100,500]+list(range(1000,int(gen),1000))
+        gens = [1,10,100,500]+list(range(1000,int(gen)+1,1000))
     for gen in gens :
         if not os.path.isfile(TARGET+'/'+dir+'/population'+str(gen)+'.csv') and os.path.isfile(SOURCE+'/'+dir+'/population'+str(gen)+'.csv'):
             shutil.copy(SOURCE+'/'+dir+'/population'+str(gen)+'.csv',TARGET+'/'+dir+'/population'+str(gen)+'.csv')
