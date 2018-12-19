@@ -1,0 +1,3 @@
+[submodule "Docs/Paper/overleaf"]
+	path = Docs/Paper/overleaf
+	url = git@github.com:JusteRaimbault/UrbanGrowth-paper.git
