@@ -10,7 +10,7 @@ source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
 
 # parameters : where calibration results are stored and where to store result figures
 sourcedir = ''
-resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Calibration/')
+resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Calibration/all/')
 
 latestgen <- function(dir){
   max(as.integer(sapply(strsplit(sapply(strsplit(
