@@ -54,16 +54,16 @@ val grid = EGIEnvironment("vo.complex-systems.eu")
 val evolution =
   GenomeProfileEvolution(
     evaluation = model,
-    parallelism = 1000,
-    termination = 10000,
+    parallelism = 2000,
+    termination = 20000,
     x = gravityDecay,
-    nX = 100,
+    nX = 200,
     genome =
       Seq(
         growthRate in Range(0.0, 0.05),
         gravityWeight in Range(0.0,0.05),
         gravityGamma in Range(0.0,10.0),
-        gravityDecay in Range(0.1,20000.0)
+        gravityDecay in Range(0.001,200.0)
       ),
     objective = logmse,
     distribution = Island(10 minutes)
