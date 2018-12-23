@@ -8,12 +8,14 @@ source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
 
 # parameters : where calibration results are stored and where to store result figures
-sourcedir = 'PROFILE_GRID_intgib_BR_20181219_150953/'
+#sourcedir = 'PROFILE_GRID_intgib_BR_20181219_150953/'
+sourcedir = 'PROFILE_GRID_intgib_BR_20181221_103649/'
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Calibration/',sourcedir);dir.create(resdir)
 
 
-res=as.tbl(read.csv(file=paste0(sourcedir,'population10000.csv')))
+res=as.tbl(read.csv(file=paste0(sourcedir,'population6899.csv')))
 
+# g=ggplot(res[res$gravityDecay<=1000,],aes(x=gravityDecay,y=logmse))
 g=ggplot(res,aes(x=gravityDecay,y=logmse))
 g+geom_point()+geom_line()+stdtheme
 ggsave(file=paste0(resdir,'profile_logmse-gravityDecay.png'),width=15,height = 10,units='cm')
