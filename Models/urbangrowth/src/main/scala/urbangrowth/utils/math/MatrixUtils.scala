@@ -39,5 +39,9 @@ object MatrixUtils {
     }
   }
 
+  // TODO
+  class MatrixDecorator
+
+
 }
 
