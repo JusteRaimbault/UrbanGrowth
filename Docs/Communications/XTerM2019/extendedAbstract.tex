@@ -103,8 +103,15 @@ We use the dataset of urban systems dynamics on long time provided by \cite{puma
 
 \section{Multi-scalar model}
 
-\cite{raimbault2018indirect}
-\cite{raimbault2018calibration}
+
+The generic multi-scalar model is based on a coupling of several instances of local urban morphogenesis models, and more particularly the reaction-diffusion model studied by \cite{raimbault2018calibration}, through a macroscopic model of interaction between these areas in the spirit of \cite{raimbault2018indirect}. It is therefore able to (i) integrate long range interactions in systems of cities and (ii) simulate the local urban form.
+
+We assume model ontologies similar to the original ones and operate the coupling through a potential dependency of parameters between scales. Let the index $\mu$ denote the macro scale and $M$ the meso scale. Then we assume the parameters of reaction-diffusion instances to depend on time and the macro-scale: $(\alpha,\beta,N_G/P_m)\left[t,\mu\right]$ and similarly for the parameters of the interaction model $(g_0,\vec{gamma},d_G)\left[t,M\right]$.
+% TODO Note : here a clarification is needed : shouldnt the macro ontology be a bit modified to include short range and long range interactions ? then cannot be fully generic ? 
+
+We are interested in the following coupling specifications: weak coupling $\mu \rightarrow M$ (no upward causation, study of the consequence on local form of global dynamics), weak coupling $M \rightarrow \mu$ (no downward causation, aggregation of macro trajectories based on macro dynamics to e.g. study their performance compared to the model alone) and strong coupling $M \leftrightarrow \mu$ which can implemented in different ways, but which implies upward and downward causations. The comparison between these coupling is in itself an important knowledge.
+
+
 
 
 
@@ -118,7 +125,7 @@ We use the dataset of urban systems dynamics on long time provided by \cite{puma
 \end{figure}
 
 
-\cite{reuillon2013openmole}
+The model is implemented in scala for performance purposes and an easier integration into the model exploration software OpenMOLE \cite{reuillon2013openmole}.
 
 
 
