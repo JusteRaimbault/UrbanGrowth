@@ -35,21 +35,13 @@ val model = ScalaTask(
     plugins += pluginsOf(urbangrowth.models.coevolution.Coevolution),
     inputs += (popFile,distFile,dateFile,growthRate,gravityWeight,gravityGamma,gravityDecay,id),
     outputs += (growthRate,gravityWeight,gravityGamma,gravityDecay,id),
-    outputs += (logmse,mselog)
+    outputs += (logmse,mselog),
+    popFile := workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"),
+    distFile := workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"),
+    dateFile := workDirectory / "data" /  "processed" / (countrycode+"_dates.csv"),
+    id := 1
   )
-val modelCapsule = Capsule(model)
 
-val fileSetting = ExplorationTask(
-  (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
-  (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
-  (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv"))) x
-  (id in Seq(1))
-) set(
-  inputs += (growthRate,gravityWeight,gravityGamma,gravityDecay),
-  outputs += (growthRate,gravityWeight,gravityGamma,gravityDecay)
-)
-
-val eval = fileSetting -< model
 
 
 val modelname = "intgib"
@@ -72,7 +64,7 @@ val evolution =
       ),
     mu=400,
     objectives = Seq(mselog,logmse),
-    evaluation = eval,
+    evaluation = model,
     termination = 100000,
     parallelism = 1000,
     distribution = Island(10 minutes)

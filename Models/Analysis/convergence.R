@@ -8,7 +8,8 @@ source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 
 source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
 
-sourcedir = 'CALIB_GRID_intgib_BR_20181209_185930/'
+#sourcedir = 'CALIB_GRID_intgib_BR_20181209_185930/'
+sourcedir = 'CALIB_intgib_BR_20181218_131615/'
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Calibration/',sourcedir);dir.create(resdir)
 
 indics=c('logmse','mselog')
@@ -62,16 +63,24 @@ ggsave(file=paste0(resdir,'volumes_nobounds.png'),width=15,height=10,units='cm')
 oldcalib = 'CALIB_intgib_BR_20180921_173302'
 #'CALIB_intgib_BR_20181003_154646/population42744.csv'
 #'CALIB_intgib_BR_20180921_173302/population39261.csv'
-local = cbind(read.csv(file=paste0(oldcalib,'/population39261.csv')),type='local')
+oldcalib2='CALIB_intgib_BR_20181218_131615'
 
-d = rbind(cbind(pop96000,type='grid'),)
+local = cbind(read.csv(file=paste0(oldcalib,'/population39261.csv')),type='local')
+local2 = cbind(read.csv(file=paste0(oldcalib2,'/population40000.csv')),type='local2')
+
+d = rbind(cbind(pop96000,type='grid'),local)
 g=ggplot(d,aes(x=logmse,y=mselog,color=type))
 g+geom_point()
 # -> what the fuck ? check num of cities
 
+g=ggplot(local,aes(x=logmse,y=mselog,color=gravityDecay))
+g+geom_point()
 
+g=ggplot(rbind(local,local2),aes(x=logmse,y=mselog,color=type))
+g+geom_point()
 
-
+local[local$logmse<32.85,]
+local[local$logmse>32.85,]
 
 
 
