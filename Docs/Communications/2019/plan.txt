@@ -1,0 +1,23 @@
+
+
+- data land use impact : LUISA https://data.jrc.ec.europa.eu/collection/luisa
+
+- data pop / agglos : GHS
+
+====
+1) calib reaction diffusion :
+ - setup real density t1
+ - target morpho indics t2 => check Delta morpho indices t2 - t1
+ - extended model ? (max density - actual pop count ? conditional to Delta pop ? )
+~ ectqg
+
+2) calib global interaction model ? => in time ; administrative / distance mat only ? non stationary ?
+~ ectqg
+
+3) towards multi scale ? : test different formulations (weak / strong coupling)
+=> first test ccs
+
+4) coupling with environmental impacts => for ilus ?
+
+
+
