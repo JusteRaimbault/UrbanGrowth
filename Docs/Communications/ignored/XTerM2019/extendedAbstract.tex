@@ -111,6 +111,12 @@ We assume model ontologies similar to the original ones and operate the coupling
 
 We are interested in the following coupling specifications: weak coupling $\mu \rightarrow M$ (no upward causation, study of the consequence on local form of global dynamics), weak coupling $M \rightarrow \mu$ (no downward causation, aggregation of macro trajectories based on macro dynamics to e.g. study their performance compared to the model alone) and strong coupling $M \leftrightarrow \mu$ which can implemented in different ways, but which implies upward and downward causations. The comparison between these coupling is in itself an important knowledge.
 
+We propose the following specification for the strong coupling. At a time step of the macro level $\Delta t_{\mu}$:
+\begin{itemize}
+	\item Macro level interaction model is computed and population variations $\Delta P_i$ are obtained
+	\item Meso level sprawl is simulated in the interval for each area, given this increase. Parameters are fixed by a baseline value but modified as a function of $\Delta P_i$ following simple rules % TODO
+	\item The resulting urban form is used to compute an endogenous activity (still with very simple stylized rules) which modifies the macro parameters for each area (these depend then on $i$: $d_G^{(i)},g_0^{(i)}$
+\end{itemize}
 
 
 

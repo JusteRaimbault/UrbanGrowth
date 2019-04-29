@@ -3,6 +3,10 @@ package urbangrowth.utils.math
 
 import Jama.Matrix
 
+import urbangrowth._
+
+import scala.util.Random
+
 
 object MatrixUtils {
 
@@ -39,8 +43,40 @@ object MatrixUtils {
     }
   }
 
-  // TODO
-  class MatrixDecorator
+  def repRow(d: Array[Double]): Matrix = diag(d).times(new Matrix(d.size,d.size,1.0))
+
+  def repCol(d: Array[Double]): Matrix = (new Matrix(d.size,d.size,1.0)).times(diag(d))
+
+
+  // implicit conversions to and from matrices ?
+  //class MatrixDecorator
+
+
+  /**
+    * random distance matrix
+    * @param n
+    * @param worldSize
+    * @param rng
+    * @return
+    */
+  def randomDistanceMatrix(n: Int,worldSize: Double)(implicit rng: Random): Vector[Vector[Double]] = {
+    val xcoords = Vector.fill(n)(rng.nextDouble()*worldSize)
+    val ycoords = Vector.fill(n)(rng.nextDouble()*worldSize)
+
+    val flatres = for {
+      x1 <- xcoords.zip(ycoords)
+      x2 <- xcoords.zip(ycoords)
+    } yield math.sqrt(math.pow((x1._1-x2._1),2)+math.pow(x1._2-x2._2,2))
+
+    log("dmat flat : "+flatres.size)
+
+    //flatres.sliding(n).toVector
+    flatres.sliding(n,n).toVector
+  }
+
+
+
+
 
 
 }

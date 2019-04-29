@@ -4,25 +4,52 @@ package urbangrowth.test
 import java.io.File
 
 import Jama.Matrix
+
+import urbangrowth._
 import urbangrowth.indicators.Indicators
 import urbangrowth.models.innovation.Innovation
+import urbangrowth.models.multiscale._
 
 import scala.collection.mutable.ArrayBuffer
+import scala.util.Random
 
 
 object Test extends App {
 
+  TestModels.testMultiScale()
   //TestModels.testInnovation()
-
   //TestModels.testMarius()
-
-  TestModels.testIntGib()
+  //TestModels.testIntGib()
 
 }
 
 
 
 object TestModels {
+
+  implicit val rng = new Random
+
+
+  def testMultiScale(): Unit = {
+
+    val n = 20
+
+    val model = MultiscaleModel(timeSteps = 5,macroNcities = n,macroInitialHierarchy = 1.0,macroInitialMaxPop = 10000,macroRange=500,
+      macroGrowthRate = 0.01,macroInteractionDecay = 200.0,macroInteractionWeight=0.001,macroInteractionGamma=1.5,
+      mesoGridSize=50,mesoCenterDensity=100,mesoAlpha = 1.1,mesoBeta=0.05,mesoNdiff = 1,mesoTimeSteps = 5,
+      macroMesoAlphaUpdateMax = 0.1,macroMesoBetaUpdateMax = 0.01,mesoMacroCongestionCost = 1.0,mesoMacroDecayUpdateMax = 10.0
+    )
+
+    val res = model.modelRun
+
+    //println(res)
+    //println(res.mesoMorans.sliding(n,n).mkString("\n"))
+    // deltapops <-> NaNs ?
+    log(res.macroPopulations.sliding(n,n).mkString("\n"))
+    log(res.mesoMorans.sliding(n,n).mkString("\n"))
+    //log(res.mesoCongestedFlows.sliding(n,n).mkString("\n"))
+  }
+
 
   def testInnovation(): Unit = {
     //val pop = new File("data/processed/FR_pops.csv")

@@ -8,7 +8,7 @@ import urbangrowth.indicators._
 
 import scala.collection.mutable.ArrayBuffer
 
-import urbangrowth.models.Model
+import urbangrowth.models.MacroModel
 
 /** Simple model with only core mechanisms */
 case class SimpleModel(
@@ -19,7 +19,7 @@ case class SimpleModel(
                       sizeEffectOnDemand: Double,
                       distanceDecay: Double,
                       wealthToPopulationExponent: Double,
-                      populationToWealthExponent: Double) extends Model with Marius //with DefaultValues
+                      populationToWealthExponent: Double) extends MacroModel with Marius //with DefaultValues
  {
 
   override def distanceMatrix: DistanceMatrix = modelDistanceMatrix

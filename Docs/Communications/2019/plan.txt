@@ -11,6 +11,8 @@
  - extended model ? (max density - actual pop count ? conditional to Delta pop ? )
 ~ ectqg
 
+comparison : https://www.nature.com/articles/s41597-019-0048-z (calibrated sleuth)
+
 2) calib global interaction model ? => in time ; administrative / distance mat only ? non stationary ?
 ~ ectqg
 

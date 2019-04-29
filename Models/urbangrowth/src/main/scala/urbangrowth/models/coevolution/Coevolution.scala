@@ -5,7 +5,7 @@ import java.io.File
 
 import Jama.Matrix
 
-import urbangrowth.models.Model
+import urbangrowth.models.MacroModel
 import urbangrowth.indicators._
 import urbangrowth.utils.io.FileUtils
 import urbangrowth.utils.math.MatrixUtils
@@ -40,7 +40,7 @@ case class Coevolution(
                         feedbackWeight: Double,
                         feedbackGamma: Double,
                         feedbackDecay: Double
-                      ) extends Model {
+                      ) extends MacroModel {
 
   override def run(): Result = Coevolution.run(model = this)
 
@@ -179,7 +179,7 @@ object Coevolution {
     * @return
     */
   def computeFlows(populations: Populations, distances: Distances): Array[Array[Double]] = {
-
+    Array.empty
   }
 
   /**
@@ -189,11 +189,11 @@ object Coevolution {
     * @return
     */
   def updatePopulations(populations: Populations,flows: Array[Array[Double]]): Populations = {
-
+    Array.empty
   }
 
   def updateDistances(distances: Distances, flows: Array[Array[Double]]): Distances = {
-
+    Array.empty
   }
 
   /**
