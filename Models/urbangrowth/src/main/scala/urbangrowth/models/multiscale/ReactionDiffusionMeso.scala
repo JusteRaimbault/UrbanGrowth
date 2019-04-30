@@ -18,11 +18,14 @@ object ReactionDiffusionMeso {
   def mesoStep(states: Vector[ReactionDiffusionMesoState])(implicit rng: Random): Vector[ReactionDiffusionMesoState] = {
     states.map{
       s => {
+        val toadd = s.growthRate*s.mesoTimeSteps
+        val prevpop = s.populationGrid.flatten.sum
         var state = s
         (0 until s.mesoTimeSteps).foreach{_ =>
           state = state.copy(time=state.time+1,populationGrid=reactionDiffusionStep(s.alpha,s.beta,s.ndiff,s.growthRate)(state.populationGrid))
         }
-        state
+        val newpop = state.populationGrid.flatten.sum
+        state.copy(missingPopulation = toadd-(newpop-prevpop))
       }
     }
   }

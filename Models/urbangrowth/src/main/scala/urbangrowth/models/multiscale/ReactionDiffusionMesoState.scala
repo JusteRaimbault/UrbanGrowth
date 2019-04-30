@@ -13,7 +13,8 @@ case class ReactionDiffusionMesoState(
                                      beta: Double,
                                      ndiff: Int,
                                      growthRate: Double,
-                                     mesoTimeSteps: Int
+                                     mesoTimeSteps: Int,
+                                     missingPopulation: Double
                                      ) extends MesoState {
 
 }
@@ -31,7 +32,7 @@ object ReactionDiffusionMesoState {
                             mesoTimeSteps: Int)(implicit rng: Random): ReactionDiffusionMesoState = ReactionDiffusionMesoState(
     0,
     ExpMixtureGenerator(gridSize,1,centerDensity,kernelRadius,false,Seq((gridSize/2,gridSize/2))).generateGrid.map{_.toVector}.toVector,
-    alpha,beta,ndiff,growthRate,mesoTimeSteps
+    alpha,beta,ndiff,growthRate,mesoTimeSteps,0.0
   )
 
 }

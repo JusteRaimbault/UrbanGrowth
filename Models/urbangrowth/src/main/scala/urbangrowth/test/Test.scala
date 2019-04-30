@@ -34,9 +34,9 @@ object TestModels {
 
     val n = 20
 
-    val model = MultiscaleModel(timeSteps = 5,macroNcities = n,macroInitialHierarchy = 1.0,macroInitialMaxPop = 10000,macroRange=500,
+    val model = MultiscaleModel(timeSteps = 20,macroNcities = n,macroInitialHierarchy = 1.0,macroInitialMaxPop = 100000,macroRange=500,
       macroGrowthRate = 0.01,macroInteractionDecay = 200.0,macroInteractionWeight=0.001,macroInteractionGamma=1.5,
-      mesoGridSize=50,mesoCenterDensity=100,mesoAlpha = 1.1,mesoBeta=0.05,mesoNdiff = 1,mesoTimeSteps = 5,
+      mesoGridSize=50,mesoCenterDensity=1000,mesoAlpha = 1.1,mesoBeta=0.05,mesoNdiff = 1,mesoTimeSteps = 5,
       macroMesoAlphaUpdateMax = 0.1,macroMesoBetaUpdateMax = 0.01,mesoMacroCongestionCost = 1.0,mesoMacroDecayUpdateMax = 10.0
     )
 

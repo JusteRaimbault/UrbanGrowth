@@ -1,7 +1,15 @@
 
 library(sp)
-library(hypervolume)
+#library(hypervolume)
 
+
+hierarchy<-function(x){
+  xx = x[x>0]
+  if(length(xx)==0){return(0)}else{
+    reg = lm(data=data.frame(logx = sort(log(xx),decreasing = T),logrank=log(1:length(xx))),logx~logrank)
+    return(reg$coefficients[2])
+  }
+}
 
 runmodel<-function(args){
   system(paste0('sbt "run ',args,'"'))

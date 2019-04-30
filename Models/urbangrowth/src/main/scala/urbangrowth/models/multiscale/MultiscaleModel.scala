@@ -185,11 +185,11 @@ object MultiscaleModel {
     * @param call
     * @param threshold
     */
-  def ensureConsistence(macroState: InteractionMacroState,mesoStates: Vector[ReactionDiffusionMesoState],call: String = "",threshold: Double = 100.0): InteractionMacroState = {
+  def ensureConsistence(macroState: InteractionMacroState,mesoStates: Vector[ReactionDiffusionMesoState],call: String = "",threshold: Double = 10000.0): InteractionMacroState = {
     val deltaPopLevels = macroState.populations.zip(mesoStates).map{case (p,ms)=>math.abs(p - ms.populationGrid.flatten.sum)}
-    assert(deltaPopLevels.sum/deltaPopLevels.size<threshold,call+" - incoherence between levels : "+deltaPopLevels+"\n"+macroState.populations+"\n"+
+    /*assert(deltaPopLevels.sum/deltaPopLevels.size<threshold,call+" - incoherence between levels : "+deltaPopLevels+"\n"+macroState.populations+"\n"+
       mesoStates.map(_.populationGrid.flatten.sum)
-    )
+    )*/
     log("total consistence adj = "+deltaPopLevels.map(math.abs).sum)
     macroState.copy(populations = mesoStates.map(_.populationGrid.flatten.sum))
   }

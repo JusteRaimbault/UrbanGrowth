@@ -33,8 +33,14 @@ case class MultiScaleResult(
                            mesoEntropy: Vector[Double],
                            mesoSlopes: Vector[Double],
                            mesoSlopeRsquared: Vector[Double],
-                           mesoCongestedFlows: Vector[Double]
-                           )
+                           mesoCongestedFlows: Vector[Double],
+                           mesoMissingPopulations: Vector[Double]
+                           ) {
+  def asArrayTuple =  (macroPopulations.toArray,macroClosenesses.toArray,macroAccessibilities.toArray,
+    mesoMorans.toArray,mesoDistances.toArray,mesoEntropy.toArray,mesoSlopes.toArray,mesoSlopeRsquared.toArray,
+    mesoCongestedFlows.toArray,mesoMissingPopulations.toArray
+  )
+}
 
 object MultiScaleResult {
 
@@ -51,9 +57,12 @@ object MultiScaleResult {
       morphologies.map(_._3),
       morphologies.map(_._4),
       morphologies.map(_._5),
-      rawStates.flatMap(_.macroState.congestedFlows)
+      rawStates.flatMap(_.macroState.congestedFlows),
+      rawStates.flatMap(_.mesoStates.map(_.missingPopulation))
     )
   }
+
+
 
 }
 
