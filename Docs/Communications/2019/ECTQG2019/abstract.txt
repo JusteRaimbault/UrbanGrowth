@@ -1,4 +1,10 @@
 
+
+Simini, F., & James, C. (2019). Testing Heaps’ law for cities using administrative and gridded population data sets. EPJ Data Science, 8(1), 1-13. => tested again using this database ?
+
+
+=======
+
 An evolutionary theory for the spatial dynamics of urban systems worldwide
 Author keywords:	
 urban systems
