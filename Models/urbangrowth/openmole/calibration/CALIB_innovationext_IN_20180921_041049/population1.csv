@@ -1,0 +1,2 @@
+evolution$generation,growthRate,innovationWeight,gravityDecay,innovationDecay,innovationUtility,innovationUtilityGrowth,earlyAdoptersRate,newInnovationHierarchy,newInnovationPopulationProportion,mselog,logmse,evolution$samples
+1,0.011684259300718237,0.003475876891006623,9193.856646504799,8982.868771616979,1.3782523455570792,2.10363973650034,0.41271030836060507,0.24143960210182924,0.34668933811790015,495.10055202453,43.7239163401657,1

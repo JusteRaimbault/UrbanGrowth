@@ -1,5 +1,5 @@
 
-setwd(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/urbangrowth/openmole'))
+setwd(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/urbangrowth/openmole/calibration'))
 
 library(dplyr)
 library(ggplot2)
@@ -9,8 +9,8 @@ source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
 
 # parameters : where calibration results are stored and where to store result figures
-sourcedir = 'calibration/'
-resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Calibration/')
+sourcedir = ''
+resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Calibration/all/')
 
 latestgen <- function(dir){
   max(as.integer(sapply(strsplit(sapply(strsplit(
@@ -21,34 +21,35 @@ latestgen <- function(dir){
 models = c('intgib','innovation','gibrat','innovationext','marius','intgibphysical','mariusrestr')
 systems = c('ZA','CN','US','BR','EU','IN','RU')
 
+# could take only the latest here ? not viable as older can be better
 popdirs = list(
-  'intgib_ZA'='CALIB_intgib_ZA_20180921_193701',
-  'intgib_CN'='CALIB_intgib_CN_20180921_180359',
-  'intgib_US'='CALIB_intgib_US_20180921_200806',
-  'intgib_BR'='CALIB_intgib_BR_20180921_173302',
-  'intgib_EU'='CALIB_intgib_EU_20180921_203903',
-  'intgib_IN'='CALIB_intgib_IN_20180921_183459',
-  'intgib_RU'='CALIB_intgib_RU_20180921_190600',
-  'innovation_ZA'='CALIB_innovation_ZA_20180922_011531',
-  'innovation_CN'='CALIB_innovation_CN_20180921_221111',
-  'innovation_US'='CALIB_innovation_US_20180922_021705',
-  'innovation_BR'='CALIB_innovation_BR_20180921_211009',
-  'innovation_EU'='CALIB_innovation_EU_20180922_031844',
-  'innovation_IN'='CALIB_innovation_IN_20180921_231249',
-  'innovation_RU'='CALIB_innovation_RU_20180922_001353',
-  'gibrat_ZA'='CALIB_gibrat_ZA_20180922',
+  'intgib_ZA'='CALIB_intgib_ZA_20181004_115105',
+  'intgib_CN'='CALIB_intgib_CN_20181003_204750',
+  'intgib_US'='CALIB_intgib_US_20181004_154542',
+  'intgib_BR'='CALIB_GRID_intgib_BR_20181209_185930',
+  'intgib_EU'='CALIB_intgib_EU_20181004_163326',
+  'intgib_IN'='CALIB_intgib_IN_20181004_014849',
+  'intgib_RU'='CALIB_intgib_RU_20181004_064958',
+  'innovation_ZA'='CALIB_innovation_ZA_20181013_032337',
+  'innovation_CN'='CALIB_innovation_CN_20181012_012821',
+  'innovation_US'='CALIB_innovation_US_20181013_115954',
+  'innovation_BR'='CALIB_innovation_BR_20181011_171420',
+  'innovation_EU'='CALIB_innovation_EU_20181013_204045',
+  'innovation_IN'='CALIB_innovation_IN_20181012_101107',
+  'innovation_RU'='CALIB_innovation_RU_20181012_184655',
+  'gibrat_ZA'='CALIB_gibrat_ZA_20181004',
   'gibrat_CN'='CALIB_gibrat_CN_20180922',
-  'gibrat_US'='CALIB_gibrat_US_20180922',
+  'gibrat_US'='CALIB_gibrat_US_20181004',
   'gibrat_BR'='CALIB_gibrat_BR_20180922',
-  'gibrat_EU'='CALIB_gibrat_EU_20180922',
+  'gibrat_EU'='CALIB_gibrat_EU_20181004',
   'gibrat_IN'='CALIB_gibrat_IN_20180922',
   'gibrat_RU'='CALIB_gibrat_RU_20180922',
   'innovationext_ZA'='CALIB_innovationext_ZA_20180922_082545',
-  'innovationext_CN'='CALIB_innovationext_CN_20180922_052122',
+  'innovationext_CN'='CALIB_innovationext_CN_20181014_133044',
   'innovationext_US'='CALIB_innovationext_US_20180922_092709',
-  'innovationext_BR'='CALIB_innovationext_BR_20180922_042016',
+  'innovationext_BR'='CALIB_innovationext_BR_20181014_050644',
   'innovationext_EU'='CALIB_innovationext_EU_20180922_102836',
-  'innovationext_IN'='CALIB_innovationext_IN_20180922_062253',
+  'innovationext_IN'='CALIB_innovationext_IN_20181014_220028',
   'innovationext_RU'='CALIB_innovationext_RU_20180922_072418',
   'marius_ZA'='CALIB_marius_ZA_20180923_012414',
   'marius_CN'='CALIB_marius_CN_20180922_235109',
@@ -107,7 +108,11 @@ populations = list()
 
 popcolnames=c()
 for(popname in names(popdirs)){
-  populations[[popname]] = read.csv(paste0(sourcedir,popdirs[[popname]],'/population',latestgen(paste0(sourcedir,popdirs[[popname]])),'.csv'))
+  currentfile=paste0(sourcedir,popdirs[[popname]],'/population',latestgen(paste0(sourcedir,popdirs[[popname]])),'.csv')
+  show(currentfile)
+  currentdata = read.csv(currentfile)
+  show(dim(currentdata))
+  populations[[popname]] = currentdata
   popcolnames=append(popcolnames,colnames(populations[[popname]]))
 }
 popcolnames=unique(c(popcolnames,'model','system'))

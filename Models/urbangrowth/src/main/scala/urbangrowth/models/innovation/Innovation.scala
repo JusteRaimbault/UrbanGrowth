@@ -6,7 +6,7 @@ import java.io.File
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
-import urbangrowth.models.Model
+import urbangrowth.models.MacroModel
 import urbangrowth.utils.io.FileUtils
 import urbangrowth.indicators.Result
 import urbangrowth.utils.math.MatrixUtils
@@ -85,7 +85,7 @@ case class Innovation(
                          */
                       newInnovationPopulationProportion: Double
 
-                     ) extends Model {
+                     ) extends MacroModel {
 
   override def run(): Result = Innovation.run(this)
 

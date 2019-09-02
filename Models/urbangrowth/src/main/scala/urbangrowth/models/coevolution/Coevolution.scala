@@ -5,21 +5,24 @@ import java.io.File
 
 import Jama.Matrix
 
-import urbangrowth.models.Model
+import urbangrowth.models.MacroModel
 import urbangrowth.indicators._
 import urbangrowth.utils.io.FileUtils
 import urbangrowth.utils.math.MatrixUtils
 
+import urbangrowth._
+
 case class Coevolution(
                         /**
                           * Target pop matrix
+                          *   rows : cities ; cols : time
                           */
                         populationMatrix: Matrix,
 
                         /**
-                          * Distance matrix
+                          * Distance matrices (target in time)
                           */
-                        distancesMatrix: Matrix,
+                        distancesMatrices: Array[Matrix],
 
                         /**
                           * Network feedback distance matrix
@@ -37,7 +40,7 @@ case class Coevolution(
                         feedbackWeight: Double,
                         feedbackGamma: Double,
                         feedbackDecay: Double
-                      ) extends Model {
+                      ) extends MacroModel {
 
   override def run(): Result = Coevolution.run(model = this)
 
@@ -66,6 +69,10 @@ object Coevolution {
     //for (t <- 0 to feedbackDistancesMatrix.getColumnDimension() - 1) { print(feedbackDistancesMatrix.get(0, t) + " ; ") }
   }*/
 
+
+
+
+
   def apply(populationsFile : File,
             distancesFile : File,
             feedbackDistancesFile : File,
@@ -80,10 +87,9 @@ object Coevolution {
            ) : Coevolution = {
 
     val populationMatrix: Matrix = FileUtils.parseMatrixFile(populationsFile)
-    val distancesMatrix: Matrix = if(distancesFile!=null){
-      FileUtils.parseMatrixFile(distancesFile)
-    }else{
-      new Matrix(populationMatrix.getRowDimension,populationMatrix.getRowDimension,0.0)
+    val distancesMatrices: Array[Matrix] = distancesFile match {
+      case f if f==null => Array(FileUtils.parseMatrixFile(distancesFile))
+      case _ => Array(new Matrix(populationMatrix.getRowDimension,populationMatrix.getRowDimension,0.0))
     }
 
     /*
@@ -99,7 +105,7 @@ object Coevolution {
     /*Coevolution(populationMatrix,distancesMatrix,feedbackDistancesMatrix,dates,
       growthRate,gravityWeight,gravityGamma,gravityDecay,feedbackWeight,feedbackGamma,feedbackDecay
     )*/
-    Coevolution(populationMatrix,distancesMatrix,null,dates,
+    Coevolution(populationMatrix,distancesMatrices,null,dates,
       growthRate,gravityWeight,gravityGamma,gravityDecay,feedbackWeight,feedbackGamma,feedbackDecay
     )
   }
@@ -119,7 +125,7 @@ object Coevolution {
     val res = new Matrix(n, p)
     res.setMatrix(0, n - 1, 0, 0, populationMatrix.getMatrix(0, n - 1, 0, 0))
 
-    val gravityDistanceWeights = new Matrix(distancesMatrix.getArray().map { _.map { d => Math.exp(-d / gravityDecay) } })
+    val gravityDistanceWeights = new Matrix(distancesMatrices(0).getArray().map { _.map { d => Math.exp(-d / gravityDecay) } })
 
     //val feedbackDistanceWeights = new Matrix(feedbackDistancesMatrix.getArray().map { _.map { d => Math.exp(-d / feedbackDecay) } })
 
@@ -163,6 +169,31 @@ object Coevolution {
     }
 
     return(Result(populationMatrix,res))
+  }
+
+
+  /**
+    * Direct flows between cities given a distance matrix
+    * @param populations
+    * @param distances
+    * @return
+    */
+  def computeFlows(populations: Populations, distances: Distances): Array[Array[Double]] = {
+    Array.empty
+  }
+
+  /**
+    *
+    * @param populations
+    * @param flows
+    * @return
+    */
+  def updatePopulations(populations: Populations,flows: Array[Array[Double]]): Populations = {
+    Array.empty
+  }
+
+  def updateDistances(distances: Distances, flows: Array[Array[Double]]): Distances = {
+    Array.empty
   }
 
   /**

@@ -1,0 +1,27 @@
+
+
+Simini, F., & James, C. (2019). Testing Heaps’ law for cities using administrative and gridded population data sets. EPJ Data Science, 8(1), 1-13. => tested again using this database ?
+
+
+=======
+
+An evolutionary theory for the spatial dynamics of urban systems worldwide
+Author keywords:	
+urban systems
+dynamic models
+evolutionary theory
+world
+Topics:	S05. Co-evolution of networks and cities, urban systems
+Abstract:	Analyzing the spatial dynamics of complex urban systems clearly deserves an evolutionary frame. Following the methodology and results already obtained in the GeoDiverCity project (Pumain et al. 2015, Cura et al. 2015, Pumain, Reuillon 2017), including USA, Europe and BRICS countries, we complete them with new datasets at world scale and other types of models. These models conceived for explaining city size and urban growth distributions establish a correspondence between urban trajectories when observed at the level of cities and systems of cities. We test the validity and representativeness of several models of complex urban systems and their variations across regions of the world at different spatial scales (Raimbault 2018a, 2018b). The originality of the approach is in considering spatial interaction and evolutionary path dependence as major features in the general behavior of urban entities. We investigate models of urban growth at different scales and on different urban systems: a model of urban morphogenesis at the metropolitan scale, which we calibrate dynamically, using the diachronic population grid on largest urban clusters, and interaction models for systems of cities at the macroscopic scale on main systems of cities across the world. We also suggest research directions towards the coupling of these models into a multi-scale model of urban growth.
+Complex systems’ dynamics is in principle unpredictable, but contextualizing it regarding demographic, income and resource components may help in minimizing the forecasting errors. We use among others a new unique source correlating population and build-up footprint at world scale: the Global Human Settlement built-up areas (GHS-BU). Already explored statistically for comparing urban sprawl trends in the countries of the world by Eric Denis (2019), the dataset is available at different dates between 1975 and 2015. In 2015 the source delineates precisely some 13 000 urban agglomerations between 50000 and tens million inhabitants in the world. These data help in further empirical testing to the hypotheses of the evolutionary theory of urban systems and partially revising them.
+
+References:
+Cura R. Cottineau C. Swerts E. Ignazzi C.A. Bretagnolle A. Vacchiani-Marcuzzo C. Pumain D. 2017, The old and the new : qualifying city systems in the world with old models and new data. Geographical Analysis. 49, 4, 363–386. DOI: 10.1111
+Denis E., 2019, Population, Land, Wealth and the Global Urban Sprawl. Drivers of urban built-up expansion across the world from 1990 to 2015, in Pumain D. (ed) Theories and models of urbanization. Springer. Forthcoming.
+Pumain D., Swerts E., Cottineau C. Vacchiani-Marcuzzo C., Ignazzi A., Bretagnolle A., Delisle F., Cura R., Lizzi L, Baffi S. 2015 : Multi-level comparison of large urban systems. Cybergeo, 706, http://cybergeo.revues.org/26730 ; DOI : 10.4000/cybergeo.26730
+Pumain D. Reuillon R. 2017, Urban Dynamics and Simulation Models. Springer, International. Lecture Notes in Morphogenesis, 123 p. DOI 10.1007/978-3-319-46497-8_3.
+Raimbault, J. 2018a. Calibration of a density-based model of urban morphogenesis. PloS one, 13(9), e0203516.
+Raimbault 2018b, Indirect evidence of network effects in a system of cities. Environment and Planning B: Urban Analytics. arXiv:1804.09416v1 [physics.soc-ph] 25 Apr 2018.
+
+
+
