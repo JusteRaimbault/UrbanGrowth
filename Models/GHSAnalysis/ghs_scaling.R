@@ -9,10 +9,14 @@ library(rgdal)
 library(raster)
 library(ggplot2)
 library(reshape2)
+library(corrplot)
+
+source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 
 source('functions.R')
 
-ucdb <- readOGR(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0'),'GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0')
+
+ucdb <- readOGR(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0'),'GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0',stringsAsFactors = F)
 
 ###
 # Analysis
@@ -23,43 +27,124 @@ ucdb <- readOGR(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCDB2015
 #  - variable urban area (k*radius)
 #  - endogenous scaling ?
 
+resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/GHS/')
 
 #####
 # 1) Summary statistics
 
+dir.create(paste0(resdir,'Summary'))
+
 # countries
 countrycount = as.tbl(ucdb@data) %>% group_by(CTR_MN_NM) %>% summarize(count=n())
-countrycount[countrycount$count > 50,]
+#countrycount[countrycount$count > 50,]
+summary(countrycount$count)
 
-summary(ucdb$P15)
+allcountries = as.character(unlist(countrycount[countrycount$count > area_num_threshold,"CTR_MN_NM"]))
+
+####
+
+areas = ucdb@data
+for(j in 1:ncol(areas)){if(length(which(areas[,j]=="NAN"))>0){
+  areas[areas[,j]=="NAN",j]="0"
+  areas[,j]=as.numeric(areas[,j])
+  }
+}
+
+# compute aggreg indicators
+# co2 emissions
+areas$E75 = areas$E_EC2E_A75 + areas$E_EC2E_T75 + areas$E_EC2E_I75 + areas$E_EC2E_R75 +  areas$E_EC2E_E75 +
+  areas$E_EC2O_A75 + areas$E_EC2O_T75 + areas$E_EC2O_I75 + areas$E_EC2O_R75 +  areas$E_EC2O_E75
+areas$E90 = areas$E_EC2E_A90 + areas$E_EC2E_T90 + areas$E_EC2E_I90 + areas$E_EC2E_R90 +  areas$E_EC2E_E90 +
+  areas$E_EC2O_A90 + areas$E_EC2O_T90 + areas$E_EC2O_I90 + areas$E_EC2O_R90 +  areas$E_EC2O_E90
+areas$E00 = areas$E_EC2E_A00 + areas$E_EC2E_T00 + areas$E_EC2E_I00 + areas$E_EC2E_R00 +  areas$E_EC2E_E00 +
+  areas$E_EC2O_A00 + areas$E_EC2O_T00 + areas$E_EC2O_I00 + areas$E_EC2O_R00 +  areas$E_EC2O_E00
+areas$E15 = areas$E_EC2E_A12 + areas$E_EC2E_T12 + areas$E_EC2E_I12 + areas$E_EC2E_R12 +  areas$E_EC2E_E12 +
+  areas$E_EC2O_A12 + areas$E_EC2O_T12 + areas$E_EC2O_I12 + areas$E_EC2O_R12 +  areas$E_EC2O_E12
+
+areas$G15 = areas$GDP15_SM 
+areas$G00 = areas$GDP00_SM
+areas$G90 = areas$GDP90_SM
+
+# deltas
+areas$DP90 = ifelse(areas$P75>0,(areas$P90 - areas$P75)/areas$P75,NA)
+areas$DP00 = ifelse(areas$P90>0,(areas$P00 - areas$P90)/areas$P90,NA)
+areas$DP15 = ifelse(areas$P00>0,(areas$P15 - areas$P00)/areas$P00,NA)
+
+areas$DB90 = ifelse(areas$B75>0,(areas$B90 - areas$B75)/areas$B75,NA)
+areas$DB00 = ifelse(areas$B90>0,(areas$B00 - areas$B90)/areas$B90,NA)
+areas$DB15 = ifelse(areas$B00>0,(areas$B15 - areas$B00)/areas$B00,NA)
+
+areas$DG00 = ifelse(areas$GDP90_SM>0,(areas$GDP00_SM - areas$GDP90_SM)/areas$GDP90_SM,NA)
+areas$DG15 = ifelse(areas$GDP00_SM>0,(areas$GDP15_SM - areas$GDP00_SM)/areas$GDP00_SM,NA)
+
+areas$DE90 = ifelse(areas$E75>0,(areas$E90 - areas$E75)/areas$E75,NA)
+areas$DE00 = ifelse(areas$E90>0,(areas$E00 - areas$E90)/areas$E90,NA)
+areas$DE15 = ifelse(areas$E00>0,(areas$E15 - areas$E00)/areas$E00,NA)
+
+######
+
+allpops = melt(areas,measure.vars = c('P75','P90','P00','P15'),id.vars = c('ID_HDC_G0','CTR_MN_NM'))
+allpops$year = substr(allpops$variable,2,4)
+allpops$year = ifelse(allpops$year%in%c("75","90"),paste0("19",allpops$year),paste0("20",allpops$year))
+allpops$population = allpops$value
+
+summary(ucdb$P15);summary(ucdb$P00);summary(ucdb$P90);summary(ucdb$P75)
+
+g=ggplot(allpops[allpops$population>50000,],aes(x=year,y=population,group=year))
+g+geom_boxplot(outlier.size = 1)+scale_y_continuous(trans="log10")+xlab("Year")+ylab("Population")+stdtheme
+ggsave(filename = paste0(resdir,'Summary/population_distributions.png'),width=20,height=15,units='cm')
+
+
+### Correlations
+
+# corrmats in 2000 and 2015
+corvars = c('DP','DG','DE','DB','P','B','E','G')
+corvarsnames = c('DeltaPop','DeltaGDP','DeltaEm','DeltaBuilt','Pop','Built','Emissions','GDP')
+for(year in c('00','15')){
+  rho = matrix(0,length(corvars),length(corvars));colnames(rho)<-corvarsnames;rownames(rho)<-corvarsnames
+  rhomin = rho;rhomax = rho
+  for(i in 1:length(corvars)){
+    for(j in 1:length(corvars)){
+      rhotest = cor.test(areas[,paste0(corvars[i],year)],areas[,paste0(corvars[j],year)])
+      rho[i,j]=rhotest$estimate;rhomin[i,j]=rhotest$conf.int[1];rhomax[i,j]=rhotest$conf.int[2]
+    }
+  }
+  png(filename = paste0(resdir,'Summary/correlations_',year,'.png'),width = 20,height = 20,units='cm',res = 300)
+  corrplot(rho,lowCI.mat = rhomin, uppCI.mat = rhomax,type = 'upper',title = paste0('20',year),bg='lightgrey',
+           plotCI = 'circle',
+           addCoef.col = "black",
+           mar = c(0,0,1,0)
+           #order='hclust',
+           #method='ellipse'
+           )
+  dev.off()
+}
+
+
+
+
+
+
+
 
 #####
-# 2) Raw scaling
+# 2) Rank-size / summary for regions
 
-area_num_threshold = 50
-#pop_threshold = 
 
-countries = as.character(unlist(countrycount[countrycount$count > area_num_threshold,"CTR_MN_NM"]))
 
-areas = as.tbl(ucdb@data) %>% filter(CTR_MN_NM%in%countries)
 
-pops = melt(areas,measure.vars = c('P75','P90','P00','P15'),id.vars = c('ID_HDC_G0','CTR_MN_NM'))
-#popcounts = pops %>% group_by(CTR_MN_NM,variable) %>% summarize(count=n())
-pops = pops[pops$value>0,]
-
-ranks = rep(NA,nrow(pops))
-for(popvar in c('P75','P90','P00','P15')){for(country in countries){ranks[pops$variable==popvar&as.character(pops$CTR_MN_NM)==country]=order(pops$value[pops$variable==popvar&as.character(pops$CTR_MN_NM)==country],decreasing = T)}}
-pops$logranks = log(ranks,base = 10)
-pops$logpop = log(pops$value,base=10)
-
-g=ggplot(pops,aes(x=logranks,y=logpop,color=CTR_MN_NM,linetype=variable,group=interaction(CTR_MN_NM,variable)))
-g+stat_smooth(method = 'lm')
-#g+geom_point()
 
 # terrible - test to fit log-log linear models
-regs = pops%>%group_by(variable,CTR_MN_NM)%>% summarise(alpha = lmreg(logranks,logpop)$alpha,rsquared = lmreg(logranks,logpop)$rsquared)
+regs = pops%>%group_by(variable,CTR_MN_NM)%>% summarise(
+  alpha = lmreg(logranks,logpop)$alpha,
+  rsquared = lmreg(logranks,logpop)$rsquared,
+  sigmaalpha = lmreg(logranks,logpop)$sigmaalpha  
+)
+#regs[regs$rsquared>0.1,]
 
 # seems very far from rank-size law - need other tests.
+
+# 3) Raw scaling
 
 # check same with pop/gdp
 
@@ -86,12 +171,20 @@ regs = popgdp%>%group_by(year,country)%>% summarise(alpha = lmreg(logpop,loggdp)
 # Targeted analysis
 
 # european countries
-unique(ucdb$CTR_MN_NM[ucdb$GRGN_L1=='Europe'])
-countries=c('Finland','Norway','Sweden','Estonia','United Kingdom','Denmark','Latvia','Lithuania',
+as.character(unique(ucdb$CTR_MN_NM[ucdb$GRGN_L1=='Europe']))
+
+eu=c('Finland','Sweden','Estonia','United Kingdom','Denmark','Latvia','Lithuania',
             'Germany','Poland','Ireland','Netherlands','Belgium','France','Czech Republic','Luxembourg',         
-             'Slovakia','Austria','Hungary','Switzerland','Slovenia','Italy','Bulgaria',
-             'Spain','Portugal','Greece')
-# 'Belarus', Ukraine, 'Romania'
+             'Slovakia','Austria','Hungary','Slovenia','Italy','Bulgaria',
+             'Spain','Portugal','Greece','Romania','Malta')
+# 'Belarus', Ukraine
+
+asean=c('Indonesia','Thailand','Malaysia','Singapore','Philippines','Vietnam','Myanmar','Cambodia','Laos','Brunei')
+mercosur=c('Argentina','Brazil','Paraguay','Uruguay','Bolivia','Chile','Colombia','Ecuador','Guyana','Peru','Suriname')
+
+#areas = ucdb@data[as.character(ucdb$CTR_MN_NM)=='France',]
+countries=c('France')
+
 areas = as.tbl(ucdb@data) %>% filter(as.character(CTR_MN_NM)%in%countries)
 
 g=ggplot(popgdp,aes(x=logpop,y=loggdp,color=country,linetype=popvar,group=interaction(country,popvar)))

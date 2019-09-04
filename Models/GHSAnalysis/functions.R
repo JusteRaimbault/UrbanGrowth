@@ -3,7 +3,43 @@ library(fitdistrplus)
 library(poweRlaw)
 
 
-powerlawfit <- function(x,y)
+#powerlawfit <- function(x,y)
+
+
+
+simpleScaling <- function(areasdata,
+                          withPlot = F,
+                          area_num_threshold=10,
+                          popvars = c('P75','P90','P00','P15'),
+                          years = c('75','90','00','15'),
+                          scalingvars = c('B','G','E'),
+                          areasids = c('ID_HDC_G0','CTR_MN_NM')
+){
+  
+  pops = melt(areas,measure.vars = popvars,id.vars = areasids)
+  #popcounts = pops %>% group_by(CTR_MN_NM,variable) %>% summarize(count=n())
+  pops = pops[pops$value>0,]
+  
+  ranks = rep(NA,nrow(pops))
+  for(popvar in popvars){
+    for(country in countries){
+      ranks[pops$variable==popvar&as.character(pops$CTR_MN_NM)==country]=order(pops$value[pops$variable==popvar&as.character(pops$CTR_MN_NM)==country],decreasing = T)
+      }
+    }
+  pops$pops = pops$value
+  pops$ranks = ranks
+  pops$logranks = log(ranks,base = 10)
+  pops$logpop = log(pops$value,base=10)
+  
+  if(withPlot){
+    g=ggplot(pops,aes(x=logranks,y=logpop,color=CTR_MN_NM,linetype=variable,group=interaction(CTR_MN_NM,variable)))
+    g+stat_smooth(method = 'lm')+geom_point()
+  }
+  
+}
+
+
+
 
 
 lmreg <- function(x,y){
