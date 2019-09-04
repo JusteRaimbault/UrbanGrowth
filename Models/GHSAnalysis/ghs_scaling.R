@@ -29,19 +29,8 @@ ucdb <- readOGR(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCDB2015
 
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/GHS/')
 
-#####
-# 1) Summary statistics
 
-dir.create(paste0(resdir,'Summary'))
-
-# countries
-countrycount = as.tbl(ucdb@data) %>% group_by(CTR_MN_NM) %>% summarize(count=n())
-#countrycount[countrycount$count > 50,]
-summary(countrycount$count)
-
-allcountries = as.character(unlist(countrycount[countrycount$count > area_num_threshold,"CTR_MN_NM"]))
-
-####
+#### Data formatting
 
 areas = ucdb@data
 for(j in 1:ncol(areas)){if(length(which(areas[,j]=="NAN"))>0){
@@ -80,6 +69,35 @@ areas$DG15 = ifelse(areas$GDP00_SM>0,(areas$GDP15_SM - areas$GDP00_SM)/areas$GDP
 areas$DE90 = ifelse(areas$E75>0,(areas$E90 - areas$E75)/areas$E75,NA)
 areas$DE00 = ifelse(areas$E90>0,(areas$E00 - areas$E90)/areas$E90,NA)
 areas$DE15 = ifelse(areas$E00>0,(areas$E15 - areas$E00)/areas$E00,NA)
+
+areas$country = as.character(areas$CTR_MN_NM)
+
+
+## export for simulation
+targetdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Data/GHSL/processed/');dir.create(targetdir)
+areastoexport = areas[areas$P15>quantile(areas$P15,c(0.96)),]
+# distance matrix
+eucldists = spDists(SpatialPoints(areastoexport[,c("GCPNT_LON","GCPNT_LAT")],proj4string = crs("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),longlat = T)
+write.table(eucldists,file=paste0(targetdir,'world_dist.csv'),row.names = F,col.names = F,sep=',')
+write.table(areastoexport[,c('P75','P90','P00','P15')],file=paste0(targetdir,'world_pops.csv'),row.names = F,col.names = F,sep=",")
+write.table(c(1975,1990,2000,2015),file=paste0(targetdir,'world_dates.csv'),row.names = F,col.names = F,sep=",")
+
+
+
+
+#####
+# 1) Summary statistics
+
+dir.create(paste0(resdir,'Summary'))
+
+# countries
+countrycount = as.tbl(ucdb@data) %>% group_by(CTR_MN_NM) %>% summarize(count=n())
+#countrycount[countrycount$count > 50,]
+summary(countrycount$count)
+
+allcountries = as.character(unlist(countrycount[countrycount$count > area_num_threshold,"CTR_MN_NM"]))
+
+
 
 ######
 
@@ -128,56 +146,46 @@ for(year in c('00','15')){
 
 
 #####
-# 2) Rank-size / summary for regions
+# 2) Rank-size / summary / scaling for regions and countries
+
+dir.create(paste0(resdir,'SimpleScaling'))
 
 
-
-
-
-# terrible - test to fit log-log linear models
-regs = pops%>%group_by(variable,CTR_MN_NM)%>% summarise(
-  alpha = lmreg(logranks,logpop)$alpha,
-  rsquared = lmreg(logranks,logpop)$rsquared,
-  sigmaalpha = lmreg(logranks,logpop)$sigmaalpha  
-)
-#regs[regs$rsquared>0.1,]
-
-# seems very far from rank-size law - need other tests.
-
-# 3) Raw scaling
-
-# check same with pop/gdp
-
-gdpvars = c("GDP90_SM"='90',"GDP00_SM"='00',"GDP15_SM"='15')
-popvars = c('P90'='90','P00'='00','P15'='15')
-pops = melt(areas,measure.vars = names(popvars),id.vars = c('ID_HDC_G0','CTR_MN_NM'))
-pops = pops[pops$value>0,]
-pops$year = popvars[pops$variable]
-gdps = melt(areas,measure.vars = names(gdpvars),id.vars = c('ID_HDC_G0','CTR_MN_NM'))
-gdps$year = gdpvars[gdps$variable]
-gdps = gdps[gdps$value>0,]
-
-popgdp = left_join(pops,gdps,by=c('ID_HDC_G0'='ID_HDC_G0','CTR_MN_NM'='CTR_MN_NM','year'='year'))
-names(popgdp)<-c('id','country','popvar','pop','year','gdpvar','gdp')
-popgdp = popgdp[popgdp$pop>0&!is.na(popgdp$gdp),]
-popgdp$logpop = log(popgdp$pop,base = 10)
-popgdp$loggdp = log(popgdp$gdp,base = 10)
-
-regs = popgdp%>%group_by(year,country)%>% summarise(alpha = lmreg(logpop,loggdp)$alpha,rsquared = lmreg(logpop,loggdp)$rsquared)
-
-# -> better than rank-size but still not crazy.
-
-####
-# Targeted analysis
-
-# european countries
-as.character(unique(ucdb$CTR_MN_NM[ucdb$GRGN_L1=='Europe']))
-
+# EU countries : comparison EU/Europe
+#europe = as.character(unique(ucdb$CTR_MN_NM[ucdb$GRGN_L1=='Europe']))
 eu=c('Finland','Sweden','Estonia','United Kingdom','Denmark','Latvia','Lithuania',
             'Germany','Poland','Ireland','Netherlands','Belgium','France','Czech Republic','Luxembourg',         
              'Slovakia','Austria','Hungary','Slovenia','Italy','Bulgaria',
              'Spain','Portugal','Greece','Romania','Malta')
-# 'Belarus', Ukraine
+
+# does not make sense : overlap !
+#simpleScaling(areas,list('Europe'=europe,'EU'=eu),resdir,withPlot = T)
+
+
+#####
+# cybergeo paper
+# "reproduction" of rank-size plot in geodivercity paper
+# Urban systems : Brazil, China, Europe, Former Soviet Union, India, South Africa, United States
+
+cybresults = simpleScaling(areasdata = areas,regions = list('Europe'=eu,
+                         'China'=c('China'),
+                         'Brazil'=c('Brazil'),
+                         'India'=c('India'),
+                         'SouthAfrica'=c('South Africa'),
+                         'UnitedStates'=c('United States'),
+                         'FormerSovietUnion'=c('Kazakhstan','Kyrgyzstan','Tajikistan','Turkmenistan',
+                                               'Uzbekistan','Belarus','Moldova','Ukraine','Russia','Armenia',
+                                               'Azerbaijan','Georgia')),
+              figresdir = resdir,withPlot = T)
+
+write.table(cybresults,row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/geodivercity.csv'))
+
+
+####
+# Continents
+
+
+
 
 asean=c('Indonesia','Thailand','Malaysia','Singapore','Philippines','Vietnam','Myanmar','Cambodia','Laos','Brunei')
 mercosur=c('Argentina','Brazil','Paraguay','Uruguay','Bolivia','Chile','Colombia','Ecuador','Guyana','Peru','Suriname')
@@ -185,21 +193,7 @@ mercosur=c('Argentina','Brazil','Paraguay','Uruguay','Bolivia','Chile','Colombia
 #areas = ucdb@data[as.character(ucdb$CTR_MN_NM)=='France',]
 countries=c('France')
 
-areas = as.tbl(ucdb@data) %>% filter(as.character(CTR_MN_NM)%in%countries)
 
-g=ggplot(popgdp,aes(x=logpop,y=loggdp,color=country,linetype=popvar,group=interaction(country,popvar)))
-g+stat_smooth(method = 'lm',se = F)
-
-g=ggplot(popgdp,aes(x=logpop,color=country,linetype=popvar,group=interaction(country,popvar)))
-g+geom_density()
-
-g=ggplot(popgdp,aes(x=logpop,y=loggdp,color=country,shape=popvar,group=interaction(country,popvar)))
-g+geom_point()+stat_smooth(method = 'lm',se = F,alpha=0.6)
-
-
-#####
-# "reproduction" of rank-size plot in geodivercity paper
-# Urban systems : Brazil, China, Europe, Former Soviet Union, India, South Africa, United States
 
 
 
