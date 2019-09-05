@@ -32,7 +32,7 @@ simpleScaling <- function(areasdata,
   
   # ranks and summary by year and region
   ranks = rep(NA,nrow(pops))
-  cyears=c();cregions=c();cpops=c();cranksizealpha=c();cranksizersquared=c();cranksizerelci=c();ccities = c()
+  cyears=c();cregions=c();cpops=c();cranksizealpha=c();cranksizersquared=c();cranksizesigma=c();ccities = c()
   cprimacy=c();
   for(popvar in popvars){
     for(region in names(regions)){
@@ -48,14 +48,14 @@ simpleScaling <- function(areasdata,
       ranksizefit = lmreg(log(currentranks,base=10),log(currentpops,base=10))
       cyears=append(cyears,currentyear);cregions=append(cregions,region);
       cpops=append(cpops,sum(currentpops));
-      cranksizealpha=append(cranksizealpha,ranksizefit$alpha);cranksizersquared=append(cranksizersquared,ranksizefit$rsquared);cranksizerelci=append(cranksizerelci,abs(ranksizefit$alpha/ranksizefit$sigmaalpha))
+      cranksizealpha=append(cranksizealpha,ranksizefit$alpha);cranksizersquared=append(cranksizersquared,ranksizefit$rsquared);cranksizesigma=append(cranksizesigma,ranksizefit$sigmaalpha)
       ccities = append(ccities,length(currentpops));
       cprimacy = append(cprimacy,currentpops[currentranks==1]/currentpops[currentranks==2])
     }
   }
   summarydf = data.frame(
     year=cyears,region=cregions,population=cpops,cities=ccities,primacy=cprimacy,ranksizealpha=cranksizealpha,
-    ranksizersquared=cranksizersquared,ranksizerelci=cranksizerelci
+    ranksizersquared=cranksizersquared,ranksizesigma=cranksizesigma
   )
   
   pops$pops = pops$value
@@ -111,19 +111,19 @@ simpleScaling <- function(areasdata,
     
     summarydf[,paste0(scalingvarname,'alpha')]=rep(NA,nrow(summarydf))
     summarydf[,paste0(scalingvarname,'rsquared')]=rep(NA,nrow(summarydf))
-    summarydf[,paste0(scalingvarname,'relci')]=rep(NA,nrow(summarydf))
+    summarydf[,paste0(scalingvarname,'sigma')]=rep(NA,nrow(summarydf))
     for(popvar in popvars){
       for(region in names(regions)){
         currentyear = substr(popvar,2,4);ifelse(currentyear%in%c("75","90"),paste0("19",currentyear),paste0("20",currentyear))
         currentregion = regions[[region]]
         regionrows = allvars$popvar==popvar&allvars[,countrycol]%in%currentregion
         currentpops = allvars$pop[regionrows];currentscaling = allvars$scaling[regionrows]
-        show(currentyear);show(currentregion);show(scalingvarname)
+        #show(currentyear);show(currentregion);show(scalingvarname)
         reg = lmreg(log(currentpops,base=10),log(currentscaling,base=10))
         
         summarydf[summarydf$year==currentyear&summarydf$region==region,paste0(scalingvarname,'alpha')]=reg$alpha
         summarydf[summarydf$year==currentyear&summarydf$region==region,paste0(scalingvarname,'rsquared')]=reg$rsquared
-        summarydf[summarydf$year==currentyear&summarydf$region==region,paste0(scalingvarname,'relci')]=abs(reg$alpha/reg$sigmaalpha)
+        summarydf[summarydf$year==currentyear&summarydf$region==region,paste0(scalingvarname,'sigma')]=reg$sigmaalpha
       }
     }
   
@@ -133,7 +133,13 @@ simpleScaling <- function(areasdata,
         scale_color_discrete(name='Region')+scale_linetype_discrete(name='Year')+scale_shape_discrete(name='Year')+
         xlab('Population')+ylab(scalingvarname)+stdtheme
       ggsave(file=paste0(figresdir,'SimpleScaling/',scalingvarname,'-fitted_',regionnames,'_years-',allyears,'.png'),width=25,height=22,units='cm')
-    }
+    
+      # plot of scaling exponent in time
+      g=ggplot(summarydf,aes_string(x='year',y=paste0(scalingvarname,'alpha'),color='region',group='region',ymin=paste0(scalingvarname,'alpha - ',scalingvarname,'sigma'),ymax=paste0(scalingvarname,'alpha + ',scalingvarname,'sigma')))
+      g+geom_point()+geom_errorbar(width=0.2)+geom_line()
+      ggsave(file=paste0(figresdir,'SimpleScaling/',scalingvarname,'-evolution_',regionnames,'_years-',allyears,'.png'),width=25,height=22,units='cm')
+      
+    } 
       
   }
   return(summarydf)

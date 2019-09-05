@@ -88,7 +88,7 @@ object Coevolution {
 
     val populationMatrix: Matrix = FileUtils.parseMatrixFile(populationsFile)
     val distancesMatrices: Array[Matrix] = distancesFile match {
-      case f if f==null => Array(FileUtils.parseMatrixFile(distancesFile))
+      case f if f!=null => Array(FileUtils.parseMatrixFile(distancesFile))
       case _ => Array(new Matrix(populationMatrix.getRowDimension,populationMatrix.getRowDimension,0.0))
     }
 

@@ -1,9 +1,9 @@
-val countrycode = "EU"
+val countrycode = "world"
 
 import java.util.Date
 import java.text.SimpleDateFormat
 
-logger.level("FINE")
+//logger.level("FINE")
 
 val growthRate = Val[Double]
 val innovationWeight = Val[Double]
@@ -35,21 +35,12 @@ val model =
     plugins += pluginsOf(urbangrowth.models.innovation.Innovation),
     inputs += (popFile,distFile,dateFile,growthRate,innovationWeight,gravityDecay,innovationDecay,id),
     outputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id),
-    outputs += (logmse,mselog)
+    outputs += (logmse,mselog),
+    popFile := workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"),
+    distFile := workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"),
+    dateFile := workDirectory / "data" /  "processed" / (countrycode+"_dates.csv")
   )
 val modelCapsule = Capsule(model)
-
-
- val fileSetting = ExplorationTask(
-    (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
-    (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
-    (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv")))
-  ) set(
-    inputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id),
-    outputs += (growthRate,innovationWeight,gravityDecay,innovationDecay,id)
-  )
-
-  val eval = fileSetting -< model
 
 
   val modelname = "innovation"
@@ -72,12 +63,12 @@ val modelCapsule = Capsule(model)
         gravityDecay in Range(0.1,100000.0),
         innovationDecay in Range(0.1,100000.0)
       ),
-      mu = 400,
+      mu = 200,
       stochastic = Stochastic(seed = id),
       objectives = Seq(mselog,logmse),
-      evaluation = eval,
+      evaluation = model,
       termination = 100000,
-      parallelism = 1000,
+      parallelism = 200,
       distribution = Island(10 minutes)
   )
 

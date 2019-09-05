@@ -178,7 +178,10 @@ cybresults = simpleScaling(areasdata = areas,regions = list('Europe'=eu,
                                                'Azerbaijan','Georgia')),
               figresdir = resdir,withPlot = T)
 
-write.table(cybresults,row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/geodivercity.csv'))
+write.table(cybresults[as.character(cybresults$year)=='15',c("region","population","cities","primacy","ranksizealpha","ranksizersquared","ranksizesigma")],row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/geodivercity_ranksize_2015.csv'))
+
+write.table(cybresults[as.character(cybresults$year)=='15',c("region","Builtalpha","Builtrsquared","Builtsigma","GDPalpha","GDPrsquared","GDPsigma","Emissionsalpha","Emissionsrsquared","Emissionssigma")],row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/geodivercity_scaling_2015.csv'))
+
 
 
 ####

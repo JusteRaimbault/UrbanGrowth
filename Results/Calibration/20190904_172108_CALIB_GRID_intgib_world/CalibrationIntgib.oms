@@ -3,7 +3,7 @@ val countrycode = "world"
 import java.util.Date
 import java.text.SimpleDateFormat
 
-//logger.level("FINE")
+logger.level("FINE")
 
 val growthRate = Val[Double]
 val gravityWeight = Val[Double]
