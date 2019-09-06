@@ -1,3 +1,6 @@
 [submodule "Docs/Paper/overleaf"]
 	path = Docs/Paper/overleaf
 	url = git@github.com:JusteRaimbault/UrbanGrowth-paper.git
+[submodule "Docs/Communications/2019/ECTQG2019/Communication"]
+	path = Docs/Communications/2019/ECTQG2019/Communication
+	url = git@github.com:JusteRaimbault/ECTQG2019-UrbanDynamics.git

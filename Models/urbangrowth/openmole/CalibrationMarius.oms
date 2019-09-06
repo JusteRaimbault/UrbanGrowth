@@ -1,4 +1,4 @@
-val countrycode = "BR"
+val countrycode = "world"
 
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -39,22 +39,13 @@ val model =
     plugins += pluginsOf(urbangrowth.models.marius.SimpleModel),
     inputs += (popFile,distFile,dateFile,economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent,id),
     outputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent,id),
-    outputs += (logmse,mselog)
+    outputs += (logmse,mselog),
+    popFile := workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"),
+    distFile := workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"),
+    dateFile := workDirectory / "data" /  "processed" / (countrycode+"_dates.csv"),
+    id := 1
   )
 val modelCapsule = Capsule(model)
-
-
-val fileSetting = ExplorationTask(
-    (popFile in Seq( workDirectory / "data"/ "processed" / (countrycode+"_pops.csv"))) x
-    (distFile in Seq(workDirectory / "data"/  "processed" / (countrycode+"_dist.csv"))) x
-    (dateFile in Seq(workDirectory / "data" /  "processed" / (countrycode+"_dates.csv"))) x
-    (id in Seq(1))
-  ) set(
-    inputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent),
-    outputs += (economicMultiplier,sizeEffectOnSupply,sizeEffectOnDemand,distanceDecay,wealthToPopulationExponent,populationToWealthExponent)
-)
-
-val eval = fileSetting -< model
 
 
 val modelname = "marius"
@@ -77,11 +68,11 @@ val evolution =
         populationToWealthExponent in Range(0.1,10.0),
         wealthToPopulationExponent in Range(0.1,10.0)
       ),
-      mu = 400,
+      mu = 200,
       objectives = Seq(mselog,logmse),
-      evaluation = eval,
+      evaluation = model,
       termination = 100000,
-      parallelism = 1000,
+      parallelism = 200,
       distribution = Island(10 minutes)
   )
 

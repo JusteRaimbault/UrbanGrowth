@@ -9,6 +9,7 @@ library(poweRlaw)
 #areasdata=areas
 #regions = list('China'=c('China'),'NorthAmerica'=c('United States','Canada'))
 # regions = list('Europe'=europe,'EU'=eu)
+#regions = list('Europe'=eea)
 rm(areasdata,regions,figresdir)
 simpleScaling <- function(areasdata, 
                           regions, #list(reg1 = c(countries),...)

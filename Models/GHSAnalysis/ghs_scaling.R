@@ -187,16 +187,33 @@ write.table(cybresults[as.character(cybresults$year)=='15',c("region","Builtalph
 ####
 # Continents
 
+unique(areas$GRGN_L1)
+# "Europe""Northern America""Asia""Africa"  "Latin America and the Caribbean" "Oceania" 
+continents = list('Europe'=unique(areas$country[as.character(areas$GRGN_L1)=='Europe']),
+                  'America'=unique(areas$country[as.character(areas$GRGN_L1)=='Northern America'|as.character(areas$GRGN_L1)=='Latin America and the Caribbean']),
+                  'Asia'=unique(areas$country[as.character(areas$GRGN_L1)=='Asia']),
+                  'Africa'=unique(areas$country[as.character(areas$GRGN_L1)=='Africa']),
+                  'Oceania'=unique(areas$country[as.character(areas$GRGN_L1)=='Oceania'])
+)
+
+continentsresults = simpleScaling(areasdata = areas,regions = continents,figresdir = resdir,withPlot = T)
+write.table(continentsresults[as.character(continentsresults$year)=='15',c("region","population","cities","primacy","ranksizealpha","ranksizersquared","ranksizesigma")],row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/continents_ranksize_2015.csv'))
+write.table(continentsresults[as.character(continentsresults$year)=='15',c("region","Builtalpha","Builtrsquared","Builtsigma","GDPalpha","GDPrsquared","GDPsigma","Emissionsalpha","Emissionsrsquared","Emissionssigma")],row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/continents_scaling_2015.csv'))
 
 
+
+####
+# Trade areas
 
 asean=c('Indonesia','Thailand','Malaysia','Singapore','Philippines','Vietnam','Myanmar','Cambodia','Laos','Brunei')
 mercosur=c('Argentina','Brazil','Paraguay','Uruguay','Bolivia','Chile','Colombia','Ecuador','Guyana','Peru','Suriname')
+comesa=c('Djibouti','Eritrea','Ethiopia','Somalia','Egypt','Libya','Sudan','Tunisia','Comoros','Madagascar','Mauritius','Seychelles','Burundi','Kenya','Malawi','Rwanda','Uganda','Eswatini','Zambia','Zimbabwe','Democratic Republic of the Congo')
+eea=c(eu,'Norway','Switzerland','Iceland','Croatia')
 
-#areas = ucdb@data[as.character(ucdb$CTR_MN_NM)=='France',]
-countries=c('France')
 
-
+tradeareasresults = simpleScaling(areasdata = areas,regions = list('ASEAN'=asean,'MERCOSUR'=mercosur,'COMESA'=comesa,'EEA'=eea),figresdir = resdir,withPlot = T)
+write.table(tradeareasresults[as.character(tradeareasresults$year)=='15',c("region","population","cities","primacy","ranksizealpha","ranksizersquared","ranksizesigma")],row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/tradeareas_ranksize_2015.csv'))
+write.table(tradeareasresults[as.character(tradeareasresults$year)=='15',c("region","Builtalpha","Builtrsquared","Builtsigma","GDPalpha","GDPrsquared","GDPsigma","Emissionsalpha","Emissionsrsquared","Emissionssigma")],row.names = F,sep="&",file = paste0(resdir,'SimpleScaling/tradeareas_scaling_2015.csv'))
 
 
 
@@ -205,6 +222,8 @@ countries=c('France')
 #####
 ## 3) Two param scaling (with xmin cutoff)
 # (package powerlaw ?)
+
+
 
 
 
