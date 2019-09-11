@@ -19,7 +19,7 @@ latestgen <- function(dir){
 # population dirs listed by hand
 
 #models = c('intgib','innovation','gibrat','innovationext','marius','intgibphysical','mariusrestr')
-models = c('intgib','innovation','gibrat','mariusrestr')
+models = c('intgib','innovation','gibrat','mariusrestr','innovationext','marius')
 #systems = c('ZA','CN','US','BR','EU','IN','RU')
 systems=c('world')
 
@@ -28,7 +28,9 @@ popdirs = list(
   'intgib_world'='20190904_172108_CALIB_GRID_intgib_world',
   'innovation_world'='20190904_152508_CALIB_GRID_innovation_world',
   'gibrat_world'='20190904_CALIB_GRID_gibrat_world',
-  'mariusrestr_world'='20190904_171935_CALIB_GRID_mariusrestr_world'
+  'mariusrestr_world'='20190904_171935_CALIB_GRID_mariusrestr_world',
+  'marius_world'='20190906_182401_CALIB_GRID_marius_world',
+  'innovationext_world'='20190906_182354_CALIB_GRID_innovationext_world'
 )
 
 
@@ -113,5 +115,24 @@ g+geom_point(aes(y=logmse,color=gravityGamma))
 g = ggplot(pop[pop$system=='world',],aes(x = mselog,y=logmse,color=model))
 g+geom_point(alpha=0.5)+stdtheme
 ggsave(file=paste0(resdir,'allmodels_world.png'),width=22,height = 18,units='cm')
+
+
+######
+pop$normalizedGravityDecay = rep(NA,nrow(pop))
+for(model in models){
+  ma = max(pop$gravityDecay[pop$model==model]);mi=min(pop$gravityDecay[pop$model==model])
+  if(!is.na(mi)){pop$normalizedGravityDecay[pop$model==model] = (pop$gravityDecay - mi) / (ma - mi)}
+}
+
+g = ggplot(pop[pop$system=='world'&!is.na(pop$normalizedGravityDecay),],aes(x = mselog,y=logmse,color=normalizedGravityDecay,shape=model))
+g+geom_point(alpha=0.8)+stdtheme
+ggsave(file=paste0(resdir,'allmodels_world_colorNormalizedGravityDecay.png'),width=22,height = 18,units='cm')
+
+
+
+
+
+
+
 
 
