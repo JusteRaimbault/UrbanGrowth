@@ -16,7 +16,7 @@ trait MacroState {
   def distanceMatrix: Vector[Vector[Double]]
 
   /**
-    * indicators : pop, closeness and accessibility
+    * Compute macroscopic indicators : population, closeness and accessibility
     * @return
     */
   def indicators: (Vector[Double],Vector[Double],Vector[Double]) = {

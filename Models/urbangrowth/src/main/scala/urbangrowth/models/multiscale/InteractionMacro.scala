@@ -35,16 +35,17 @@ object InteractionMacro {
 
 
   /**
-    * compute population evolution
-    * @param prevpop
+    * Compute the evolution of macroscopic populations
+    *
+    * @param prevpop previous populations
     * @param genDistanceMatrix
-    * @param growthRates
+    * @param growthRates growth rate proper to each city
     * @param interactionWeights
     * @param interactionGammas
     * @return
     */
   def interactionStep(prevpop: Vector[Double],genDistanceMatrix: Vector[Vector[Double]],growthRates: Vector[Double],interactionWeights: Vector[Double],interactionGammas: Vector[Double]): Vector[Double] = {
-    val delta_t = 1 // synthetic model
+    val delta_t = 1 // synthetic model // TODO generalize for possible calibration
     val n = prevpop.size
     val totalpop = prevpop.toArray.sum
     val diagpops = MatrixUtils.diag(prevpop.toArray.zip(interactionGammas).map{ case (p,g) => math.pow(p / totalpop,g)})
@@ -60,9 +61,12 @@ object InteractionMacro {
 
 
   /**
-    * compute generalized dist mat from dist mat
-    * @param dmat
-    * @param decays
+    * Compute generalized dist mat from dist mat
+    * as with d_{ij} the distance matrix, generalized distance is
+    *  g_{ij} = exp( - d_{ij} / d_i)
+    *
+    * @param dmat distance matrix
+    * @param decays interaction decays for each city
     * @return
     */
   def generalizedDistanceMatrix(dmat: Vector[Vector[Double]],decays: Vector[Double]): Vector[Vector[Double]] = {
@@ -74,7 +78,7 @@ object InteractionMacro {
   }
 
   /**
-    * specific update for generalized distance given previous and new decays
+    * Specific update for generalized distance given previous and new decays
     *  ( uses the fact that access is computed with an exponential)
     * @param dmat
     * @param prevDecays

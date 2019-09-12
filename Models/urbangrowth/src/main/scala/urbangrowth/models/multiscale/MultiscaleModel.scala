@@ -162,6 +162,7 @@ object MultiscaleModel {
 
     assert(mesoStates.map{_.populationGrid.flatten.sum>0}.filter(_==false).size==0,"existing null meso pop grids")
 
+    // note: congestedFlow function in spatialdata computes \sum (flow - lambda flow^2 )
     val utilities = mesoStates.map{s => GridMorphology.congestedFlows(s.populationGrid.map{_.toArray}.toArray,congestionCost)}
 
     assert(utilities.filter(_.isNaN).size==0,"Nan in utilities : "+utilities)

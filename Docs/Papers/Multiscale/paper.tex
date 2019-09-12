@@ -1,0 +1,166 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[margin=2cm]{geometry}
+\usepackage{multirow}
+
+
+\begin{document}
+
+% Systems of cities
+%Multi-scalar model
+%Spatial interaction
+%Reaction-diffusion
+
+
+
+
+\section{Introduction}
+
+The modeling of urban growth is a crucial issue for the design of sustainable territorial policies, through the understanding of past urbanization processes and the forecasting of future urban trajectories. Several models have been proposed at different scales and integrating different dimensions of urban systems, such as land-use transport interaction models \cite{wegener2004land} or systems of cities models \cite{pumain2017urban}. While multi-scalar models are recognized as crucial for the study of such systems \cite{Rozenblat2018}, they remain in practice unexplored.
+
+At the scale of a metropolitan area, Land-use Transport Interaction models \cite{wegener2004land} are for example a privileged tool to anticipate the answer of spatial distributions of activities (mostly residential location and economic activities) to an evolution of the accessibility landscape permitted by new transportation infrastructures. At the same scale, cellular automata models of urban growth or land-use change study more generally land-use transitions with a high spatial resolution, and are mostly data-driven \cite{clarke2007decade}. At the smaller scale of the system of cities, macroscopic models of urban growth have focused on reproducing the distribution of city sizes, either through economic processes as e.g. \cite{gabaix1999zipf}, or from a geographical point of view focusing on interactions between cities \cite{favaro2011gibrat}.
+
+Territorial dynamics, and more particularly urban dynamics, have according to \cite{pumain1997pour} an intrinsic multi-scalar nature, with successive autonomous levels of emergence from individual microscopic agents to the mesoscopic scale of the city and the macroscopic scale of the system of cities. Furthermore, the need for sustainable territorial policies would imply the construction of multi-scalar models to take into account issues associated to each relevant scale \cite{Rozenblat2018}.
+
+This paper contributes to that open question by introducing a multi-scale model of urban growth which focuses on the spatial structure of processes rather than on their multi-dimensionality. Therefore, we take into account only population variables, but both at the macroscopic scale of the system of cities in the legacy of \cite{pumain2017urban} and at the mesoscopic scale of the metropolitan area with an urban morphogenesis model. The coupling of these scales is a crucial novel feature of our model. We describe in the following stylized facts justifying the approach, describe the model, and summarize preliminary results from its exploration and calibration.
+
+
+
+\section{Multi-scale model}
+
+\subsection{Rationale}
+
+This contribution introduces a parsimonious multi-scalar model for systems of cities, based on simple dimensions (mainly populations) with stylized processes, but yielding an effective strong coupling between the metropolitan mesoscopic scale and the macroscopic scale of the system of cities. The model couples the spatial interaction model of \cite{raimbault2018indirect} for the macro scale with the reaction-diffusion model for urban form studied by \cite{raimbault2018calibration}. More precisely, urban areas viewed as a population grid are embedded into the macroscopic interaction model. To evolve populations and local urban forms, one time step consists of (i) population differences are computed by the interaction model; (ii) top-down feedback modifies parameters of mesoscopic models, given control parameters to capture typical scenarios (transit-oriented development or sprawl for diffusion, metropolization or uniformization for aggregation); (iii) local urban form are evolved with the reaction-diffusion models at a given speed conditionally to the population variations; (iv) changes in urban form influence macroscopic interaction ranges (capturing the impact of local activity on global insertion), by integrating gravity flows in the area with a squared cost function making a compromise between congestion and flows.
+
+
+\subsection{Formalization}
+
+
+We consider $N$ urban areas, represented at the macroscopic scale by their population $P_j(t)$ at time $t$, and at the mesoscopic scale by a population grid $p_{kl}^{(j)}(t)$.
+
+The model runs for a total number $t_f$ of time steps, and we will assume that $\Delta t = 1$ for the sake of simplicity (the formulas can be generalized for arbitrary values of the time step, for example when running on real data with irregular time sampling).
+
+The system is initialized with synthetic data with a parameter $\alpha_0$ for the initial hierarchy, $P_0 (0)$ for the initial population of the largest city, in a square world of size $w$ (reference unit for the decay parameter).
+
+At each time step:
+
+\begin{enumerate}
+	\item Aggregated population are evolved according to
+	
+	\begin{equation}
+		P_i(t+1) = P_i(t) \left(1 + \Delta t \cdot \left(g_i + \frac{w_i}{N} \cdot \sum_j \frac{V_{ij}}{<V_{ij}>} \right) \right)
+	\end{equation}
+	
+	where the gravity interaction potential is given by 
+	
+	\begin{equation}
+		V_{ij} = \left(\frac{P_i P_j}{(\sum_k p_k)^2}\right)^{\gamma_G} \cdot \exp \left(- \frac{d_{ij}}{d_i} \right)
+	\end{equation}
+
+	and we write the population variations
+	
+	\begin{equation}
+		\Delta P_i (t) = P_i (t + 1) - P_i (t)
+	\end{equation}
+
+	
+	\item Mesoscopic parameters are modified following the evolution of population such that 
+		\begin{itemize}
+			\item the mesoscopic growth rate is adjusted to the population growth uniformaly over the time interval	
+			    $N_G^{(i)} (t + 1) = \Delta P_i / t_m$
+			\item The sprawl parameter evolves according to a fixed multiplier and the relative population increase following 
+			\begin{equation}
+				\beta_i (t+1) = \beta_i (t) \cdot \left(1 + \delta\beta \cdot \frac{\Delta P_i (t)}{\max_k  \Delta P_k (t)}\right)
+			\end{equation}
+			where the multiplier parameter $\delta\beta$ allows testing different scenarios: a negative value corresponds to transit-oriented development while a positive value corresponds to an uncontrolled sprawl
+			\item The aggregation parameter evolves in a similar way but as a function of accessibility increase
+			\begin{equation}
+				\alpha_i (t+1) = \alpha_i (t) \cdot \left(1 + \delta\alpha \cdot \frac{\Delta Z_i (t)}{\max_k  \Delta Z_k (t)}\right)
+			\end{equation}
+			where the multiplier parameter $\delta\alpha$ allows switching between a metropolization scenario (more aggregation) and an uniformization scenario (less aggregation), and accessibility is given by
+			\begin{equation}
+				Z_i = \sum_j \frac{P_j}{\sum_k P_k} \cdot \exp( - d_{ij} / d_i)
+			\end{equation}
+			\item Change in the level of sprawl depends on the population pressure only, while aggregation depends on accessibility since it is linked to metropolization processes
+			\item \textit{Note: the linear scale for these two parameters may not be relevant depending on the distribution of increments ?} $\rightarrow$ to be tested
+		\end{itemize}
+	
+	\item Mesoscopic grids are evolved by the updated parameters, and $t_m$ time steps, following the aggregation-diffusion model, with $n_d$ unchanged. Slight differences in the end (due to rounding in computing the number of steps) is corrected by adjusting the macroscopic increments by the effective mesoscopic increments (which are assumed to be more precise).
+	
+	\item Macroscopic parameters are updated: for the sake of simplicity, only interaction decays are updated, assuming that urban form pattern play a role in the global insertion of the city. More precisely, we compute gravity flows within the area, and aggregate their value as an economic activity with a squared negative externality interpreted as a congestion with a cost $\lambda$ following
+	
+	\begin{equation}
+		U_i = \sum_{kl} \left( \frac{P_k P_l}{P^2} \cdot \frac{1}{d_{kl}} - \lambda \left(\frac{P_k P_l}{P^2} \cdot \frac{1}{d_{kl}}\right)^2 \right)
+	\end{equation}
+	
+	We do not add gravity parameter nor hierarchy parameter for the sake of simplicity. This utility $U_i$ is used to update the interaction decays following
+	
+	\begin{equation}
+		d_i (t+1) = d_i (t) \left( 1 + \delta d \cdot \frac{U_i}{\max_k \left|U_k\right|} \right)
+	\end{equation}
+	where the multiplier parameter $\delta d$ allows controlling for the influence of local performance on global insertion.
+\end{enumerate}
+
+
+
+
+
+\subsection{Parameters}
+
+The Table~\ref{tab:parameters} summarizes
+
+\begin{table}
+	\caption{Summary of model parameters\label{tab:parameters}}
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+	\hline
+		Type & Parameter & Process & Range \\\hline
+		\multirow{4}{*}{Macro} & $g_i = g_0$ & Endogenous growth & \\
+		& $w_i = w_G$ & Interactions weight & \\
+		& $\gamma_i = \gamma_G$ & Interactions hierarchy & \\
+		& $d_i$ & Interactions decay & \\ \hline
+		\multirow{4}{*}{Meso} & $\alpha_i$ & Aggregation & \\
+		& $\beta_i$ & Diffusion & \\
+		& $t_m$ & Urban growth speed & \\
+		& $n_d$ & Diffusion & \\ \hline
+		\multirow{3}{*}{Multiscale} & $\delta\alpha$ & Downward feedback & \\
+		& $\delta\beta$ & Downward feedback & \\
+		& $\delta d$ & Upward feedback & \\\hline
+	\end{tabular}
+\end{table}
+
+
+
+
+\section{Results}
+
+The model is applied on synthetic systems of cities typical of a continental range (500km, hierarchy around 1, 20 cities), with initial local population grid configurations as monocentric. Parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}, eased by the implementation of the model in scala \cite{model}. First results show a strong impact of the strong meso-macro coupling, such as for example a qualitative inversion of the behavior as a function of interaction range of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion) to a ``sprawl'' scenario (positive feedback). Similarly, mesoscopic urban form indicators are significantly influenced by the coupling process.
+
+
+\section{Discussion}
+
+
+\subsection{Multi-modeling and concurrent processes}
+
+This model is only a first structural sketch with very restrictive assumption, in particular regarding the downward and upward feedbacks on submodel parameters. There may be no link between urban form and global insertion, or it may be due to other processes, be expressed as an other functional form. An important stage before shifting to robust knowledge will consist in (i) reviewing and making a typology of such potential processes across scales; (ii) including most in a multi-modeling fashion to compare possible concurrent mechanisms.
+
+
+\subsection{Developments}
+
+Further work will consist in more targeted simulation experiments, including specific exploration algorithms such as diversity search for model regimes \cite{reuillon2013openmole}, to test the model as a proof-of-concept of models for policies. Such a model can also be calibrated on real city systems and urban form trajectories, to extrapolate coupling parameters that would be difficult to obtain otherwise. Our contribution is thus a first step towards multi-scalar simulation models for systems of cities.
+
+We also did not include explicitly transportation networks in this model.
+
+
+
+
+\bibliographystyle{apalike}
+\bibliography{biblio}
+
+
+\end{document} 
