@@ -9,7 +9,21 @@
 \usepackage{multirow}
 
 
+
+\title{Multiscalar modeling of urban growth}
+\date{}
+
+
 \begin{document}
+
+
+\maketitle
+
+
+\begin{abstract}
+	Urban evolution processes occur at different scales, with intricate interactions between levels and relatively distinct type of processes. To what extent actual urban dynamics include an actual strong coupling between scales, in the sense of both top-down and bottom-up feedbacks, remains an open issue with important practical application for the management of urban growth. We introduce in this paper a multi-scalar simulation model of urban growth, coupling an interaction model at the macroscopic scale with morphogenesis models for the evolution of urban form at the scale of metropolitan areas.
+\end{abstract}
+
 
 % Systems of cities
 %Multi-scalar model
@@ -112,7 +126,7 @@ At each time step:
 
 \subsection{Parameters}
 
-The Table~\ref{tab:parameters} summarizes
+The Table~\ref{tab:parameters} summarizes model parameters.
 
 \begin{table}
 	\caption{Summary of model parameters\label{tab:parameters}}
@@ -137,9 +151,41 @@ The Table~\ref{tab:parameters} summarizes
 
 
 
+\subsection{Indicators}
+
+Model behavior is characterized using the following indicators:
+
+
+
+
 \section{Results}
 
-The model is applied on synthetic systems of cities typical of a continental range (500km, hierarchy around 1, 20 cities), with initial local population grid configurations as monocentric. Parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}, eased by the implementation of the model in scala \cite{model}. First results show a strong impact of the strong meso-macro coupling, such as for example a qualitative inversion of the behavior as a function of interaction range of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion) to a ``sprawl'' scenario (positive feedback). Similarly, mesoscopic urban form indicators are significantly influenced by the coupling process.
+\subsection{Implementation}
+
+The model is applied on synthetic systems of cities typical of a continental range (500km, hierarchy around 1, 20 cities), with initial local population grid configurations as monocentric. Parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}, eased by the implementation of the model in scala \cite{model}.
+
+
+
+\subsection{Grid exploration}
+
+
+% 20190429_193158_MULTISCALE_GRID_GRID.csv
+
+First results show a strong impact of the strong meso-macro coupling, such as for example a qualitative inversion of the behavior as a function of interaction range of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion) to a ``sprawl'' scenario (positive feedback). Similarly, mesoscopic urban form indicators are significantly influenced by the coupling process.
+
+
+% 20190506_135221_MULTISCALE_TARGETEDGRID_GRID
+
+We do a targeted experiment to look at the influence of the macroscopic interaction decay and the mesoscopic evolution speed, under stylized scenarios for the downward feedback.
+
+We run 50 replications for each parameter value.
+
+Congestion cost for upward feedback is fixed to a rather strong effect.
+% note : we should control here compare with / without feedback ?
+%  -> first thing to check : with/ without the model
+
+
+
 
 
 \section{Discussion}
