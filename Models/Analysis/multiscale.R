@@ -9,7 +9,8 @@ source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
 
 
 #resPrefix = '20190429_193158_MULTISCALE_GRID_GRID'
-resPrefix = '20190506_135221_MULTISCALE_TARGETEDGRID_GRID'
+#resPrefix = '20190506_135221_MULTISCALE_TARGETEDGRID_GRID'
+resPrefix = '20190919_161009_MULTISCALE_TARGETEDGRID_GRID'
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Multiscale/',resPrefix,'/');dir.create(resdir)
 
 #res <- as.tbl(read.csv(paste0('exploration/',resPrefix,'.csv')))
@@ -23,8 +24,10 @@ params = c("macroGrowthRate","macroInteractionDecay","macroInteractionGamma",
 macroindics = c("macroAccessibilities","macroClosenesses","macroPopulations")
 mesoindics = c("mesoSlopes","mesoMorans","mesoEntropy","mesoDistances")
 
+#ncities = 20
+#tsteps = 5
 ncities = 20
-tsteps = 5
+tsteps = 20
 
 for(macroindic in macroindics){
   res[[paste0("deltaHierarchy",macroindic)]] = apply(res[,paste0(macroindic,0:(ncities-1))],2,hierarchy) - apply(res[,paste0(macroindic,(ncities*(tsteps-1)):(ncities*tsteps - 1))],2,hierarchy)
