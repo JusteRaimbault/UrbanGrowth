@@ -59,23 +59,48 @@ sres = res %>% group_by(
 )
 
 
-save(sres,file=paste0(resdir,'data/',resPrefix,'_summary.RData'))
-
+#save(sres,file=paste0(resdir,'data/',resPrefix,'_summary.RData'))
+load(paste0(resdir,'data/',resPrefix,'_summary.RData'))
 
 #sres=sres[sres$macroGrowthRate==0.0&sres$macroMesoAlphaUpdateMax==0.1&sres$macroInteractionGamma==5.0&sres$mesoAlpha==0.5&sres$mesoBeta==0.1&sres$mesoMacroCongestionCost==2.0,]
 
-# g=ggplot(sres,aes(x=macroInteractionDecay,y=deltaHierarchymacroAccessibilities,group=mesoTimeSteps,color=mesoTimeSteps))
-# g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax)+stdtheme
-# ggsave(file=paste0(resdir,'deltaHierarchyAccessibility.png'),width=20,height=18,units='cm')
+###
+# compute sharpe ratios (cv ?)
+sharpes <- sres %>% transmute(
+  deltaHierarchymacroAccessibilitiesSharpe = abs(deltaHierarchymacroAccessibilities / deltaHierarchymacroAccessibilitiesSd),
+  deltaHierarchymacroClosenessesSharpe = abs(deltaHierarchymacroClosenesses / deltaHierarchymacroClosenessesSd),
+  deltaHierarchymacroPopulationsSharpe = abs(deltaHierarchymacroPopulations / deltaHierarchymacroPopulationsSd),
+  deltamesoSlopesSharpe = abs(deltamesoSlopes / deltamesoSlopesSd),
+  deltamesoMoransSharpe = abs(deltamesoMorans / deltamesoMoransSd),
+  deltamesoEntropySharpe = abs(deltamesoEntropy / deltamesoEntropySd),
+  deltamesoDistancesSharpe = abs(deltamesoDistances / deltamesoDistancesSd)
+)
+summary(sharpes)
+# -> well converged with 50 replications given the relative size of stds
+
+
+g=ggplot(sres,aes(x=macroInteractionDecay,y=deltaHierarchymacroAccessibilities,group=mesoTimeSteps,color=mesoTimeSteps))
+g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax)+stdtheme
+#ggsave(file=paste0(resdir,'deltaHierarchyAccessibility-macroInteractionDecay_col-mesoTimeSteps_facet-mesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png'),width=20,height=18,units='cm')
 # 
-# g=ggplot(sres,aes(x=macroInteractionDecay,y=deltamesoMorans,group=mesoTimeSteps,color=mesoTimeSteps))
-# g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax,scales="free")
-# ggsave(file=paste0(resdir,'deltaMoran.png'),width=20,height=18,units='cm')
+
+g=ggplot(sres,aes(x=macroInteractionDecay,y=deltamesoMorans,group=mesoTimeSteps,color=mesoTimeSteps))
+g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax,scales="free")
+# ggsave(file=paste0(resdir,'deltaMesoMoran-macroInteractionDecay_col-mesoTimeSteps_facet-mesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png'),width=20,height=18,units='cm')
 # 
-# g=ggplot(sres,aes(x=macroInteractionDecay,y=deltamesoDistances,group=mesoTimeSteps,color=mesoTimeSteps))
-# g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax,scales="free")
-# ggsave(file=paste0(resdir,'deltaDistances.png'),width=20,height=18,units='cm')
+g=ggplot(sres,aes(x=macroInteractionDecay,y=deltamesoDistances,group=mesoTimeSteps,color=mesoTimeSteps))
+g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax,scales="free")
+# ggsave(file=paste0(resdir,'deltaMesoDistances-macroInteractionDecay_col-mesoTimeSteps_facet-mesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png'),width=20,height=18,units='cm')
 # 
+
+
+###
+# targeted calibration from this ? : minimize sprawl while maximizing access ?
+# compromise "meso opt / macro opt" ? (macro access ?)
+
+
+
+
 
 
 
