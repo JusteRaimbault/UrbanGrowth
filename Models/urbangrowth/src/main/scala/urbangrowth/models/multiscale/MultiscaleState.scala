@@ -34,7 +34,8 @@ case class MultiScaleResult(
                            mesoSlopes: Vector[Double],
                            mesoSlopeRsquared: Vector[Double],
                            mesoCongestedFlows: Vector[Double],
-                           mesoMissingPopulations: Vector[Double]
+                           mesoMissingPopulations: Vector[Double],
+                           fullTrajectories: Boolean
                            ) {
   def asArrayTuple =  (macroPopulations.toArray,macroClosenesses.toArray,macroAccessibilities.toArray,
     mesoMorans.toArray,mesoDistances.toArray,mesoEntropy.toArray,mesoSlopes.toArray,mesoSlopeRsquared.toArray,
@@ -44,9 +45,10 @@ case class MultiScaleResult(
 
 object MultiScaleResult {
 
-  def apply(rawStates: Vector[MultiscaleState]): MultiScaleResult = {
-    val morphologies: Vector[(Double,Double,Double,Double,Double)] = rawStates.flatMap{_.mesoStates.map{_.morphology}}
-    val macroIndics: Vector[(Vector[Double],Vector[Double],Vector[Double])] = rawStates.map{_.macroState.indicators}
+  def apply(rawStates: Vector[MultiscaleState],fulltrajs: Boolean): MultiScaleResult = {
+    val states: Vector[MultiscaleState] = if (fulltrajs) rawStates else rawStates.take(1)++rawStates.takeRight(1)
+    val morphologies: Vector[(Double,Double,Double,Double,Double)] = states.flatMap{_.mesoStates.map{_.morphology}}
+    val macroIndics: Vector[(Vector[Double],Vector[Double],Vector[Double])] = states.map{_.macroState.indicators}
     MultiScaleResult(
       rawStates,
       macroIndics.flatMap(_._1),
@@ -58,7 +60,8 @@ object MultiScaleResult {
       morphologies.map(_._4),
       morphologies.map(_._5),
       rawStates.flatMap(_.macroState.congestedFlows),
-      rawStates.flatMap(_.mesoStates.map(_.missingPopulation))
+      rawStates.flatMap(_.mesoStates.map(_.missingPopulation)),
+      fulltrajs
     )
   }
 

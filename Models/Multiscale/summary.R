@@ -13,8 +13,8 @@ source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
 
 #resPrefix = '20190429_193158_MULTISCALE_GRID_GRID'
 #resPrefix = '20190506_135221_MULTISCALE_TARGETEDGRID_GRID'
-resPrefix = '20190919_161009_MULTISCALE_TARGETEDGRID_GRID'
-#resPrefix = '20190919_141607_MULTISCALE_TARGETEDGRID_GRID'
+#resPrefix = '20190919_161009_MULTISCALE_TARGETEDGRID_GRID'
+resPrefix = '20190919_141607_MULTISCALE_TARGETEDGRID_GRID'
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Multiscale/',resPrefix,'/');dir.create(resdir)
 
 #res <- as.tbl(read.csv(paste0('exploration/',resPrefix,'.csv')))
