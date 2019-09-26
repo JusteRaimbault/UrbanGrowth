@@ -4,3 +4,6 @@
 [submodule "Docs/Communications/2019/ECTQG2019/Communication"]
 	path = Docs/Communications/2019/ECTQG2019/Communication
 	url = git@github.com:JusteRaimbault/ECTQG2019-UrbanDynamics.git
+[submodule "Models/UrbanGrowth-model"]
+	path = Models/UrbanGrowth-model
+	url = git@github.com:JusteRaimbault/UrbanGrowth-model.git
