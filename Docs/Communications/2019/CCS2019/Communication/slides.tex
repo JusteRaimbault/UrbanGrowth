@@ -1,0 +1,234 @@
+\input{header_slides.tex}
+
+\begin{document}
+
+\title[Multiscale urban growth]{A multi-scalar model for system of cities}
+\author[Raimbault]{J.~Raimbault$^{1,2,3\ast}$\\\medskip
+$^{\ast}$\texttt{j.raimbault@ucl.ac.uk}
+}
+
+\institute[UCL]{$^{1}$CASA, UCL\\
+$^{2}$UPS CNRS 3611 Complex Systems Institute Paris\\
+$^{3}$UMR CNRS 8504 G{\'e}ographie-cit{\'e}s
+}
+
+
+\date[1st October 2019]{CCS 2019\\
+Urban Complexity\\
+October 1st 2019
+}
+
+\frame{\maketitle}
+
+
+
+% keywords Systems of cities Multi-scalar model Spatial interaction Reaction-diffusion
+
+
+\section{Introduction}
+
+
+
+\sframe{Modeling urban growth}{
+
+%The modeling of urban growth is a crucial issue for the design of sustainable territorial policies, through the understanding of past urbanization processes and the forecasting of future urban trajectories.
+
+
+
+}
+
+
+\sframe{Growth models at the mesoscopic scale}{
+
+%Several models have been proposed at different scales and integrating different dimensions of urban systems, such as land-use transport interaction models \cite{wegener2004land} 
+%At the scale of a metropolitan area, Land-use Transport Interaction models \cite{wegener2004land} are for example a privileged tool to anticipate the answer of spatial distributions of activities (mostly residential location and economic activities) to an evolution of the accessibility landscape permitted by new transportation infrastructures. At the same scale, cellular automata models of urban growth or land-use change study more generally land-use transitions with a high spatial resolution, and are mostly data-driven \cite{clarke2007decade}.
+
+
+
+
+}
+
+
+\sframe{Interaction models for systems of cities}{
+
+% or systems of cities models \cite{pumain2017urban}.
+% At the smaller scale of the system of cities, macroscopic models of urban growth have focused on reproducing the distribution of city sizes, either through economic processes as e.g. \cite{gabaix1999zipf}, or from a geographical point of view focusing on interactions between cities \cite{favaro2011gibrat}.
+
+
+}
+
+
+\sframe{Towards multi-scalar models}{
+
+%While multi-scalar models are recognized as crucial for the study of such systems \cite{Rozenblat2018}, they remain in practice unexplored.
+%Territorial dynamics, and more particularly urban dynamics, have according to \cite{pumain1997pour} an intrinsic multi-scalar nature, with successive autonomous levels of emergence from individual microscopic agents to the mesoscopic scale of the city and the macroscopic scale of the system of cities. Furthermore, the need for sustainable territorial policies would imply the construction of multi-scalar models to take into account issues associated to each relevant scale \cite{Rozenblat2018}.
+
+
+}
+
+
+
+\sframe{Strong coupling and multi-scalarity}{
+
+% on model coupling: example diagram Mike flooding
+
+}
+
+
+ 
+
+
+
+
+
+
+
+\sframe{Research objective}{
+
+
+%This contribution contributes to that open question by introducing a multi-scale model of urban growth which focuses on the spatial structure of processes rather than on their multi-dimensionality. Therefore, we take into account only population variables, but both at the macroscopic scale of the system of cities in the legacy of \cite{pumain2017urban} and at the mesoscopic scale of the metropolitan area with an urban morphogenesis model. The coupling of these scales is a crucial novel feature of our model. We describe in the following stylized facts justifying the approach, describe the model, and summarize preliminary results from its exploration and calibration.
+%This contribution introduces a parsimonious multi-scalar model for systems of cities, based on simple dimensions (mainly populations) with stylized processes, but yielding an effective strong coupling between the metropolitan mesoscopic scale and the macroscopic scale of the system of cities.
+
+
+
+}
+
+
+
+\section{Model description}
+
+
+
+\sframe{Model Rationale}{
+
+%The model couples the spatial interaction model of \cite{raimbault2018indirect} for the macro scale with the reaction-diffusion model for urban form studied by \cite{raimbault2018calibration}. More precisely, urban areas viewed as a population grid are embedded into the macroscopic interaction model. To evolve populations and local urban forms, one time step consists of (i) population differences are computed by the interaction model; (ii) top-down feedback modifies parameters of mesoscopic models, given control parameters to capture typical scenarios (transit-oriented development or sprawl for diffusion, metropolization or uniformization for aggregation); (iii) local urban form are evolved with the reaction-diffusion models at a given speed conditionally to the population variations; (iv) changes in urban form influence macroscopic interaction ranges (capturing the impact of local activity on global insertion), by integrating gravity flows in the area with a squared cost function making a compromise between congestion and flows.
+
+}
+
+
+
+\sframe{Model formalization}{
+
+}
+
+
+
+
+\section{Results}
+
+
+\sframe{Implementation}{
+
+% Parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}, eased by the implementation of the model in scala \cite{model}.
+
+% + pub openmole
+
+
+}
+
+
+\sframe{Synthetic configuration}{
+
+% The model is applied on synthetic systems of cities typical of a continental range (500km, hierarchy around 1, 20 cities), with initial local population grid configurations as monocentric.
+
+
+
+}
+
+
+
+\sframe{Statistical consistency}{
+
+% one factor sampling
+
+}
+
+
+\sframe{Impact of policy parameters}{
+
+% First results show a strong impact of the strong meso-macro coupling, such as for example a qualitative inversion of the behavior as a function of interaction range of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion) to a ``sprawl'' scenario (positive feedback). Similarly, mesoscopic urban form indicators are significantly influenced by the coupling process.
+% ! abstract is wrong : say it !
+
+
+
+}
+
+
+
+\section{Discussion}
+
+
+
+\sframe{Discussion}{
+
+
+%Further work will consist in more targeted simulation experiments, including specific exploration algorithms such as diversity search for model regimes \cite{reuillon2013openmole}, to test the model as a proof-of-concept of models for policies. Such a model can also be calibrated on real city systems and urban form trajectories, to extrapolate coupling parameters that would be difficult to obtain otherwise. 
+
+
+
+
+
+}
+
+
+
+
+\sframe{Conclusion}{
+
+% Our contribution is thus a first step towards multi-scalar simulation models for systems of cities.
+
+
+$\rightarrow$ 
+
+$\rightarrow$ 
+
+
+\bigskip
+\bigskip
+
+
+\textbf{Open repository for model and results at}
+
+\texttt{https://github.com/JusteRaimbault/UrbanGrowth}
+
+\textbf{Simulation data at}
+
+\texttt{}% dataverse
+
+\bigskip
+
+\textbf{Acknowledgments}: thanks to the \textit{European Grid Infrastructure} for access to the infrastructure.
+
+
+}
+
+
+
+\sframe{Reserve slides}{
+
+\centering
+
+\Large
+
+\textbf{Reserve Slides}
+
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apalike}
+\bibliography{biblio}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+\end{document}
+
