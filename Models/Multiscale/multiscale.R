@@ -3,6 +3,7 @@ setwd(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/urbangrowth/openmole'))
 
 library(dplyr)
 library(ggplot2)
+library(reshape2)
 
 source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
@@ -10,18 +11,23 @@ source(paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Models/Analysis/functions.R'))
 
 #resPrefix = '20190429_193158_MULTISCALE_GRID_GRID'
 #resPrefix = '20190506_135221_MULTISCALE_TARGETEDGRID_GRID'
-resPrefix = '20190919_161009_MULTISCALE_TARGETEDGRID_GRID'
+#resPrefix = '20190919_161009_MULTISCALE_TARGETEDGRID_GRID';filtered=T;fulltrajs=T;oneFactor=F
 #resPrefix = '20190919_141607_MULTISCALE_TARGETEDGRID_GRID'
 #resPrefix = '20190926_114834_MULTISCALE_LHS_TEST'
+#resPrefix = '20190926_173110_MULTISCALE_ONEFACTOR_GRID';filtered=F;fulltrajs=F;oneFactor=T
+resPrefix = '20190927_131754_MULTISCALE_TARGETEDGRID_GRID';filtered=F;fulltrajs=F;oneFactor=F
+
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/Multiscale/',resPrefix,'/');dir.create(resdir)
 
-#res <- as.tbl(read.csv(paste0('exploration/',resPrefix,'.csv')))
-#res <- as.tbl(read.csv(paste0(resdir,'data/',resPrefix,'.csv'),stringsAsFactors = F))
-#res <- as.tbl(read.csv(paste0(resdir,'data/',resPrefix,'_sample.csv'),stringsAsFactors = F))
-res <- as.tbl(read.csv(paste0(resdir,'data/',resPrefix,'_filtered.csv'),stringsAsFactors = F))
-
-params = c("macroGrowthRate","macroInteractionDecay","macroInteractionGamma",
-           "mesoAlpha","mesoBeta","mesoTimeSteps",
+if(!filtered){
+  res <- as.tbl(read.csv(paste0(resdir,'data/',resPrefix,'.csv'),stringsAsFactors = F))
+}else{
+  #res <- as.tbl(read.csv(paste0(resdir,'data/',resPrefix,'_sample.csv'),stringsAsFactors = F))
+  res <- as.tbl(read.csv(paste0(resdir,'data/',resPrefix,'_filtered.csv'),stringsAsFactors = F))
+}
+  
+params = c("macroGrowthRate","macroInteractionDecay","macroInteractionGamma","macroInteractionWeight",
+           "mesoAlpha","mesoBeta","mesoNdiff","mesoTimeSteps",
            "macroMesoAlphaUpdateMax","macroMesoBetaUpdateMax","mesoMacroCongestionCost","mesoMacroDecayUpdateMax"
            )
 
@@ -44,7 +50,7 @@ tsteps = 20
 #plot(log(1:length(P0)),sort(log(P0),decreasing = T),col='red')
 #hierarchy(Pf) - hierarchy(P0)
 
-
+if(!fulltrajs){tsteps=1}# shitty naming system for arrays on rows
 for(macroindic in macroindics){
   res[[paste0("deltaHierarchy",macroindic)]] = apply(res[,paste0(macroindic,0:(ncities-1))],1,hierarchy) - apply(res[,paste0(macroindic,(ncities*tsteps):(ncities*(tsteps+1) - 1))],1,hierarchy)
 }
@@ -87,7 +93,9 @@ deltaMesoindics=paste0("delta",mesoindics)
 #####
 
 sres = res %>% group_by(
-  macroGrowthRate,macroInteractionDecay,macroInteractionGamma,mesoAlpha,mesoBeta,mesoTimeSteps,
+  macroGrowthRate,macroInteractionDecay,macroInteractionGamma,macroInteractionWeight,
+  mesoAlpha,mesoBeta,mesoNdiff,
+  mesoTimeSteps,
   macroMesoAlphaUpdateMax,macroMesoBetaUpdateMax,mesoMacroCongestionCost,mesoMacroDecayUpdateMax,id
 ) %>% summarise(
   deltaHierarchymacroAccessibilitiesSd=sd(deltaHierarchymacroAccessibilities),
@@ -110,6 +118,7 @@ sres = res %>% group_by(
 
 #####
 
+
 #load(paste0(resdir,'data/',resPrefix,'_summary.RData'))
 
 #sres=sres[sres$macroGrowthRate==0.0&sres$macroMesoAlphaUpdateMax==0.1&sres$macroInteractionGamma==5.0&sres$mesoAlpha==0.5&sres$mesoBeta==0.1&sres$mesoMacroCongestionCost==2.0,]
@@ -130,31 +139,82 @@ summary(sharpes)
 # -> well converged with 50 replications given the relative size of stds
 
 
-#g=ggplot(sres,aes(x=macroInteractionDecay,y=deltaHierarchymacroAccessibilities,group=mesoTimeSteps,color=mesoTimeSteps))
-#g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax)+stdtheme
-#ggsave(file=paste0(resdir,'deltaHierarchyAccessibility-macroInteractionDecay_col-mesoTimeSteps_facet-mesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png'),width=20,height=18,units='cm')
-# 
+
+####
+## one factor sampling plots
 
 
-for()
+if(oneFactor){
 
-g=ggplot(sres,aes(x=mesoTimeSteps,y=deltaHierarchymacroPopulations,group=macroInteractionDecay,color=macroInteractionDecay))
-g+geom_point()+geom_line()+geom_errorbar(aes(ymin=deltaHierarchymacroPopulations-deltaHierarchymacroPopulationsSd,ymax=deltaHierarchymacroPopulations+deltaHierarchymacroPopulationsSd),width=1)+
-  facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax,scales='free')+stdtheme
-
-
-#g=ggplot(sres,aes(x=macroInteractionDecay,y=deltaHierarchymacroPopulations,group=mesoTimeSteps,color=mesoTimeSteps))
-#g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoAlphaUpdateMax)+stdtheme
+nominals = list(
+  "macroGrowthRate"=0.02,"macroInteractionDecay"=250,"macroInteractionWeight"=0.005,"macroInteractionGamma"=1.5,
+  "mesoAlpha"=1.5,"mesoBeta"=0.05,"mesoNdiff"=1,"mesoTimeSteps"=11,"macroMesoAlphaUpdateMax"=0.05,"macroMesoBetaUpdateMax"=0.05,
+  "mesoMacroCongestionCost"=1.0,"mesoMacroDecayUpdateMax"=0.05
+)
 
 
-g=ggplot(sres,aes(x=macroInteractionDecay,y=deltamesoMorans,group=mesoTimeSteps,color=mesoTimeSteps))
-g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax,scales="free")
-# ggsave(file=paste0(resdir,'deltaMesoMoran-macroInteractionDecay_col-mesoTimeSteps_facet-mesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png'),width=20,height=18,units='cm')
-# 
-g=ggplot(sres,aes(x=macroInteractionDecay,y=deltamesoDistances,group=mesoTimeSteps,color=mesoTimeSteps))
-g+geom_line()+facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax,scales="free")
-# ggsave(file=paste0(resdir,'deltaMesoDistances-macroInteractionDecay_col-mesoTimeSteps_facet-mesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png'),width=20,height=18,units='cm')
-# 
+
+msres = melt(sres[,c(params,"id",hierarchiesMacroindics,deltaMesoindics)],id.vars = c(params,"id"),measure.vars = c(hierarchiesMacroindics,deltaMesoindics),variable.name = "var")
+msressd = melt(sres[,c(params,"id",paste0(c(hierarchiesMacroindics,deltaMesoindics),'Sd'))],id.vars = c(params,"id"),measure.vars = paste0(c(hierarchiesMacroindics,deltaMesoindics),'Sd'),variable.name = "var")
+msres$valueSd = msressd$value
+
+# length(which(msres$macroGrowthRate==0.02&msres$macroInteractionDecay==250&msres$macroInteractionWeight==0.005&msres$macroInteractionGamma==1.5&
+#                msres$mesoAlpha==1.5&msres$mesoBeta==0.05&msres$mesoNdiff==1&msres$mesoTimeSteps==11&msres$macroMesoAlphaUpdateMax==0.05&
+#                msres$macroMesoBetaUpdateMax==0.05&msres$mesoMacroCongestionCost==1&msres$mesoMacroDecayUpdateMax==0.05
+# )
+# )
+
+for(param in params){
+  nomonly = rep(T,nrow(msres));for(param2 in params){if(param2!=param){nomonly=nomonly&msres[,param2]==nominals[[param2]]}}
+  g=ggplot(msres[nomonly,],aes_string(x=param,y='value'))
+  g+geom_point()+geom_line()+facet_wrap(~var,scales='free',nrow = 2)+ylab('Indicator')+stdtheme
+  ggsave(file=paste0(resdir,'onefactor_allindics_',param,'.png'),width=42,height=25,units='cm')
+  
+  g=ggplot(msres[nomonly,],aes_string(x=param,y='value'))
+  g+geom_point()+geom_line()+geom_errorbar(aes(ymin=value-valueSd,ymax=value+valueSd))+
+    facet_wrap(~var,scales='free',nrow = 2)+ylab('Indicator')+stdtheme
+  ggsave(file=paste0(resdir,'onefactor_allindics_',param,'_errorbars.png'),width=42,height=25,units='cm')
+}
+
+
+###
+# some histograms
+
+mres = melt(res[,c(params,"id",hierarchiesMacroindics,deltaMesoindics)],id.vars = c(params,"id"),measure.vars = c(hierarchiesMacroindics,deltaMesoindics),variable.name = "var")
+
+set.seed(15)
+ids = sample(unique(res$id),10)
+
+g=ggplot(mres[mres$id%in%ids,],aes(x=value,color=as.character(id),group=as.character(id)))
+g+geom_density()+facet_wrap(~var,scales='free',nrow = 2)+scale_color_discrete(name='id')
+ggsave(file=paste0(resdir,'allindics_hist.png'),width=30,height = 20,units='cm')
+
+}
+
+
+
+#######
+## Full grid plots
+
+for(param in params){show(param);show(length(unique(unlist(res[,param]))))}
+
+for(beta in unique(sres$mesoBeta)){
+for(indic in c(hierarchiesMacroindics,deltaMesoindics)){
+  #show(indic)
+  #g=ggplot(sres,aes_string(x="mesoTimeSteps",y=indic,group="macroInteractionDecay",color="macroInteractionDecay"))
+  #g+geom_point()+geom_line()+geom_errorbar(aes_string(ymin=paste0(indic," - ",indic,"Sd"),ymax=paste0(indic," + ",indic,"Sd")),width=1)+
+  #facet_grid(mesoMacroDecayUpdateMax~macroMesoBetaUpdateMax)+scale_color_continuous(name=expression(d[G]))+stdtheme
+  #ggsave(file=paste0(resdir,indic,'-mesoTimeSteps_colorMacroInteractionDecay_facetmesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png'),width=30,height=25,units='cm')
+
+  show(indic)
+  g=ggplot(sres[sres$mesoBeta==beta&sres$mesoMacroDecayUpdateMax%in%c(-0.2,-0.1,0,0.1,0.2),],
+           aes_string(x="macroMesoAlphaUpdateMax",y=indic,group="macroMesoBetaUpdateMax",color="macroMesoBetaUpdateMax"))
+  g+geom_point()+geom_line()+geom_errorbar(aes_string(ymin=paste0(indic," - ",indic,"Sd"),ymax=paste0(indic," + ",indic,"Sd")))+
+    facet_grid(mesoMacroCongestionCost~mesoMacroDecayUpdateMax)+scale_color_continuous(name=expression(delta[d]))+xlab(expression(delta[beta]))+stdtheme
+  ggsave(file=paste0(resdir,indic,'-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta',beta,'.png'),width=40,height=25,units='cm')
+  
+}
+}
 
 
 ###
