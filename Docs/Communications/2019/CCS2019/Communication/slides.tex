@@ -343,7 +343,9 @@ At each time step:
 
 \medskip
 
-$\rightarrow$ model implemented in \texttt{scala} and integrated within a broader library (including implementations of \cite{raimbault2018indirect} \cite{raimbault2018calibration} \cite{favaro2011gibrat} \cite{cottineau2015modular})
+$\rightarrow$ model implemented in \texttt{scala} and integrated within a broader library (including implementations of \cite{raimbault2018indirect} \cite{raimbault2018calibration}
+
+\cite{favaro2011gibrat} \cite{cottineau2015modular})
 
 \bigskip
 
@@ -354,10 +356,18 @@ $\rightarrow$ model implemented in \texttt{scala} and integrated within a broade
 $\rightarrow$ integration into the OpenMOLE model exploration open source software \cite{reuillon2013openmole}
 
 \begin{center}
-\includegraphics[width=0.55\textwidth]{figures/openmole.png}
+\includegraphics[height=0.13\textheight]{figures/iconOM.png}
+\includegraphics[height=0.13\textheight]{figures/openmole.png}
 \end{center}
 
-(X year of computation for the results presented here)
+%(X year of computation for the results presented here)
+
+\footnotesize
+\textit{Enables seamlessly (i) model embedding; (ii) access to HPC resources; (iii) exploration and optimization algorithms}
+
+\medskip
+
+\textbf{Come to the satellite \textit{New Methods and Epistemologies to Explore Simulation Models} tomorrow afternoon in LHN-TR+05}
 
 }
 
@@ -367,6 +377,8 @@ $\rightarrow$ integration into the OpenMOLE model exploration open source softwa
 % The model is applied on synthetic systems of cities typical of a continental range (500km, hierarchy around 1, 20 cities), with initial local population grid configurations as monocentric.
 
 Model applied on synthetic systems of cities:
+
+\medskip
 
 \begin{itemize}
 	\item random positions and rank-size hierarchy ($\alpha \textrm{ = } 1.0$ and $P_0 \textrm{ = } 100,000$)
@@ -385,14 +397,15 @@ Model applied on synthetic systems of cities:
 
 % one factor sampling
 
-\textit{For all indicators, median sharpe ratios computing for a parameter point across repetitions are all larger than 1.6}
 %(min around 1 for 3 indicators, above 5 for 2 and around 0.5 for 2)}
 
 \medskip
 
-\centering
-
+\begin{center}
 \includegraphics[width=0.8\textwidth]{figures/allindics_hist.png}
+\end{center}
+
+\textit{For all indicators, median sharpe ratios computing for a parameter point across repetitions are all larger than 1.6}
 
 }
 
@@ -416,10 +429,10 @@ Model applied on synthetic systems of cities:
 % what is interesting: that macro -> meso -> macro has indeed a role (or the other way around)
 
 \begin{center}
-\includegraphics[height=0.8\textheight]{figures/deltaHierarchymacroPopulations-mesoTimeSteps_colorMacroInteractionDecay_facetmesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png}
+\includegraphics[height=0.75\textheight]{figures/deltaHierarchymacroPopulations-mesoTimeSteps_colorMacroInteractionDecay_facetmesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png}
 \end{center}
 
-\footnotesize
+%\footnotesize
 \textit{Non-trivial influence of coupled feedbacks on the different scales}
 
 
@@ -450,9 +463,16 @@ Model applied on synthetic systems of cities:
 
 
 
-% TODO 
-%\sframe{Calibration}{
-%}
+
+\sframe{Multiscale optimization}{
+
+\begin{center}
+	\includegraphics[width=0.8\textheight]{figures/pareto_macroHierarchy-mesoHierarchy.png}
+\end{center}
+
+\textit{Pareto front obtained with Genetic Algorithm optimization for two contradictory objective of macrosopic and mesoscopic hierarchies}
+
+}
 
 
 
