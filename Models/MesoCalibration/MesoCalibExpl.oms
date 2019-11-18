@@ -1,0 +1,72 @@
+val areaind = 100
+val startyear = 1975
+val endyear = 1990
+
+import java.util.Date
+import java.text.SimpleDateFormat
+
+val popvals = scala.io.Source.fromFile(workDirectory / "ucdb" / (areaind.toString+"_"+startyear.toString+".csv")).getLines.map{s =>
+    s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toArray
+}.toArray
+
+// Config
+val morphofile = Val[File]
+val targetarea = Val[Int]
+val targetyear = Val[Int]
+val initialpop = Val[Array[Array[Double]]]
+
+// Parameters
+val alpha = Val[Double]
+val beta = Val[Double]
+val tsteps = Val[Double]
+
+val seed = Val[Long]
+
+// Objective
+val mse = Val[Double]
+
+
+val model =
+  ScalaTask(
+    """
+      |val pop = initialpop.map{_.toSeq}.toSeq
+      |val objs = density.reactiondiffusion.CSV.readCSVFile(morphofile,";")
+      |val targetPop = objs("totalPop"+targetyear)(targetarea-1).toDouble
+      |val targetMoran = objs("moran"+targetyear)(targetarea-1).toDouble
+      |val targetAvgDist = objs("avgDist"+targetyear)(targetarea-1).toDouble
+      |val targetEntropy = objs("entropy"+targetyear)(targetarea-1).toDouble
+      |val targetSlope = objs("alpha"+targetyear)(targetarea-1).toDouble
+      |
+      |val calib = density.reactiondiffusion.ReactionDiffusionCalibration(pop,alpha,beta,1.0,tsteps,targetPop,targetMoran,targetAvgDist,targetEntropy,targetSlope,seed)
+      |val mse = calib.runModel
+    """.stripMargin
+  ) set (
+    plugins += pluginsOf[density.reactiondiffusion.ReactionDiffusionCalibration],
+    (inputs,outputs) += (initialpop,morphofile,targetarea,targetyear,alpha,beta,tsteps,seed),
+    outputs += (mse),
+    initialpop := popvals,
+    morphofile := (workDirectory / "ucdb" / "morphologies.csv"),
+    targetarea := areaind,
+    targetyear := endyear
+  )
+
+val purpose = "MESOCALIB_EXPLO_LOCAL20"
+
+val env = LocalEnvironment(20)
+
+val indics_hook = AppendToCSVFileHook(workDirectory / "exploration" / (((new java.text.SimpleDateFormat("yyyyMMdd_HHmmss")).format(new java.util.Date()))+"_"+purpose+".csv"))
+
+
+val expl = DirectSampling(
+    evaluation = (model on env hook indics_hook),
+    sampling = 
+    (alpha in (0.1 to 2.0 by 0.1))
+    x(beta in (0.01 to 0.1 by 0.01))
+    x(tsteps in (5.0 to 55.0 by 10.0))
+    x(seed in UniformDistribution[Long]() take 10)
+)
+
+   
+expl    
+    
+
