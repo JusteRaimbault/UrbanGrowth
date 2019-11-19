@@ -21,6 +21,7 @@ val finalpopvals = scala.io.Source.fromFile(workDirectory / "configs" / (areaind
 // Config
 val morphofile = Val[File]
 val targetarea = Val[Int]
+val initialyear = Val[Int]
 val targetyear = Val[Int]
 //val initialpop = Val[Array[Array[Double]]]
 //val finalpop = Val[Array[Array[Double]]]
@@ -54,12 +55,12 @@ val model =
       |val targetEntropy = objs("entropy"+targetyear)(targetarea-1).toDouble
       |val targetSlope = objs("alpha"+targetyear)(targetarea-1).toDouble
       |val effectivearea = objs("areaid")(targetarea-1)
-      |
-      |val popvals = scala.io.Source.fromFile(workDirectory / "configs" / (effectivearea.toString+"_"+startyear.toString+".csv")).getLines.map{s =>
+      |println("Calibrating for area "+effectivearea)
+      |val popvals = scala.io.Source.fromFile(workDirectory / "configs" / (effectivearea.toString+"_"+initialyear.toString+".csv")).getLines.map{s =>
       |    s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toSeq
       |}.toSeq
       |
-      |val finalpopvals = scala.io.Source.fromFile(workDirectory / "configs" / (effectivearea.toString+"_"+endyear.toString+".csv")).getLines.map{s =>
+      |val finalpopvals = scala.io.Source.fromFile(workDirectory / "configs" / (effectivearea.toString+"_"+targetyear.toString+".csv")).getLines.map{s =>
       |    s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toSeq
       |}.toSeq
       |
@@ -76,7 +77,9 @@ val model =
     //finalpop := finalpopvals,
     morphofile := (workDirectory / "configs" / "morphologies.csv"),
     targetarea := areaind,
-    targetyear := endyear
+    initialyear := startyear,
+    targetyear := endyear,
+    resources += (workDirectory / "configs")
   )
 
 val purpose = "MESOCALIB_CALIB_LOCAL10"
