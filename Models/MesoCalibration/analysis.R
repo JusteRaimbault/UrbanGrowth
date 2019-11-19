@@ -19,21 +19,21 @@ ucdbsf <- st_as_sf(loadUCDBData(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/G
 years = c('1975','1990','2000','2015')
 indics=c('totalPop','maxPop','minPop','moran','avgDist','entropy','alpha','alphaRSquared')
 
-# real morphologies
-load(file='morphologies_tmp.RData')
+if(!file.exists('configs/morphologies.csv')){
+  # real morphologies
+  load(file='morphologies_tmp.RData')
 
-which(sapply(res,length)==1)
-# 528 947
-res[[528]]=extractDataAndComputeMorphology(528) # Helsinki was out because of missing DEM
-res[[947]]=NULL # 2x1 cell extent -> not worth it fitting
+  which(sapply(res,length)==1)
+  # 528 947
+  res[[528]]=extractDataAndComputeMorphology(528) # Helsinki was out because of missing DEM
+  res[[947]]=NULL # 2x1 cell extent -> not worth it fitting
 
-morphos = data.frame(matrix(unlist(res),nrow=length(res),byrow = T))
-names(morphos)<-names(res[[1]])
-morphos$areaid = c(1:946,948:1000)
-
-morphos = morphos[!apply(morphos,1,function(r){length(which(is.na(r)))>0}),]
-
-write.table(morphos,file='configs/morphologies.csv',col.names = T,row.names = F,sep = ";")
+  morphos = data.frame(matrix(unlist(res),nrow=length(res),byrow = T))
+  names(morphos)<-names(res[[1]])
+  morphos$areaid = c(1:946,948:1000)
+  morphos = morphos[!apply(morphos,1,function(r){length(which(is.na(r)))>0}),] # indices are shifted above 204!
+  write.table(morphos,file='configs/morphologies.csv',col.names = T,row.names = F,sep = ";")
+}
 
 # filter bad fit slope
 #morphos = morphos[morphos$alphaRSquared1975>0.5,]
