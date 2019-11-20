@@ -187,5 +187,19 @@ save(res,file='morphologies_tmp.RData')
 
 
 
+### generate range - year file for calibration
+inds = 1:99
+years = c(1990,2000,2015)
+
+write.table(
+  data.frame(ind = c(t(matrix(rep(inds,length(years)),ncol=length(years)))),year = rep(years,length(inds))),
+  row.names = F,col.names = F,sep=",",file='runYears1-99'
+)
+
+
+
+
+
+
 
 
