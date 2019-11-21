@@ -197,6 +197,13 @@ write.table(
 )
 
 
+inds = 509:985
+years = c(1990,2000,2015)
+
+write.table(
+  data.frame(ind = c(t(matrix(rep(inds,length(years)),ncol=length(years)))),year = rep(years,length(inds))),
+  row.names = F,col.names = F,sep=",",file='runYears509-985'
+)
 
 
 
