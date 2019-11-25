@@ -142,7 +142,7 @@ extractDataAndComputeMorphology <- function(i){
 
 
 library(doParallel)
-cl <- makeCluster(50,outfile='log')
+cl <- makeCluster(20,outfile='log')
 #cl <- makeCluster(8,outfile='logtest')
 registerDoParallel(cl)
 
