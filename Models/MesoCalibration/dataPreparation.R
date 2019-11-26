@@ -58,17 +58,21 @@ extractDataAndComputeMorphology <- function(i){
   #currentareaproj = st_transform(currentarea,CRS(paste0('+proj=tmerc +lat_0=',currentcoords[1,2],' +lon_0=',currentcoords[1,1],' +ellps=GRS80 +units=km')))
   # plot(currentarea[,"geometry"]);plot(currentareaproj[,"geometry"]); # intermediate reproj not needed
 
-  currentareaprojbbox = st_bbox(st_transform(currentarea,CRS('+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs')))
+  currentareaprojbbox = st_bbox(st_transform(currentarea,#CRS( # sf version 0.5-4 needs a string 
+	'+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs'))#)
 
   #centrprojcoords = st_coordinates(st_centroid(currentareaproj))
   #xmin=centrprojcoords[1,1]-25;xmax = centrprojcoords[1,1]+25;ymin = centrprojcoords[1,2]-25;ymax=centrprojcoords[1,2]+25
-  xext = currentareaprojbbox$xmax - currentareaprojbbox$xmin; yext = currentareaprojbbox$ymax - currentareaprojbbox$ymin
-  xmin = currentareaprojbbox$xmin - 0.25*xext; xmax = currentareaprojbbox$xmax + 0.25*xext; ymin = currentareaprojbbox$ymin - 0.25*yext; ymax = currentareaprojbbox$ymax + 0.25*yext
   
+  #xext = currentareaprojbbox$xmax - currentareaprojbbox$xmin; yext = currentareaprojbbox$ymax - currentareaprojbbox$ymin
+  #xmin = currentareaprojbbox$xmin - 0.25*xext; xmax = currentareaprojbbox$xmax + 0.25*xext; ymin = currentareaprojbbox$ymin - 0.25*yext; ymax = currentareaprojbbox$ymax + 0.25*yext
+  xext = currentareaprojbbox[3] - currentareaprojbbox[1]; yext = currentareaprojbbox[4] - currentareaprojbbox[2]
+  xmin = currentareaprojbbox[1] - 0.25*xext; xmax = currentareaprojbbox[3] + 0.25*xext; ymin = currentareaprojbbox[2] - 0.25*yext; ymax = currentareaprojbbox[4] + 0.25*yext  
+
   currentbbox = SpatialPolygonsDataFrame(
     SpatialPolygons(Srl=list(
     Polygons(list(
-      Polygon(matrix(c(xmin,ymin,xmin,ymax,xmax,ymax,xmax,ymin,xmin,ymin),ncol=2,byrow=T))),"ID")),proj4string=CRS(st_crs(currentareaprojbbox)$proj4string)
+      Polygon(matrix(c(xmin,ymin,xmin,ymax,xmax,ymax,xmax,ymin,xmin,ymin),ncol=2,byrow=T))),"ID")),proj4string=CRS('+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs')#CRS(st_crs(currentareaprojbbox)$proj4string)
   ),data=data.frame(ID=c(1)),match.ID = F)
 
   demcells <- cellFromPolygon(dem,currentbbox);demrows<-rowFromCell(dem,demcells[[1]]);demcols<-colFromCell(dem,demcells[[1]])
@@ -148,13 +152,16 @@ registerDoParallel(cl)
 
 startTime = proc.time()[3]
 
-res <- foreach(i=1:nrow(ucdbsf)) %dopar% {
+#res <- foreach(i=1:nrow(ucdbsf)) %dopar% {
+res <- foreach(i=1:1000) %dopar% {
   library(dplyr)
   library(sf)
   library(rgdal)
   library(raster)
   source('morphology.R')
-  morph = extractDataAndComputeMorphology(i)
+  
+  morph = tryCatch({extractDataAndComputeMorphology(i)
+ 	},error=function(e){show(e);return(res=NA)})
   show(morph)
   return(morph)
 }
