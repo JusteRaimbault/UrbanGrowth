@@ -1,0 +1,33 @@
+val areaind = 100
+val startyear = 1975
+val targetyear = 1990
+
+import java.util.Date
+import java.text.SimpleDateFormat
+
+// load pop in script 
+val pop = scala.io.Source.fromFile("ucdb/"+areaind+"_"+year+".csv").getLines.map{s =>
+    s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toArray
+}.toArray
+
+//val pop = Array.fill(5,5)(0.0)
+val popproto = Val[Array[Array[Double]]]
+//val popfile = Val[String]
+
+val model =
+  ScalaTask(
+    """
+      |//import org.openmole.spatialdata.application.reactiondiffusion._
+      | println(popproto)
+    """.stripMargin
+  ) set (
+    //plugins += pluginsOf[org.openmole.spatialdata.grid.synthetic.ReactionDiffusionGridGenerator],
+    inputs += (popproto),
+    //outputs += (),
+    //outputs += (),
+    popproto := pop
+    //popfile :=  ("ucdb/"+areaind+"_"+year+".csv")
+  )
+val modelCapsule = Capsule(model)
+
+model

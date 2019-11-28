@@ -15,6 +15,10 @@ ucdb <- loadUCDBData(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCD
 #dem <- raster(paste0(Sys.getenv('CS_HOME'),'/Data/SRTM/raw/srtm_01_02/srtm_01_02.tif'))
 #dem <- raster(paste0(Sys.getenv('CS_HOME'),'/Data/SRTM/SRTM_1km_GRD/srtmv4_30s/w001001.adf')) # bug with projection
 dem <- raster(paste0(Sys.getenv('CS_HOME'),'/Data/SRTM/SRTM_1km.tif'))
+# citation for the srtm data
+# https://cgiarcsi.community/data/srtm-90m-digital-elevation-database-v4-1/
+# Jarvis, A., H.I. Reuter, A. Nelson, E. Guevara, 2008, Hole-filled SRTM for the globe Version 4, available from the CGIAR-CSI SRTM 90m Database (http://srtm.csi.cgiar.org).
+
 
 years = c('1975','1990','2000','2015')
 pops = list()
@@ -50,7 +54,7 @@ ucdbsf <- ucdbsf %>% arrange(desc(P15))
 #  38.75  42.50  55.00 138.75
 
 extractDataAndComputeMorphology <- function(i){
-  #i = 1
+  #i = 528
   show(paste0("Computing for area ",i," - ",ucdbsf$UC_NM_MN[i]))
   currentarea = ucdbsf[i,]
   #currentcentroid = centroids[i,]
@@ -75,13 +79,17 @@ extractDataAndComputeMorphology <- function(i){
       Polygon(matrix(c(xmin,ymin,xmin,ymax,xmax,ymax,xmax,ymin,xmin,ymin),ncol=2,byrow=T))),"ID")),proj4string=CRS('+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs')#CRS(st_crs(currentareaprojbbox)$proj4string)
   ),data=data.frame(ID=c(1)),match.ID = F)
 
-  demcells <- cellFromPolygon(dem,currentbbox);demrows<-rowFromCell(dem,demcells[[1]]);demcols<-colFromCell(dem,demcells[[1]])
-  demvalues <-getValuesBlock(dem,row=min(demrows),nrows=(max(demrows)-min(demrows)),col=min(demcols),ncols=(max(demcols)-min(demcols)),format='matrix')
-  # plot(raster(demvalues))
-  # plot(raster(demvalues<0))
-  # plot(raster(is.na(demvalues)))
-  # need to extend a bit the coastline (bord cells, plus extension sligthly possible in the sea)
-  demvalues = as.matrix(focal(raster(demvalues),matrix(rep(1,9),nrow=3),mean,na.rm=T))
+  demcells <- cellFromPolygon(dem,currentbbox)
+  demvalues=NULL
+  if(!is.null(demcells[[1]])){
+    demrows<-rowFromCell(dem,demcells[[1]]);demcols<-colFromCell(dem,demcells[[1]])
+    demvalues <-getValuesBlock(dem,row=min(demrows),nrows=(max(demrows)-min(demrows)),col=min(demcols),ncols=(max(demcols)-min(demcols)),format='matrix')
+    # plot(raster(demvalues))
+    # plot(raster(demvalues<0))
+    # plot(raster(is.na(demvalues)))
+    # need to extend a bit the coastline (bord cells, plus extension sligthly possible in the sea)
+    demvalues = as.matrix(focal(raster(demvalues),matrix(rep(1,9),nrow=3),mean,na.rm=T))
+  }
   
   res = list()
   prevconfig = NULL
@@ -98,7 +106,7 @@ extractDataAndComputeMorphology <- function(i){
     #  if(is.na(demvalues[floor((i-1)*nrow(demvalues)/nrow(popvalues))+1,floor((j-1)*ncol(demvalues)/ncol(popvalues))+1])){popvalues[i,j]=NA}
     #}} # -> shit - dem is not precise enough
     # with reprojected dem, can directly do the product (same dimension)
-    popvalues = ifelse(is.na(demvalues),demvalues,popvalues)
+    if(!is.null(demvalues)){popvalues = ifelse(is.na(demvalues),demvalues,popvalues)}
     
     # plot(raster(popvalues))
     
@@ -174,8 +182,8 @@ stopCluster(cl)
 save(res,file='morphologies_tmp.RData')
 
 
-
-
+# extractDataAndComputeMorphology(528)
+# extractDataAndComputeMorphology(947) 
 
 
 
