@@ -50,34 +50,23 @@ val model =
     targetyear := endyear
   )
 
-val purpose = "MESOCALIB_CALIB_LOCAL20"
-val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
-val resdir = purpose+"_"+areaind.toString+"_"+endyear.toString+"_"+datestr
+val purpose = "MESOCALIB_EXPLO_LOCAL20"
 
 val env = LocalEnvironment(20)
-//val env = EGIEnvironment("vo.complex-systems.eu")
+
+val indics_hook = AppendToCSVFileHook(workDirectory / "exploration" / (((new java.text.SimpleDateFormat("yyyyMMdd_HHmmss")).format(new java.util.Date()))+"_"+purpose+".csv"))
 
 
-val evolution =
-  NSGA2Evolution(
-    genome =
-      Seq(
-        alpha in Range(0.0, 10.0),
-        beta in Range(0.0,0.5),
-        tsteps in Range(1.0,100.0)
-      ),
-      mu = 50,
-      objectives = Seq(mse),
-      evaluation = model,
-      stochastic = Stochastic(seed = seed),
-      termination = 5000,
-      parallelism = 20//,
-      //distribution = Island(5 minutes)
+val expl = DirectSampling(
+    evaluation = (model on env hook indics_hook),
+    sampling = 
+    (alpha in (0.1 to 2.0 by 0.1))
+    x(beta in (0.01 to 0.1 by 0.01))
+    x(tsteps in (5.0 to 55.0 by 10.0))
+    x(seed in UniformDistribution[Long]() take 10)
 )
 
-val savePopulation = SavePopulationHook(evolution, workDirectory / "calibration" / resdir)
+   
+expl    
+    
 
-
-(evolution on env hook savePopulation)
-
-  
