@@ -5,7 +5,7 @@ val endyear = 1990
 import java.util.Date
 import java.text.SimpleDateFormat
 
-val popvals = scala.io.Source.fromFile(workDirectory / "ucdb" / (areaind.toString+"_"+startyear.toString+".csv")).getLines.map{s =>
+val popvals = scala.io.Source.fromFile(workDirectory / "configs" / (areaind.toString+"_"+startyear.toString+".csv")).getLines.map{s =>
     s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toArray
 }.toArray
 
@@ -45,7 +45,7 @@ val model =
     (inputs,outputs) += (initialpop,morphofile,targetarea,targetyear,alpha,beta,tsteps,seed),
     outputs += (mse),
     initialpop := popvals,
-    morphofile := (workDirectory / "ucdb" / "morphologies.csv"),
+    morphofile := (workDirectory / "configs" / "morphologies.csv"),
     targetarea := areaind,
     targetyear := endyear
   )
@@ -54,8 +54,8 @@ val purpose = "MESOCALIB_CALIB_LOCAL20"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
 val resdir = purpose+"_"+areaind.toString+"_"+endyear.toString+"_"+datestr
 
-val env = LocalEnvironment(20)
-//val env = EGIEnvironment("vo.complex-systems.eu")
+//val env = LocalEnvironment(20)
+val env = EGIEnvironment("vo.complex-systems.eu")
 
 
 val evolution =
@@ -70,12 +70,12 @@ val evolution =
       objectives = Seq(mse),
       evaluation = model,
       stochastic = Stochastic(seed = seed),
-      termination = 5000,
-      parallelism = 20//,
-      //distribution = Island(5 minutes)
+      termination = 10000,
+      parallelism = 1000,
+      distribution = Island(5 minutes)
 )
 
-val savePopulation = SavePopulationHook(evolution, workDirectory / "calibration" / resdir)
+val savePopulation = SavePopulationHook(evolution, workDirectory / "calibration" / resdir, 1000)
 
 
 (evolution on env hook savePopulation)
