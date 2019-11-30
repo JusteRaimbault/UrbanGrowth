@@ -1,0 +1,15 @@
+
+val seed = Val[Long]
+
+val env = EGIEnvironment("vo.complex-systems.eu")
+
+val model = ScalaTask("println(seed)") set ((inputs,outputs) += (seed))
+
+val repl = Replication(
+	evaluation = (model on env by 100),
+	replications = 1000,
+	seed = seed
+)
+
+repl
+
