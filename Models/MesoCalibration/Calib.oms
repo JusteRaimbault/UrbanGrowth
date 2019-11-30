@@ -1,4 +1,4 @@
-val areaind=500
+val areaind=2
 
 //val areaind = 100
 
@@ -66,11 +66,11 @@ val model =
     targetyear := endyear
   )
 
-val purpose = "MESOCALIB_CALIB_LOCAL16"
+val purpose = "MESOCALIB_CALIB_LOCAL20"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
 val resdir = purpose+"_"+areaind.toString+"_"+endyear.toString+"_"+datestr
 
-val env = LocalEnvironment(16)
+val env = LocalEnvironment(20)
 //val env = EGIEnvironment("vo.complex-systems.eu")
 
 
@@ -86,7 +86,7 @@ val evolution =
       objectives = Seq(popfit,indicsfit),
       evaluation = model,
       stochastic = Stochastic(seed = seed),
-      termination = 1000,
+      termination = 2000,
       parallelism = 20//,
       //distribution = Island(5 minutes)
 )
