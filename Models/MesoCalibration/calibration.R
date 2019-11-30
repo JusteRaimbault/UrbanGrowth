@@ -11,7 +11,7 @@ latestgen <- function(dir){max(as.integer(sapply(strsplit(sapply(strsplit(list.f
 # test Pareto fronts
 # -> on 100-200 seems fine - even if few replications
 
-resdir = 'calibration/MESOCALIB_CALIB_LOCAL20_200_2000_20191129_122332/'
+resdir = 'calibration/MESOCALIB_CALIB_LOCAL10_204_1990_20191119_051844/'
 res <- as.tbl(read.csv(paste0(resdir,'population',latestgen(resdir),'.csv')))
 
 g=ggplot(res[res$evolution.samples>2,],aes(x=popfit,y=indicsfit,color=alpha))
