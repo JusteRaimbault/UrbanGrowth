@@ -14,7 +14,13 @@ latestgen <- function(dir){max(as.integer(sapply(strsplit(sapply(strsplit(list.f
 resdir = 'calibration/MESOCALIB_CALIB_LOCAL10_204_1990_20191119_051844/'
 res <- as.tbl(read.csv(paste0(resdir,'population',latestgen(resdir),'.csv')))
 
+g=ggplot(res,aes(x=popfit,y=indicsfit,color=alpha))
+g+geom_point()
+
 g=ggplot(res[res$evolution.samples>2,],aes(x=popfit,y=indicsfit,color=alpha))
+g+geom_point()
+
+g=ggplot(res,aes(x=popfit,y=indicsfit,color=beta))
 g+geom_point()
 
 g=ggplot(res[res$evolution.samples>2,],aes(x=popfit,y=indicsfit,color=beta))
