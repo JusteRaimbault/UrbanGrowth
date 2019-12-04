@@ -8,7 +8,10 @@ library(rgdal)
 library(raster)
 library(reshape2)
 library(ggplot2)
+library(scales)
+library(sf)
 library(maps)
+library(mapproj)
 
 source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 
@@ -125,43 +128,185 @@ areasmorph$areaid = inds
 
 areasmorph = left_join(areasmorph,morphos,by=c('areaid'='areaid'))
 
-map<- function(var){
-  WorldData <- map_data('world') %>% filter(region != "Antarctica") %>% fortify
-  g=ggplot() + geom_map(data = WorldData, map = WorldData,aes(group = group, map_id=region),
-             fill = "white", colour = "#7f7f7f", size=0.5) + 
-    geom_point(data=areasmorph,aes(x=GCPNT_LON,y=GCPNT_LAT,color=moran2015))+
+countries <- st_read(paste0(Sys.getenv('CS_HOME'),'/Data/Countries/'),'countries')
+
+map<- function(data,var,sizevar,filename,discrete=FALSE,legendtitle=NULL,legendsizetitle=NULL,xlim=c(-130,150),ylim=c(-50, 60)){
+  #WorldData <- map_data('world') %>% filter(region != "Antarctica") %>% fortify
+  #sizes = log10(data[[sizevar]]);sizes = (sizes - min(sizes,na.rm = T)) / (max(sizes,na.rm = T) - min(sizes,na.rm = T))
+  #data[['sizes']]=sizes
+  g=ggplot()+
+    #geom_map(data = WorldData, map = WorldData,aes(group = group, map_id=region),fill = "white", colour = "#7f7f7f", size=0.1) + 
+    geom_sf(data=countries,fill = "white", colour = "#7f7f7f", size=0.1)+
+    geom_point(data=data,aes_string(x='GCPNT_LON',y='GCPNT_LAT',color=var,size=sizevar),alpha=0.6)+
+    scale_size_area(name=ifelse(is.null(legendsizetitle),sizevar,legendsizetitle))+
     #geom_map(data = areasmorph, map=WorldData,
     #         aes(fill=moran2015),#, map_id=region),
     #         colour="#7f7f7f", size=0.5) +
-    coord_map("rectangular", lat0=0, xlim=c(-180,180), ylim=c(-60, 90)) +
+    #coord_map("mollweide")+ # coord_map("rectangular",lat0=lat0, xlim=xlim, ylim=ylim)
+    #coord_sf("rectangular",xlim=xlim, ylim=ylim)+
     #scale_fill_continuous(low="thistle2", high="darkred", guide="colorbar") +
-    scale_y_continuous(breaks=c()) +
-    scale_x_continuous(breaks=c()) +
-    labs(fill="legend", title="Title", x="", y="") +
-    theme_bw()
-  g
+    theme_bw()+xlab("")+ylab("")+
+    xlim(xlim)+ylim(ylim)+theme(axis.text = element_blank(),axis.ticks = element_blank())
+    #scale_y_continuous(limits=ylim,breaks=c(),labels = c()) +
+    #scale_x_continuous(limits=xlim,breaks=c(),labels = c())
+  if(discrete){
+    g+scale_color_discrete(name=ifelse(is.null(legendtitle),var,legendtitle))
+  }else{
+    g+scale_color_distiller(palette = 'Spectral',na.value ='white',name=ifelse(is.null(legendtitle),var,legendtitle))
+  }
+  ggsave(filename = filename,width=30,height=12,units='cm',dpi = 600)
 }
 
 
-g=ggplot(areasmorph,aes(x=GCPNT_LON,y=GCPNT_LAT,color=moran2015))
-g+geom_point()
+years=c(1975,1990,2000,2015)
 
-# check clusters
-areasmorph = areasmorph[!apply(areasmorph[,names(morphosall)],1,function(r){length(which(is.na(r)))>0}),]
+for(indic in indics){for(year in years){
+  currentdata=areasmorph
+  if(indic=='moran'){currentdata=areasmorph[areasmorph[,paste0('moran',year)]>0,]}
+  if(indic=='alpha'){currentdata=areasmorph[areasmorph[,paste0('alpha',year)]>-2,]}
+  map(
+    currentdata,
+    paste0(indic,year),
+    paste0("totalPop",year),
+    paste0(resdir,'mapindic_',indic,'_',year,'.png'),
+    legendtitle = paste0(indicnames[[indic]],'\n',year),
+    legendsizetitle = paste0('Population\n',year)
+)}}
+
+
+
+# clusters map
+areasmorphfilt = areasmorph[!apply(areasmorph[,names(morphosall)],1,function(r){length(which(is.na(r)))>0})&areasmorph$alpha1975>-4&areasmorph$alpha1990>-4&areasmorph$alpha2000>-4&areasmorph$alpha2015>-4,]
 for(classindic in names(classdata)){
-  areasmorph[[paste0("class",classindic)]] = classdata[[classindic]]
+  areasmorphfilt[[paste0("class",classindic)]] = classdata[[classindic]]
 }
-areasmorph=areasmorph[areasmorph$alpha1975>-2,]
+areasmorphfilt$classcluster=as.character(areasmorphfilt$classcluster)
 
-g=ggplot(areasmorph,aes(x=GCPNT_LON,y=GCPNT_LAT,color=factor(classcluster)))
-g+geom_point()
+map(
+  areasmorphfilt,
+  'classcluster',
+  "totalPop2015",
+  paste0(resdir,'mapindic_cluster.png'),
+  discrete=T,
+  legendtitle = 'Cluster',
+  legendsizetitle = 'Population\n2015'
+)
 
-g=ggplot(areasmorph,aes(x=GCPNT_LON,y=GCPNT_LAT,color=classalpha1990))
-g+geom_point()
 
-g=ggplot(areasmorph,aes(x=GCPNT_LON,y=GCPNT_LAT,color=cut(classalpha1990,breaks=c(-2,-0.1,0.1,1))))
-g+geom_point() # -> proportion of each per country ?
+#####
+### Correlations
+# + supp mat: cors dpop etc
 
+library(corrplot)
+
+years = c(1990,2000,2015)
+
+corvars = c('P','B','E','G',classifindics)
+corvarsnames = c('Pop','Built','Emissions','GDP',unlist(indicnames[classifindics]))
+for(year in years){
+  rho = matrix(0,length(corvars),length(corvars));colnames(rho)<-corvarsnames;rownames(rho)<-corvarsnames
+  rhomin = rho;rhomax = rho
+  for(i in 1:length(corvars)){
+    for(j in 1:length(corvars)){
+      ivar= paste0(corvars[i],year);jvar=paste0(corvars[j],year)
+      if(!corvars[i]%in%classifindics){ivar= paste0(corvars[i],substr(year,3,4))}
+      if(!corvars[j]%in%classifindics){jvar=paste0(corvars[j],substr(year,3,4))}
+      rhotest = cor.test(unlist(areasmorphfilt[,ivar]),unlist(areasmorphfilt[,jvar]))
+      rho[i,j]=rhotest$estimate;rhomin[i,j]=rhotest$conf.int[1];rhomax[i,j]=rhotest$conf.int[2]
+    }
+  }
+  png(filename = paste0(resdir,'correlations_vars-morpho_',year,'.png'),width = 25,height = 20,units='cm',res = 300)
+  corrplot(rho,lowCI.mat = rhomin, uppCI.mat = rhomax,type = 'upper',title = year,bg='lightgrey',
+           plotCI = 'circle',
+           addCoef.col = "black",
+           mar = c(0,0,1,0)
+           #order='hclust',
+           #method='ellipse'
+  )
+  dev.off()
+}
+
+
+years = c(2000,2015)
+
+corvars = c('DP','DG','DE','DB',classifindics)
+corvarsnames = c('DeltaPop','DeltaGDP','DeltaEm','DeltaBuilt',unlist(indicnames[classifindics]))
+for(year in years){
+  rho = matrix(0,length(corvars),length(corvars));colnames(rho)<-corvarsnames;rownames(rho)<-corvarsnames
+  rhomin = rho;rhomax = rho
+  for(i in 1:length(corvars)){
+    for(j in 1:length(corvars)){
+      ivar= paste0(corvars[i],year);jvar=paste0(corvars[j],year)
+      if(!corvars[i]%in%classifindics){ivar= paste0(corvars[i],substr(year,3,4))}
+      if(!corvars[j]%in%classifindics){jvar=paste0(corvars[j],substr(year,3,4))}
+      rhotest = cor.test(unlist(areasmorphfilt[,ivar]),unlist(areasmorphfilt[,jvar]))
+      rho[i,j]=rhotest$estimate;rhomin[i,j]=rhotest$conf.int[1];rhomax[i,j]=rhotest$conf.int[2]
+    }
+  }
+  png(filename = paste0(resdir,'correlations_deltavars-morpho_',year,'.png'),width = 25,height = 20,units='cm',res = 300)
+  corrplot(rho,lowCI.mat = rhomin, uppCI.mat = rhomax,type = 'upper',title = year,bg='lightgrey',
+           plotCI = 'circle',
+           addCoef.col = "black",
+           mar = c(0,0,1,0)
+           #order='hclust',
+           #method='ellipse'
+  )
+  dev.off()
+}
+
+
+
+######
+# trajectories of cluster centers in PC space
+
+#summary(classdata)
+
+years = c(1975,1990,2000,2015)
+
+timedf <- data.frame()
+for(year in years){
+  currentd = areasmorphfilt[,paste0(indics,year)];names(currentd)<-indics
+  timedf = rbind(timedf,cbind(area = 1:nrow(currentd),currentd,year=rep(year,nrow(currentd))))
+}
+pcadata = timedf
+for(ind in classifindics){pcadata[,ind] = (pcadata[,ind] - min(pcadata[,ind]))/(max(pcadata[,ind])-min(pcadata[,ind]))}
+
+pca <- prcomp(pcadata[,classifindics])
+
+#                           PC1    PC2     PC3     PC4
+#Standard deviation     0.2002 0.1890 0.08542 0.05261
+#Proportion of Variance 0.4667 0.4160 0.08499 0.03223
+#Cumulative Proportion  0.4667 0.8828 0.96777 1.00000
+# more variance captured
+
+#pca$rotation
+#                PC1        PC2        PC3        PC4
+#moran   0.85080930 -0.3122690  0.1625213 -0.3901262
+#avgDist 0.05508002  0.8256783  0.4291656 -0.3619922
+#entropy 0.50776371  0.3602970 -0.1041703  0.7755712
+#alpha   0.12355460  0.3015450 -0.8823561 -0.3394887
+
+
+rotated = data.frame(as.matrix(pcadata[,classifindics])%*%pca$rotation)
+
+for(pcname in names(rotated)){pcadata[,pcname]=rotated[,pcname]}
+
+clusts = classdata$cluster;names(clusts)<-classdata$id
+
+pcadata$cluster=as.character(clusts[pcadata$area])
+
+
+
+g=ggplot(pcadata,aes(x=PC1,y=PC2,color=cluster,group=area))
+g+geom_path(alpha=0.2,arrow=arrow(angle=20, type = "closed",length = unit(0.05,'inches')))+
+  geom_path(data=pcadata%>%group_by(cluster,year)%>%summarise(PC1=mean(PC1),PC2=mean(PC2)),
+            aes(x=PC1,y=PC2,color=cluster,group=cluster),size=2,
+            arrow=arrow(angle=30, type = "closed",length = unit(0.1,'inches')))+
+  geom_label(data=data.frame(x=0.28,y=0.01,s=paste0("PC1=",format(pca$rotation[1,1],digits=2),"*I+",format(pca$rotation[2,1],digits=2),"*d+",format(pca$rotation[3,1],digits=2),"*e+",format(pca$rotation[4,1],digits=2),
+                                              "*s\nPC2=",format(pca$rotation[1,2],digits=2),"*I+",format(pca$rotation[2,2],digits=2),"*d+",format(pca$rotation[3,2],digits=2),"*e+",format(pca$rotation[4,2],digits=2),"*s"))
+             ,mapping=aes(x=x,y=y,label=s),inherit.aes = F)+
+  stdtheme
+ggsave(file=paste0(resdir,'PCA_trajectories.png'),width=20,height=18,units='cm')
 
 
 
