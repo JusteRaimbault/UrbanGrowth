@@ -8,17 +8,13 @@ library(rgdal)
 library(raster)
 library(reshape2)
 library(ggplot2)
-library(scales)
-library(sf)
-library(maps)
-library(mapproj)
 
 source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 
 source('functions.R')
 source('morphology.R')
 
-ucdbsf <- st_as_sf(loadUCDBData(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0'),'GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0'))
+ucdbsf <- loadUCDBData(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0'),'GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0')
 
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/GHS/Morphology/')
 
@@ -46,20 +42,27 @@ if(!file.exists('configs/morphologies.csv')){
 
 morphos <- read.csv(file='configs/morphologies.csv',header = T,sep = ";")
 
+inds = c(1:946,948:1000) # 
+#morphosall = data.frame(matrix(unlist(res),nrow=length(res),byrow = T))
+#names(morphosall)<-names(res[[1]])
+#morphos <- read.csv(file='configs/morphologies.csv',header = T,sep = ";")
+#rownames(morphos)<-morphos$areaid
+areasmorph = ucdbsf[inds,]
+areasmorph$areaid = inds
+
+areasmorph = left_join(areasmorph,morphos,by=c('areaid'='areaid'))
+
+
 
 # filter bad fit slope
 #morphos = morphos[morphos$alphaRSquared1975>0.5,]
 # better with outliers
 morphos = morphos[morphos$alpha1975>-4&morphos$alpha1990>-4&morphos$alpha2000>-4&morphos$alpha2015>-4,]
 
-timedf <- data.frame()
-for(year in years){
-  currentd = morphos[,paste0(indics,year)];names(currentd)<-indics
-  timedf = rbind(timedf,cbind(area = 1:nrow(currentd),currentd,year=rep(year,nrow(currentd))))
-}
+timedf <- as_temporal_df(morphos,indics)
 
 classifindics = c('moran','avgDist','entropy','alpha')
-classdata = data.frame(id = 1:nrow(morphos))
+classdata = data.frame(id=morphos$areaid)
 for(yearind in 2:length(years)){
   classdata=cbind(classdata,morphos[,paste0(classifindics,years[yearind])] - morphos[,paste0(classifindics,years[yearind-1])])
 }
@@ -67,12 +70,12 @@ for(yearind in 2:length(years)){
 for(j in 2:ncol(classdata)){classdata[,j] = (classdata[,j] - min(classdata[,j]))/(max(classdata[,j])-min(classdata[,j]))}
 
 # classify relative variation TS
-set.seed(42)
-clusts = list()
-for(k in 2:15){
-  show(k)
-  clusts[[as.character(k)]] = kmeans(classdata[,2:ncol(classdata)],centers = k,iter.max = 10000,nstart = 1000)
-}
+#set.seed(42)
+#clusts = list()
+#for(k in 2:15){
+#  show(k)
+#  clusts[[as.character(k)]] = kmeans(classdata[,2:ncol(classdata)],centers = k,iter.max = 10000,nstart = 1000)
+#}
 #plot(2:15,sapply(clusts,function(km){km$tot.withinss/km$totss}),type='l')
 # rq: number of cluster could also be a function of disjoint signif intervals for averages ?
 
@@ -91,7 +94,6 @@ for(indic in indics){
   ggsave(file=paste0(resdir,'clusteringTS_',indic,'.png'),width=20,height=15,units='cm')
 }
 
-
 for(indic in indics){
   g=ggplot(timedf,aes_string(x=indic,color='year'))
   g+geom_density()+scale_color_discrete(name='Year')+xlab(indicnames[[indic]])+ylab('Density')+stdtheme
@@ -103,11 +105,11 @@ timeclassdata = data.frame()
 for(year in years[2:length(years)]){
   for(classifindic in classifindics){
     currentd = classdata[,c(paste0(classifindic,year),"cluster")];names(currentd)<-c("value","cluster")
-    timeclassdata = rbind(timeclassdata,cbind(area = 1:nrow(currentd),currentd,year=rep(year,nrow(currentd)),indic=rep(indicnames[[classifindic]],nrow(currentd))))
+    timeclassdata = rbind(timeclassdata,cbind(area = classdata$id,currentd,year=rep(year,nrow(currentd)),indic=rep(indicnames[[classifindic]],nrow(currentd))))
   }
 }
 
-g=ggplot(timeclassdata,aes(x=value,color=factor(cluster),linetype=year,group=interaction(cluster,year)))
+g=ggplot(timeclassdata,aes(x=value,color=factor(cluster),linetype=factor(year),group=interaction(cluster,year)))
 g+geom_density()+facet_wrap(~indic,scales='free')+scale_linetype_discrete(name='Year')+scale_color_discrete(name='Cluster')+xlab("")+ylab("")+stdtheme
 ggsave(file=paste0(resdir,'distributions_cluster-year.png'),width=30,height=20,units='cm')
 
@@ -116,46 +118,6 @@ ggsave(file=paste0(resdir,'distributions_cluster-year.png'),width=30,height=20,u
 
 ###
 # quick maps
-
-inds = c(1:946,948:1000) # 
-#morphosall = data.frame(matrix(unlist(res),nrow=length(res),byrow = T))
-#names(morphosall)<-names(res[[1]])
-morphos <- read.csv(file='configs/morphologies.csv',header = T,sep = ";")
-rownames(morphos)<-morphos$areaid
-
-areasmorph = as.tbl(ucdbsf[inds,])
-areasmorph$areaid = inds
-
-areasmorph = left_join(areasmorph,morphos,by=c('areaid'='areaid'))
-
-countries <- st_read(paste0(Sys.getenv('CS_HOME'),'/Data/Countries/'),'countries')
-
-map<- function(data,var,sizevar,filename,discrete=FALSE,legendtitle=NULL,legendsizetitle=NULL,xlim=c(-130,150),ylim=c(-50, 60)){
-  #WorldData <- map_data('world') %>% filter(region != "Antarctica") %>% fortify
-  #sizes = log10(data[[sizevar]]);sizes = (sizes - min(sizes,na.rm = T)) / (max(sizes,na.rm = T) - min(sizes,na.rm = T))
-  #data[['sizes']]=sizes
-  g=ggplot()+
-    #geom_map(data = WorldData, map = WorldData,aes(group = group, map_id=region),fill = "white", colour = "#7f7f7f", size=0.1) + 
-    geom_sf(data=countries,fill = "white", colour = "#7f7f7f", size=0.1)+
-    geom_point(data=data,aes_string(x='GCPNT_LON',y='GCPNT_LAT',color=var,size=sizevar),alpha=0.6)+
-    scale_size_area(name=ifelse(is.null(legendsizetitle),sizevar,legendsizetitle))+
-    #geom_map(data = areasmorph, map=WorldData,
-    #         aes(fill=moran2015),#, map_id=region),
-    #         colour="#7f7f7f", size=0.5) +
-    #coord_map("mollweide")+ # coord_map("rectangular",lat0=lat0, xlim=xlim, ylim=ylim)
-    #coord_sf("rectangular",xlim=xlim, ylim=ylim)+
-    #scale_fill_continuous(low="thistle2", high="darkred", guide="colorbar") +
-    theme_bw()+xlab("")+ylab("")+
-    xlim(xlim)+ylim(ylim)+theme(axis.text = element_blank(),axis.ticks = element_blank())
-    #scale_y_continuous(limits=ylim,breaks=c(),labels = c()) +
-    #scale_x_continuous(limits=xlim,breaks=c(),labels = c())
-  if(discrete){
-    g+scale_color_discrete(name=ifelse(is.null(legendtitle),var,legendtitle))
-  }else{
-    g+scale_color_distiller(palette = 'Spectral',na.value ='white',name=ifelse(is.null(legendtitle),var,legendtitle))
-  }
-  ggsave(filename = filename,width=30,height=12,units='cm',dpi = 600)
-}
 
 
 years=c(1975,1990,2000,2015)
@@ -178,7 +140,8 @@ for(indic in indics){for(year in years){
 # clusters map
 areasmorphfilt = areasmorph[!apply(areasmorph[,names(morphosall)],1,function(r){length(which(is.na(r)))>0})&areasmorph$alpha1975>-4&areasmorph$alpha1990>-4&areasmorph$alpha2000>-4&areasmorph$alpha2015>-4,]
 for(classindic in names(classdata)){
-  areasmorphfilt[[paste0("class",classindic)]] = classdata[[classindic]]
+  currentd = classdata[[classindic]];names(currentd)<-classdata$id
+  areasmorphfilt[[paste0("class",classindic)]] = currentd[areasmorphfilt$areaid]
 }
 areasmorphfilt$classcluster=as.character(areasmorphfilt$classcluster)
 
@@ -197,34 +160,12 @@ map(
 ### Correlations
 # + supp mat: cors dpop etc
 
-library(corrplot)
-
 years = c(1990,2000,2015)
 
 corvars = c('P','B','E','G',classifindics)
 corvarsnames = c('Pop','Built','Emissions','GDP',unlist(indicnames[classifindics]))
-for(year in years){
-  rho = matrix(0,length(corvars),length(corvars));colnames(rho)<-corvarsnames;rownames(rho)<-corvarsnames
-  rhomin = rho;rhomax = rho
-  for(i in 1:length(corvars)){
-    for(j in 1:length(corvars)){
-      ivar= paste0(corvars[i],year);jvar=paste0(corvars[j],year)
-      if(!corvars[i]%in%classifindics){ivar= paste0(corvars[i],substr(year,3,4))}
-      if(!corvars[j]%in%classifindics){jvar=paste0(corvars[j],substr(year,3,4))}
-      rhotest = cor.test(unlist(areasmorphfilt[,ivar]),unlist(areasmorphfilt[,jvar]))
-      rho[i,j]=rhotest$estimate;rhomin[i,j]=rhotest$conf.int[1];rhomax[i,j]=rhotest$conf.int[2]
-    }
-  }
-  png(filename = paste0(resdir,'correlations_vars-morpho_',year,'.png'),width = 25,height = 20,units='cm',res = 300)
-  corrplot(rho,lowCI.mat = rhomin, uppCI.mat = rhomax,type = 'upper',title = year,bg='lightgrey',
-           plotCI = 'circle',
-           addCoef.col = "black",
-           mar = c(0,0,1,0)
-           #order='hclust',
-           #method='ellipse'
-  )
-  dev.off()
-}
+
+correlations(areasmorphfilt,corvars,corvarsnames,classifindics,fileprefix=paste0(resdir,'correlations_vars-morpho'),mode="wide")
 
 
 years = c(2000,2015)
@@ -263,11 +204,7 @@ for(year in years){
 
 years = c(1975,1990,2000,2015)
 
-timedf <- data.frame()
-for(year in years){
-  currentd = areasmorphfilt[,paste0(indics,year)];names(currentd)<-indics
-  timedf = rbind(timedf,cbind(area = 1:nrow(currentd),currentd,year=rep(year,nrow(currentd))))
-}
+timedf <- as_temporal_df(as.data.frame(areasmorphfilt),indics)
 pcadata = timedf
 for(ind in classifindics){pcadata[,ind] = (pcadata[,ind] - min(pcadata[,ind]))/(max(pcadata[,ind])-min(pcadata[,ind]))}
 
