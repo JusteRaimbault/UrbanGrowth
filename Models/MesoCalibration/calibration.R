@@ -35,7 +35,7 @@ latestdir <- function(row,year){
 
 # missing: 1-1975; 204-1990; 275-2000; 309-2015; 336-1990; 385-2000; 414-2015
 allrestmp = data.frame()
-for(row in 415:nrow(morphos)) {for(year in c(1990,2000,2015)){
+for(row in 1:nrow(morphos)) {for(year in c(1990,2000,2015)){
   dir = latestdir(row,year);gen=latestgen(dir)
   show(paste0(row,'-',year,':',gen))
   if(!is.null(gen)){
@@ -44,6 +44,8 @@ for(row in 415:nrow(morphos)) {for(year in c(1990,2000,2015)){
   }
 }}
 
+years = c(1975,1990,2000,2015)
+indics=c('totalPop','maxPop','minPop','moran','avgDist','entropy','alpha','alphaRSquared')
 
 timedf = as_temporal_df(areasmorph,indics)
 allres <- left_join(allrestmp,timedf[timedf$year>1975,],by=c('areaid'='areaid','year'='year')) # %>%
@@ -107,6 +109,7 @@ for(param in params){
   for(year in years){
   currentdata=areasmorphest[areasmorphest$year==year,]
   if(param=='meanalpha'){currentdata=currentdata[currentdata[,'meanalpha']<3,]}
+  if(param=='meanbeta'){currentdata=currentdata[!is.na(currentdata[,'meanbeta']),]}
   map(
     currentdata,
     param,
@@ -133,6 +136,8 @@ for(year in years){
 }
 
 cordata <- left_join(sres,currenttimedf,by=c("areaid"="areaid","year"="year"))
+
+years=c(2000,2015)
 
 corvars = c('P','B','E','G','meanalpha','meanbeta','meantsteps')
 corvarsnames = c('Pop','Built','Emissions','GDP','alpha','beta','tsteps')

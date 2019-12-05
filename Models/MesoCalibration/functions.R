@@ -7,7 +7,7 @@ library(sf)
 #library(mapproj)
 
 
-as_temporal_df <- function(data,indics){
+as_temporal_df <- function(data,indics,years){
   currenttimedf <- data.frame()
   for(year in years){
     currentd = data[,paste0(indics,year)];names(currentd)<-indics
