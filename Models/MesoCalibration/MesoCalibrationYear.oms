@@ -97,11 +97,11 @@ val evolution =
         beta in Range(0.0,0.1),
         tsteps in Range(1.0,100.0)
       ),
-      mu = 100,
+      mu = 50,
       objectives = Seq(popfit,indicsfit),
       evaluation = model,
       stochastic = Stochastic(seed = seed),
-      termination = 1000,
+      termination = 500,
       parallelism = 20//,
       //distribution = Island(5 minutes)
 )
