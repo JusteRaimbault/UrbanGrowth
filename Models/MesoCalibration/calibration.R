@@ -121,12 +121,14 @@ for(param in params){
 ####
 ## Correlations
 
-years = c(2000,2015)
+years = c(1990,2000,2015)
 
 vars=c('P','B','E','G','DP','DB','DE','DG')
 currenttimedf <- data.frame()
 for(year in years){
-  currentd = areasmorph[,paste0(vars,substr(year,3,4))];names(currentd)<-vars
+  if(year>1990){currentvars = vars}else{currentvars = vars[c(-4,-8)]}
+  currentd = areasmorph[,paste0(currentvars,substr(year,3,4))];names(currentd)<-currentvars
+  if(year==1990){currentd$G=rep(NA,nrow(currentd));currentd$DG=rep(NA,nrow(currentd))}
   currenttimedf = rbind(currenttimedf,cbind(areaid = areasmorph$areaid,currentd,year=rep(year,nrow(currentd))))
 }
 
@@ -146,15 +148,20 @@ correlations(cordata,corvars,corvarsnames,years,fileprefix = paste0(resdir,'Cali
 ####
 ## Trajectories in phase diag
 
+areanames = sapply(strsplit(areasmorph$UC_NM_LST,";"),function(r){r[1]})
+
 # load phase diags: (alpha,beta) stratified by tf
 
-phasediag <- as.tbl(read.csv('exploration/20191204_182426_EXPLORATION_LOCAL4.csv'))
+phasediag <- as.tbl(read.csv('exploration/20191204_225527_EXPLORATION_LOCAL4.csv'))
 sphasediag <- phasediag %>% group_by(alpha,beta,tsteps) %>% summarize(
   avgDistance=mean(avgDistance),
   entropy=mean(entropy),
   moran=mean(moran),
   slope=mean(slope)
 )
+
+# restrict phase diag to beta < 0.1 (boundary for calibration)
+sphasediag = sphasediag[sphasediag$beta<=0.1&sphasediag$alpha<=2,]
 
 indics = c("avgDistance","entropy","moran","slope")
 #indicnames =list("avgDistance","entropy","moran","slope")
@@ -163,14 +170,28 @@ tsteps= unique(sphasediag$tsteps);dists=sapply(cordata$meantsteps,function(t){mi
 for(indic in indics){
   for(tstep in tsteps){
     currentest = cordata[abs(cordata$meantsteps-tstep)==dists&cordata$meanalpha<max(sphasediag$alpha),]
-  ggplot()+
-    geom_raster(data=sphasediag[sphasediag$tsteps==tstep,],aes_string(x='alpha',y='beta',fill=indic))+
-    scale_fill_distiller(palette = 'Spectral',na.value ='white')+
+    # summarize: average in each quadran
+    qest = currentest%>% group_by(areaid) %>% summarize(deltaalpha = meanalpha[year==max(year)] - meanalpha[year==min(year)],deltabeta = meanbeta[year==max(year)] - meanbeta[year==min(year)]) %>% mutate(alphaf = sign(deltaalpha),betaf= sign(deltabeta)) %>% mutate(qid = paste0(alphaf,betaf))
+    qavg = left_join(currentest,qest)%>%filter(qid!="00")%>% group_by(year,qid) %>% summarize(alpha=mean(meanalpha),beta=mean(meanbeta),pop=sum(P,na.rm=T))
+    ggplot()+geom_raster(data=sphasediag[sphasediag$tsteps==tstep,],aes_string(x='alpha',y='beta',fill=indic))+scale_fill_distiller(palette = 'Spectral',na.value ='white')+
     #facet_wrap(~tsteps,scales = 'free') # better not to wrap for color scale
     #geom_point(data=currentest,aes(x=meanalpha,y=meanbeta,size=meantsteps),alpha=0.5)+
-    geom_line(data=currentest,aes(x=meanalpha,y=meanbeta,group=areaid),alpha=0.5)+stdtheme
+    #geom_line(data=currentest,aes(x=meanalpha,y=meanbeta,group=areaid),alpha=0.5)+
+      geom_path(data=qavg,aes(x=alpha,y=beta,group=qid),arrow=arrow(angle=20, type = "closed",length = unit(0.05,'inches')))
+      stdtheme
   ggsave(file=paste0(resdir,'Calibration/phasediag_',indic,'_tsteps',tstep,'.png'),width=20,height=18,units='cm')
-}
+
+  p15 = currentest[currentest$year==2015,]
+  ids = p15$areaid[p15$P>=quantile(p15$P,0.98)]
+  
+  ggplot()+geom_raster(data=sphasediag[sphasediag$tsteps==tstep,],aes_string(x='alpha',y='beta',fill=indic))+scale_fill_distiller(palette = 'Spectral',na.value ='white')+
+    geom_path(data=currentest[currentest$areaid%in%ids,],aes(x=meanalpha,y=meanbeta,group=areaid),arrow=arrow(angle=20, type = "closed",length = unit(0.05,'inches')))+
+    #geom_text(data=cbind(p15[p15$areaid%in%ids,],name=areanames[ids]),aes(x=meanalpha,y=meanbeta,label=name))+
+  stdtheme
+  ggsave(file=paste0(resdir,'Calibration/phasediag_largestcities_',indic,'_tsteps',tstep,'.png'),width=20,height=18,units='cm')
+  
+  
+  }
 }
 
 
