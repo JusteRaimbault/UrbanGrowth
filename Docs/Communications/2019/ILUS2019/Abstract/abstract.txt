@@ -1,0 +1,25 @@
+Worldwide estimation of parameters for a simple reaction-diffusion model of urban growth
+
+keywords:
+Urban growth
+Reaction-diffusion
+World urban areas
+Model calibration	
+
+
+doi:10.1177/2399808319843534 Singularity cities - alternative model
+
+
+Abstract:
+Understanding drivers of urban growth and land-use change at the metropolitan scale often requires to isolate and estimate stylized processes of urban evolution. Several land-use change and urban growth models for example based on cellular automata have been introduced in the literature, but their lack of generality and need for rich data may become a shortcoming. We propose here to apply and calibrate a simple model of urban growth based on reaction-diffusion processes for population density, providing a rather general insight into world urban areas from simple data. This four-parameter model introduced by (Raimbault, 2018) combines aggregation forces (positive externalities) with dispersal forces (negative externalities) to capture dynamics of urban form. The model was previously only simulated on synthetic initially empty spaces and statically calibrated by comparing the projection of final simulated configurations in a space of urban morphology indicators (Moran index, entropy, average distance, hierarchy) to real measures computed on a fixed-size moving window for Europe. We significantly extend these result by (i) applying the model on the 1000 largest urban areas of the Global Human Settlements database (Florczyk et al., 2019); (ii) proceeding to a calibration on four successive time windows what provides dynamical values for parameters; (iii) using genetic optimization algorithms to minimise the distance on morphological indicators for each area. The computational cost being high, results are obtained by using the OpenMOLE model exploration software (Reuillon et al. 2013), which provides in a transparent way the optimization algorithms and the distribution of calibrations on a computation grid. We obtain therein comparable values for aggregation, diffusion and growth speed parameters on all these areas at four time steps between 1975 and 2015. These values can be used for short terms projections, but also high-level policies by situating urban areas in the model phase diagrams and for example comparing them to more or less close phase transition parameter values. We also illustrate possible policy applications by relating estimated parameters to the EDGAR greenhouse gases emission database. This work thus shows how simple models can be useful for global comparisons, which are necessary to contextualize territorial policies.
+
+References:
+
+Florczyk, A.J., Corbane, C., Schiavina, M., Pesaresi, M., Maffenini, L., Melchiorri, M., Politis, P., Sabo, F., Freire, S., Ehrlich, D., Kemper, T., Tommasi, P., Airaghi, D. and L. Zanchetta. 2019. GHS Urban Centre Database 2015, multitemporal and multidimensional attributes, R2019A. European Commission, Joint Research Centre (JRC)
+
+Raimbault, J. 2018a. Calibration of a density-based model of urban morphogenesis. PloS one, 13(9), e0203516.
+
+Reuillon, R., Leclaire, M., & Rey-Coyrehourcq, S. (2013). OpenMOLE, a workflow engine specifically tailored for the distributed exploration of simulation models. Future Generation Computer Systems, 29(8), 1981-1990.
+
+
+

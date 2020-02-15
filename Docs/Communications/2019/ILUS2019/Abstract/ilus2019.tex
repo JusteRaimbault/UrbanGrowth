@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\input{header.tex}
+\begin{document}
+
+\title{\vspace{-1cm}Worldwide estimation of parameters for a simple reaction-diffusion model of urban growth
+\\\medskip
+\textit{ILUS 2019}
+}
+\author{\noun{J. Raimbault}$^{1,2,3,\ast}$\medskip\\
+$^1$ CASA, UCL\\
+$^2$ UPS CNRS 3611 ISC-PIF\\
+$^3$ UMR CNRS 8504 G{\'e}ographie-cit{\'e}s\\
+\medskip\\
+$^{\ast}$\texttt{juste.raimbault@polytechnique.edu}
+}
+\date{}
+
+\maketitle
+
+\justify
+
+\pagenumbering{gobble}
+
+
+\textbf{Keywords: }\textit{Urban growth; Reaction-diffusion; World urban areas; Model calibration}
+
+
+% doi:10.1177/2399808319843534 Singularity cities - alternative model
+
+
+\medskip
+
+
+Understanding drivers of urban growth and land-use change at the metropolitan scale often requires to isolate and estimate stylized processes of urban evolution. Several land-use change and urban growth models for example based on cellular automata have been introduced in the literature, but their lack of generality and need for rich data may become a shortcoming. We propose here to apply and calibrate a simple model of urban growth based on reaction-diffusion processes for population density, providing a rather general insight into world urban areas from simple data. This four-parameter model introduced by \cite{raimbault2018calibration} combines aggregation forces (positive externalities) with dispersal forces (negative externalities) to capture dynamics of urban form. The model was previously only simulated on synthetic initially empty spaces and statically calibrated by comparing the projection of final simulated configurations in a space of urban morphology indicators (Moran index, entropy, average distance, hierarchy) to real measures computed on a fixed-size moving window for Europe. We significantly extend these result by (i) applying the model on the 1000 largest urban areas of the Global Human Settlements database \citep{Florczyk2019ghs}; (ii) proceeding to a calibration on three successive time windows (1975-1990, 1990-2000 and 2000-2015) what provides dynamical values for parameters; (iii) using genetic optimization algorithms to minimise the distance on morphological indicators for each area. The computational cost being high, results are obtained by using the OpenMOLE model exploration software \citep{reuillon2013openmole}, which provides in a transparent way the optimization algorithms and the distribution of calibrations on a computation grid. We obtain therein comparable values for aggregation, diffusion and growth speed parameters on all these areas for the three periods given above. These values can be used for short terms projections, but also high-level policies by situating urban areas in the model phase diagrams and for example comparing them to more or less close phase transition parameter values. We also illustrate possible policy applications by relating estimated parameters to the EDGAR greenhouse gases emission database. This work thus shows how simple models can be useful for global comparisons, which are necessary to contextualize territorial policies.
+
+
+%%%%%%%%%%%%%%%%%%%%
+%% Biblio
+%%%%%%%%%%%%%%%%%%%%
+%\tiny
+
+%\begin{multicols}{2}
+
+%\setstretch{0.3}
+%\setlength{\parskip}{-0.4em}
+
+
+\footnotesize
+
+\bibliographystyle{apalike}
+\bibliography{biblio}
+%\end{multicols}
+
+
+
+\end{document}
