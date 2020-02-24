@@ -8,6 +8,7 @@ val endyear = config._2
 import java.util.Date
 import java.text.SimpleDateFormat
 
+/*
 val popvals = scala.io.Source.fromFile(workDirectory / "configs" / (areaind.toString+"_"+startyear.toString+".csv")).getLines.map{s =>
     s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toArray
 }.toArray
@@ -15,13 +16,15 @@ val popvals = scala.io.Source.fromFile(workDirectory / "configs" / (areaind.toSt
 val finalpopvals = scala.io.Source.fromFile(workDirectory / "configs" / (areaind.toString+"_"+endyear.toString+".csv")).getLines.map{s =>
     s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toArray
 }.toArray
+*/
 
 // Config
 val morphofile = Val[File]
 val targetarea = Val[Int]
+val initialyear = Val[Int]
 val targetyear = Val[Int]
-val initialpop = Val[Array[Array[Double]]]
-val finalpop = Val[Array[Array[Double]]]
+//val initialpop = Val[Array[Array[Double]]]
+//val finalpop = Val[Array[Array[Double]]]
 
 // Parameters
 val alpha = Val[Double]
@@ -42,30 +45,44 @@ val slopefit = Val[Double]
 val model =
   ScalaTask(
     """
-      |val pop = initialpop.map{_.toSeq}.toSeq
-      |val fpop = finalpop.map{_.toSeq}.toSeq
+      |//val pop = initialpop.map{_.toSeq}.toSeq
+      |//val fpop = finalpop.map{_.toSeq}.toSeq
+      |
       |val objs = density.reactiondiffusion.CSV.readCSVFile(morphofile,";")
       |val targetPop = objs("totalPop"+targetyear)(targetarea-1).toDouble
       |val targetMoran = objs("moran"+targetyear)(targetarea-1).toDouble
       |val targetAvgDist = objs("avgDist"+targetyear)(targetarea-1).toDouble
       |val targetEntropy = objs("entropy"+targetyear)(targetarea-1).toDouble
       |val targetSlope = objs("alpha"+targetyear)(targetarea-1).toDouble
+      |val effectivearea = objs("areaid")(targetarea-1)
+      |println("Calibrating for area "+effectivearea)
+      |val popvals = scala.io.Source.fromFile(workDirectory / "configs" / (effectivearea.toString+"_"+initialyear.toString+".csv")).getLines.map{s =>
+      |    s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toSeq
+      |}.toSeq
       |
-      |val calib = density.reactiondiffusion.ReactionDiffusionCalibration(pop,fpop,alpha,beta,1.0,tsteps,targetPop,targetMoran,targetAvgDist,targetEntropy,targetSlope,seed)
+      |val finalpopvals = scala.io.Source.fromFile(workDirectory / "configs" / (effectivearea.toString+"_"+targetyear.toString+".csv")).getLines.map{s =>
+      |    s.split(";").map{ss => if(ss.equals("NA")) Double.NaN else ss.toDouble}.toSeq
+      |}.toSeq
+      |
+      |
+      |val calib = density.reactiondiffusion.ReactionDiffusionCalibration(popvals,finalpopvals,alpha,beta,1.0,tsteps,targetPop,targetMoran,targetAvgDist,targetEntropy,targetSlope,seed)
       |val (popfit,indicsfit,aggrpopfit,moranfit,avgDistfit,entropyfit,slopefit,_,_,_,_,_) = calib.runModel
     """.stripMargin
   ) set (
     plugins += pluginsOf[density.reactiondiffusion.ReactionDiffusionCalibration],
-    (inputs,outputs) += (initialpop,finalpop,morphofile,targetarea,targetyear,alpha,beta,tsteps,seed),
+    (inputs,outputs) += (//initialpop,finalpop,
+      morphofile,targetarea,targetyear,alpha,beta,tsteps,seed),
     outputs += (popfit,indicsfit,aggrpopfit,moranfit,avgDistfit,entropyfit,slopefit),
-    initialpop := popvals,
-    finalpop := finalpopvals,
+    //initialpop := popvals,
+    //finalpop := finalpopvals,
     morphofile := (workDirectory / "configs" / "morphologies.csv"),
     targetarea := areaind,
-    targetyear := endyear
+    initialyear := startyear,
+    targetyear := endyear,
+    resources += (workDirectory / "configs")
   )
 
-val purpose = "MESOCALIB_CALIB_LOCAL60"
+val purpose = "MESOCALIB_CALIB_LOCAL8"
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
 val resdir = purpose+"_"+areaind.toString+"_"+endyear.toString+"_"+datestr
 
@@ -81,12 +98,12 @@ val evolution =
         beta in Range(0.0,0.1),
         tsteps in Range(1.0,100.0)
       ),
-      mu = 200,
+      mu = 50,
       objectives = Seq(popfit,indicsfit),
       evaluation = model,
       stochastic = Stochastic(seed = seed),
-      termination = 2000,
-      parallelism = 60//,
+      termination = 500,
+      parallelism = 8//,
       //distribution = Island(5 minutes)
 )
 

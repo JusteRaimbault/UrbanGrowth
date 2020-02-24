@@ -1,6 +1,97 @@
 
 
 
+library(scales)
+library(sf)
+#library(maps)
+#library(mapproj)
+
+
+as_temporal_df <- function(data,indics,years){
+  currenttimedf <- data.frame()
+  for(year in years){
+    currentd = data[,paste0(indics,year)];names(currentd)<-indics
+    currenttimedf = rbind(currenttimedf,cbind(areaid = data$areaid,currentd,year=rep(year,nrow(currentd))))
+  }
+  return(currenttimedf)
+}
+
+getParetoFront<-function(d,c1,c2){
+  inds=c()
+  for(i in 1:nrow(d)){
+    if(length(which(d[i,c1]>d[,c1]&d[i,c2]>d[,c2]))==0){inds=append(inds,i)}
+  }
+  return(d[inds,])
+}
+
+
+library(corrplot)
+
+correlations<-function(currentdata,corvars,corvarsnames,years,mode,fileprefix,classifindics=NULL){
+  
+  for(year in years){
+    rho = matrix(0,length(corvars),length(corvars));colnames(rho)<-corvarsnames;rownames(rho)<-corvarsnames
+    rhomin = rho;rhomax = rho
+    for(i in 1:length(corvars)){
+      for(j in 1:length(corvars)){
+        if(mode=="wide"){
+        ivar= paste0(corvars[i],year);jvar=paste0(corvars[j],year)
+        if(!corvars[i]%in%classifindics){ivar= paste0(corvars[i],substr(year,3,4))}
+        if(!corvars[j]%in%classifindics){jvar=paste0(corvars[j],substr(year,3,4))}
+        x=unlist(currentdata[,ivar]);y=unlist(currentdata[,jvar])
+        }
+        if(mode=="long"){
+          x=unlist(currentdata[currentdata$year==year,corvars[i]])
+          y=unlist(currentdata[currentdata$year==year,corvars[j]])
+        }
+        rhotest = cor.test(x,y)
+        rho[i,j]=rhotest$estimate;rhomin[i,j]=rhotest$conf.int[1];rhomax[i,j]=rhotest$conf.int[2]
+      }
+    }
+    png(filename = paste0(fileprefix,'_',year,'.png'),width = 25,height = 20,units='cm',res = 300)
+    corrplot(rho,lowCI.mat = rhomin, uppCI.mat = rhomax,type = 'upper',title = year,bg='lightgrey',
+             plotCI = 'circle',
+             addCoef.col = "black",
+             mar = c(0,0,1,0)
+             #order='hclust',
+             #method='ellipse'
+    )
+    dev.off()
+  }
+}
+
+
+countries <- st_read(paste0(Sys.getenv('CS_HOME'),'/Data/Countries/'),'countries')
+
+map<- function(data,var,sizevar,filename,discrete=FALSE,legendtitle=NULL,legendsizetitle=NULL,xlim=c(-130,150),ylim=c(-50, 60)){
+  #WorldData <- map_data('world') %>% filter(region != "Antarctica") %>% fortify
+  #sizes = log10(data[[sizevar]]);sizes = (sizes - min(sizes,na.rm = T)) / (max(sizes,na.rm = T) - min(sizes,na.rm = T))
+  #data[['sizes']]=sizes
+  g=ggplot()+
+    #geom_map(data = WorldData, map = WorldData,aes(group = group, map_id=region),fill = "white", colour = "#7f7f7f", size=0.1) + 
+    geom_sf(data=countries,fill = "white", colour = "#7f7f7f", size=0.1)+
+    geom_point(data=data,aes_string(x='GCPNT_LON',y='GCPNT_LAT',color=var,size=sizevar),alpha=0.6)+
+    scale_size_area(name=ifelse(is.null(legendsizetitle),sizevar,legendsizetitle))+
+    #geom_map(data = areasmorph, map=WorldData,
+    #         aes(fill=moran2015),#, map_id=region),
+    #         colour="#7f7f7f", size=0.5) +
+    #coord_map("mollweide")+ # coord_map("rectangular",lat0=lat0, xlim=xlim, ylim=ylim)
+    #coord_sf("rectangular",xlim=xlim, ylim=ylim)+
+    #scale_fill_continuous(low="thistle2", high="darkred", guide="colorbar") +
+    theme_bw()+xlab("")+ylab("")+
+    xlim(xlim)+ylim(ylim)+theme(axis.text = element_blank(),axis.ticks = element_blank())
+  #scale_y_continuous(limits=ylim,breaks=c(),labels = c()) +
+  #scale_x_continuous(limits=xlim,breaks=c(),labels = c())
+  if(discrete){
+    g+scale_color_discrete(name=ifelse(is.null(legendtitle),var,legendtitle))
+  }else{
+    g+scale_color_distiller(palette = 'Spectral',na.value ='white',name=ifelse(is.null(legendtitle),var,legendtitle))
+  }
+  ggsave(filename = filename,width=30,height=12,units='cm',dpi = 600)
+}
+
+
+
 loadUCDBData <- function(dsn,layer){
   ucdb <- readOGR(dsn,layer,stringsAsFactors = F)
   
@@ -46,6 +137,9 @@ loadUCDBData <- function(dsn,layer){
   
   ucdb@data = areas
   
-  return(ucdb)
+  ucdbsf <- st_as_sf(ucdb)
+  ucdbsf <- ucdbsf %>% arrange(desc(P15))
+  
+  return(ucdbsf)
 }
 
