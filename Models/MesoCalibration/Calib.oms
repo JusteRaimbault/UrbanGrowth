@@ -83,11 +83,15 @@ val model =
     resources += (workDirectory / "configs")
   )
 
+<<<<<<< HEAD
+val purpose = "MESOCALIB_CALIB_LOCAL60"
+=======
 val purpose = "MESOCALIB_CALIB_LOCAL8"
+>>>>>>> edee0f7bd80c712004aff62c5ea5b51ecfe04252
 val datestr = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()).toString
 val resdir = purpose+"_"+areaind.toString+"_"+endyear.toString+"_"+datestr
 
-val env = LocalEnvironment(20)
+val env = LocalEnvironment(60)
 //val env = EGIEnvironment("vo.complex-systems.eu")
 
 
@@ -108,12 +112,16 @@ val evolution =
       //distribution = Island(5 minutes)
 )
 
-val savePopulation = SavePopulationHook(evolution, workDirectory / "calibration" / resdir,100)
+val savePopulation = SavePopulationHook(evolution, workDirectory / "calibration" / resdir, 100)
+
 
 
 (evolution on env hook savePopulation)
 
+  
 }
 
-
 EmptyTask() -- Seq((1975,1990),(1990,2000),(2000,2015)).map(calib)
+
+
+
