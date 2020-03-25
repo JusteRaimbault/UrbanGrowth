@@ -18,6 +18,9 @@ source('functions.R')
 
 ucdb <- readOGR(paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0'),'GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_0',stringsAsFactors = F)
 
+#fuas <- readOGR(dsn=paste0(Sys.getenv('CS_HOME'),'/Data/JRC_EC/GHS/'),layer='GHS_FUA_UCDB2015_GLOBE_R2019A_54009_1K_V1_0.gpkg')
+
+
 ###
 # Analysis
 #  - summary

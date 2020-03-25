@@ -18,7 +18,7 @@ latestgen <- function(dir){
 
 # population dirs listed by hand
 
-#models = c('intgib','innovation','gibrat','innovationext','marius','intgibphysical','mariusrestr')
+allmodels = c("gibrat","innovation","innovationext","intgib","intgibphysical","marius","mariusrestr")
 models = c('intgib','innovation','gibrat','mariusrestr','innovationext','marius')
 #systems = c('ZA','CN','US','BR','EU','IN','RU')
 systems=c('world')
@@ -74,6 +74,7 @@ for(model in models){
 }
 pop=as.tbl(pop[2:nrow(pop),])
 
+pop$model = factor(pop$model,levels = allmodels)
 
 #######
 
@@ -94,26 +95,33 @@ pop=as.tbl(pop[2:nrow(pop),])
 
 ## exploration of influence of parameters
 
-g=ggplot(pop[pop$gravityWeight>0,],aes(x=gravityWeight))
-g+geom_point(aes(y=logmse,color=gravityDecay))+scale_x_log10()#+geom_line(aes(y=mselog),col=2)
+#g=ggplot(pop[pop$gravityWeight>0,],aes(x=gravityWeight))
+#g+geom_point(aes(y=logmse,color=gravityDecay))+scale_x_log10()#+geom_line(aes(y=mselog),col=2)
 
-g=ggplot(pop[pop$gravityWeight>0,],aes(x=gravityWeight))
-g+geom_point(aes(y=mselog,color=gravityDecay))+scale_x_log10()#+geom_line(aes(y=mselog),col=2)
+#g=ggplot(pop[pop$gravityWeight>0,],aes(x=gravityWeight))
+#g+geom_point(aes(y=mselog,color=gravityDecay))+scale_x_log10()#+geom_line(aes(y=mselog),col=2)
 
 
-g=ggplot(pop[!is.na(pop$gravityGamma),],aes(x=gravityDecay))
-g+geom_point(aes(y=mselog,color=gravityGamma))
+#g=ggplot(pop[!is.na(pop$gravityGamma),],aes(x=gravityDecay))
+#g+geom_point(aes(y=mselog,color=gravityGamma))
 
-g=ggplot(pop[!is.na(pop$gravityGamma),],aes(x=gravityDecay))
-g+geom_point(aes(y=logmse,color=gravityGamma))
+#g=ggplot(pop[!is.na(pop$gravityGamma),],aes(x=gravityDecay))
+#g+geom_point(aes(y=logmse,color=gravityGamma))
 # counter intuitive ?
 
 
 ####
-# targeted plots
+# Result plots
 
-g = ggplot(pop[pop$system=='world',],aes(x = mselog,y=logmse,color=model))
-g+geom_point(alpha=0.5)+stdtheme
+cols = gg_color_hue(length(levels(pop$model)));names(cols)<-levels(pop$model)
+pop$modelcolor = cols[pop$model]
+
+currentcols = pop$modelcolor;names(currentcols)<-pop$model
+g = ggplot(pop,aes(x = mselog,y=logmse,color=model))
+g+geom_point(alpha=0.5)+stdtheme+
+  xlab('Mean square error on log of populations')+ylab("Log of mean square error on populations")+
+  stdtheme+guides(colour = guide_legend(override.aes = list(size=4,alpha=1),title = 'Model'))+
+  scale_color_manual(values = currentcols)
 ggsave(file=paste0(resdir,'allmodels_world.png'),width=22,height = 18,units='cm')
 
 

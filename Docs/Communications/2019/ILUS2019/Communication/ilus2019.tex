@@ -2,7 +2,7 @@
 
 \begin{document}
 
-\title[Models of urban morphogenesis]{Models of urban morphogenesis to link urban form and function}
+\title[]{Worldwide estimation of parameters for a simple reaction-diffusion model of urban growth}
 \author[J. Raimbault]{J.~Raimbault$^{1,2,3\ast}$\\\medskip
 $^{\ast}$\texttt{j.raimbault@ucl.ac.uk}
 }
@@ -15,9 +15,9 @@ $^{3}$UMR CNRS 8504 G{\'e}ographie-cit{\'e}s
 
 
 
-\date[15th November 2019]{TQG Debates 2019\\
-3.1: Fractals and Multi-fractals\\
-November 15th 2019
+\date[5th December 2019]{International Land-Use Symposium 2019\\
+Session Drivers, Mechanisms, Tools\\
+5th December 2019
 }
 
 \frame{\maketitle}
@@ -25,8 +25,6 @@ November 15th 2019
 
 
 % \textbf{Keywords: }\textit{Urban growth; Reaction-diffusion; World urban areas; Model calibration}
-
-%  Understanding drivers of urban growth and land-use change at the metropolitan scale often requires to isolate and estimate stylized processes of urban evolution. Several land-use change and urban growth models for example based on cellular automata have been introduced in the literature, but their lack of generality and need for rich data may become a shortcoming. We propose here to apply and calibrate a simple model of urban growth based on reaction-diffusion processes for population density, providing a rather general insight into world urban areas from simple data. This four-parameter model introduced by \cite{raimbault2018calibration} combines aggregation forces (positive externalities) with dispersal forces (negative externalities) to capture dynamics of urban form. The model was previously only simulated on synthetic initially empty spaces and statically calibrated by comparing the projection of final simulated configurations in a space of urban morphology indicators (Moran index, entropy, average distance, hierarchy) to real measures computed on a fixed-size moving window for Europe. We significantly extend these result by (i) applying the model on the 1000 largest urban areas of the Global Human Settlements database \citep{Florczyk2019ghs}; (ii) proceeding to a calibration on three successive time windows (1975-1990, 1990-2000 and 2000-2015) what provides dynamical values for parameters; (iii) using genetic optimization algorithms to minimise the distance on morphological indicators for each area. The computational cost being high, results are obtained by using the OpenMOLE model exploration software \citep{reuillon2013openmole}, which provides in a transparent way the optimization algorithms and the distribution of calibrations on a computation grid. We obtain therein comparable values for aggregation, diffusion and growth speed parameters on all these areas for the three periods given above. These values can be used for short terms projections, but also high-level policies by situating urban areas in the model phase diagrams and for example comparing them to more or less close phase transition parameter values. We also illustrate possible policy applications by relating estimated parameters to the EDGAR greenhouse gases emission database. This work thus shows how simple models can be useful for global comparisons, which are necessary to contextualize territorial policies.
 
 
 
@@ -40,90 +38,73 @@ November 15th 2019
 
 \centering
 
-% center of Paris
-%\includegraphics[width=0.88\textwidth]{figures/intro_paname}
-%\includegraphics[width=0.9\textwidth]{figures/intro_bp}
+\includegraphics[width=0.88\textwidth]{figures/intro_paname}
+
+\footnotesize\textit{Source: Geoportail}
+}
+
+\sframe{Complex processes of Urban Morphogenesis}{
+
+\centering
+
+\includegraphics[width=0.9\textwidth]{figures/intro_bp}
 
 \footnotesize\textit{Source: Geoportail}
 }
 
 
+\sframe{Modeling urban growth and land-use change}{
 
+%  Understanding drivers of urban growth and land-use change at the metropolitan scale often requires to isolate and estimate stylized processes of urban evolution. Several land-use change and urban growth models for example based on cellular automata have been introduced in the literature, but their lack of generality and need for rich data may become a shortcoming.
 
-
-\sframe{Defining Morphogenesis}{
-
-% precise notions and defs
-
-\justify
-
-\textit{Proposition of an interdisciplinary definition}
-
-\bigskip
-
-
-
-
-\textbf{Meta-epistemological framework of imbricated notions:}
-
-Self-organization $\supsetneq$ Morphogenesis $\supsetneq$ Autopoiesis $\supsetneq$ Life
-
-
-\bigskip
-
-\textbf{Properties:}
-
-\begin{itemize}
-\item Architecture links form and function
-\item Emergence strength~\cite{bedau2002downward} increases with notion depth, as bifurcations~\cite{thom1974stabilite}
-\end{itemize}
-
-\bigskip
-
-\textbf{Definition of Morphogenesis :} \textit{Emergence of the form and the function in a strongly coupled manner, producing an emergent architecture \cite{doursat2012morphogenetic}}
-
-
-
-}
-
-
-
-\sframe{Which models for Urban Morphogenesis ?}{
-
-
-\cite{engelen2008validating} calibration/validation + map comparison
-
-\cite{zhou2018gini} urban form / emissions
-
-
-
-\justify
-
-\begin{columns}
-\column{0.35\textwidth}
-\centering
-\includegraphics[width=\textwidth]{figures/intro_RBD_lattice}\\
-\footnotesize\textit{Example: a basic hybrid model based on elementary processes for density and network \cite{raimbault2014hybrid}}
-\column{0.6\textwidth}
-\justify
-
-%\vspace{-1cm}
-
-$\rightarrow$\textit{At the crossroad between Urban Simulation and Artificial Life, few models try to integrate and explain the link between Urban Form and Function}
+$\rightarrow$ Cellular automata models or models of land-use change generally highly data-driven
 
 \medskip
 
-$\rightarrow$\textit{Importance of parcimonious, stylized models: modeling as a tool to understand processes}
+$\rightarrow$ May be case-specific or conclusions difficult to generalize (see Sleuth for example \cite{clarke2007decade})
 
-\end{columns}
+\medskip
+
+$\rightarrow$ Issues to calibrate and validate these models \cite{engelen2008validating}
+
+%calibration/validation + map comparison
+
+%\cite{zhou2018gini} urban form / emissions
 
 \bigskip
 
-\textbf{Research Objective : } Explore simple models to capture morphogenesis based on abstract representation of urban processes; test their ability to reproduce existing urban systems.
+\textbf{Urban morphogenesis models approach:}
 
+\smallskip
 
+$\rightarrow$\textit{At the crossroad between Urban Simulation and Artificial Life, stylized models of urban growth processes}
+
+\medskip
+
+$\rightarrow$\textit{Importance of parsimony: generative modeling as a tool to understand processes}
 
 }
+
+\sframe{Contribution}{
+
+%  We propose here to apply and calibrate a simple model of urban growth based on reaction-diffusion processes for population density, providing a rather general insight into world urban areas from simple data. 
+
+% We significantly extend these result by (i) applying the model on the 1000 largest urban areas of the Global Human Settlements database \citep{Florczyk2019ghs}; (ii) proceeding to a calibration on three successive time windows (1975-1990, 1990-2000 and 2000-2015) what provides dynamical values for parameters; (iii) using genetic optimization algorithms to minimise the distance on morphological indicators for each area.
+
+$\rightarrow$ Explore a simple model to capture morphogenesis based on abstract representation of urban processes; test their ability to reproduce existing urban systems.
+
+\bigskip
+
+$\rightarrow$ The simple reaction-diffusion model of urban growth is calibrated worldwide using GHSL, and in time.
+
+\bigskip
+
+$\rightarrow$ Globally comparable insights into processes of concentration and dispersion.
+
+}
+
+
+
 
 
 \section{Reaction-diffusion model}
@@ -131,9 +112,8 @@ $\rightarrow$\textit{Importance of parcimonious, stylized models: modeling as a 
 
 \sframe{A simple Reaction-diffusion model}{
 
-% comment Arnaud : reaction-diffusion ?
 
-% model rationale and processes
+% This four-parameter model introduced by \cite{raimbault2018calibration} combines aggregation forces (positive externalities) with dispersal forces (negative externalities) to capture dynamics of urban form. The model was previously only simulated on synthetic initially empty spaces and statically calibrated by comparing the projection of final simulated configurations in a space of urban morphology indicators (Moran index, entropy, average distance, hierarchy) to real measures computed on a fixed-size moving window for Europe.
 
 
 \justify
@@ -155,16 +135,13 @@ $\rightarrow$ Extension of a DLA-type model introduced by \cite{batty1991generat
 \bigskip
 \bigskip
 
-{\tiny
 
-Raimbault, J. (2018). Calibration of a density-based model of urban morphogenesis. PloS one, 13(9), e0203516.
+\textit{Raimbault, J. (2018). Calibration of a density-based model of urban morphogenesis. PloS one, 13(9), e0203516.}
+
+
 }
 
-}
-
-\sframe{Model Formalization}{
-
-% model formalization and indicators
+\sframe{Model formalization}{
 
 $\rightarrow$ Grid world with cell populations $\left(P_i\left(t\right)\right)_{1\leq i\leq N^2}$.
 
@@ -175,10 +152,6 @@ $\rightarrow$ At each time step:
 
 \begin{enumerate}
 \item Population growth with exogenous rate $N_G$, attributed independently to a cell following a preferential attachment of strength $\alpha$
-%\begin{equation}
-%\Pb{P_i(t+1)=P_i(t)+1|P(t+1)=P(t)+1}=\frac{(P_i(t)/P(t))^{\alpha}}{\sum(P_i(t)/P(t))^{\alpha}}
-%\end{equation}
-%The attribution being uniformly drawn if all population are equal to 0.
 \item Population is diffused $n_d$ times with strength $\beta$
 \end{enumerate}
 
@@ -196,25 +169,39 @@ $\rightarrow$ Output measured by morphological indicators: Moran index, average 
 }
 
 
-\sframe{Generating Population Distributions}{
+
+\sframe{Measuring urban morphology}{
+
+\begin{enumerate}
+\item Rank-size slope $\gamma$, given by $\ln \left( P_{\tilde{i}}/P_0\right) \sim k \textrm{ + } \gamma\cdot \ln \left(\tilde{i}/i_0\right)$ where $\tilde{i}$ are the indexes of the distribution sorted in decreasing order.
+\item Entropy of the distribution:
+\begin{equation}
+\mathcal{E} \textrm{ = } \sum_{i=1}^{M}\frac{P_i}{P}\cdot \ln{\frac{P_i}{P}}
+\end{equation}
+$\mathcal{E}\textrm{ = }0$ means that all the population is in one cell whereas $\mathcal{E}\textrm{ = }0$ means that the population is uniformly distributed.
+\item Spatial-autocorrelation given by Moran index, with simple spatial weights given by $w_{ij} \textrm{ = } 1/d_{ij}$
+\[
+I \textrm{ = } M \cdot \frac{\sum_{i\neq j} w_{ij} \left(P_i - \bar{P}\right)\cdot\left(P_j - \bar{P}\right)}{\sum_{i\neq j} w_{ij} \sum_{i}{\left( P_i - \bar{P}\right)}^2}
+\]
+\item Mean distance between individuals
+\[
+\bar{d} \textrm{ = } \frac{1}{d_M}\cdot \sum_{i<j} \frac{P_i P_j}{P^2} \cdot d_{ij}
+\]
+where $d_M$ is a normalisation constant
+\end{enumerate}
 
 
-% examples : fig 2 of paper
-
-\centering
-
-\includegraphics[height=0.8\textheight]{figures/density_Fig2}
-
-\footnotesize\textit{Examples of generated territorial shapes}
 
 }
 
 
-\sframe{Model behavior}{
+\sframe{Model behavior (synthetic data))}{
 
-\centering
+\begin{center}
 
 \includegraphics[width=0.9\textwidth]{figures/density_Fig3}
+
+\end{center}
 
 \footnotesize\textit{Phase transitions of indicators unveiled by exploration of the parameter space (80000 parameter points, 10 repetitions each)}
 
@@ -222,44 +209,7 @@ $\rightarrow$ Output measured by morphological indicators: Moran index, average 
 }
 
 
-
-
-\sframe{Path-dependence and frozen accidents}{
-
-\centering
-
-\includegraphics[width=0.8\textwidth]{figures/density_Fig4}
-
-\footnotesize\textit{Illustration of path-dependence in a simplified one-dimensional version of the model: cell trajectories in time for 9 independent repetitions from the same initial configuration.}
-
-
-}
-
-
-\sframe{Empirical Data for Calibration}{
-
-% comments Arnaud : Quel lien avec les slides avant et après ? "Real" : le terme me paraît discutable : données empiriques plutôt ?
-%  Décrire les données car ici tu passes directement aux indicateurs
-
-\begin{columns}
-\column{0.6\textwidth}
-\centering
-\includegraphics[width=\textwidth]{figures/density_indics_morpho_discrquantiles}
-\column{0.3\textwidth}
-\centering
-\includegraphics[width=\textwidth]{figures/density_cluster_pca_k5_morpho}\\
-\includegraphics[width=\textwidth]{figures/density_cluster_map_k5_morpho}
-\end{columns}
-
-\justify
-
-\footnotesize\textit{Computation of morphological indicators on population density data for Europe (shown here on France), morphological classification.}
-
-}
-
-
-
-\sframe{Model Calibration}{
+\sframe{Model application on a spatial grid}{
 
 \includegraphics[width=0.9\textwidth]{figures/density_synth}
 
@@ -269,37 +219,214 @@ $\rightarrow$ Output measured by morphological indicators: Moran index, average 
 
 
 
-\sframe{Model Targeted Exploration}{
+\section{Empirical analysis}
+
+\sframe{GHSL database}{
+	% brief description of GHSL; illustration
+
+% + empirical approach: 1000 areas, window 0.25%
+
+$\rightarrow$ Application on worldwide urban areas using the GHSL population grid
+
+\medskip
+
+$\rightarrow$ Dynamical calibration on three successive time windows (1975-1990, 1990-2000, 2000-2015)
+
+\medskip
+
+$\rightarrow$ Extraction of neighborhood (spatial span times 1.5) of 1000 larger urban areas (2015 population)
+
+\medskip
+
+$\rightarrow$ Computation of morphological indicators on corresponding population grids
+
+
+}
+
+\sframe{Global indicators distribution: Moran}{
 
 \centering
 
-\includegraphics[width=0.8\textwidth]{figures/density_Fig6}
+\includegraphics[width=\linewidth]{figures/mapindic_moran_2015.png}
 
-\footnotesize\textit{Potentialities of targeted model explorations: here feasible space using Pattern Space Exploration algorithm \cite{10.1371/journal.pone.0138212}.}
+\medskip
+
+\small
+
+\textit{Regional patterns for Moran index}
+
+}
+
+\sframe{Global indicators distribution: average distance}{
+
+\centering
+
+\includegraphics[width=\linewidth]{figures/mapindic_avgDist_2015.png}
+
+\medskip
+
+\small
+
+\textit{Complementarity of average distance indicator}
+
+}
+
+\sframe{Clustering morphological trajectories}{
+
+\includegraphics[width=0.55\textwidth]{figures/distributions_cluster-year.png}
+\includegraphics[width=0.4\textwidth]{figures/PCA_trajectories.png}
+
+\medskip
+
+\small
+
+\textit{Disjoint distributions and temporal trajectories: model application is relevant}
+
+}
+
+\sframe{Distribution of clusters}{
+
+\centering
+
+\includegraphics[width=\linewidth]{figures/mapindic_cluster.png}
+
+}
+
+\sframe{Correlations with urban area properties}{
+
+\centering
+
+\includegraphics[trim={4cm 0 0 0},width=0.48\linewidth]{figures/correlations_deltavars-morpho_2015.png}\includegraphics[trim={4cm 0 0 0},width=0.48\linewidth]{figures/correlations_vars-morpho_2015.png}
 
 }
 
 
 
-\section{Co-evolution model}
+
+\section{Model calibration}
+
+\sframe{Calibration method}{
+ % setup, error
+ 
+
+ 
+\begin{itemize}
+	\item For a time period $\left[t_0,t_f\right]$, model initialized with population at $t_0$
+	\item Growth rate $N_G$ is computed by constraining with actual population growth: $N_G \textrm{ = } \left(P_i\left(t_f\right) - P_i \left(t_0\right)\right) / T$ where $T$ is a calibration parameter
+	\item Fitness functions: squared relative population error and squared relative morphological indicator error
+	\item Biobjective genetic algorithm (NSGA2) run for each areas ($\sim 600$ areas large enough) and each time windows (1000 generations, population of 100), on parameters $\alpha, \beta, T$
+\end{itemize}
+
+ 
+}
 
 
-\sframe{Including more complex processes ?}{
+\sframe{Implementation}{
 
-% transition : representation of territories
+% openmole slide
 
-\textit{Which ontology to include more complex functional properties ?}
+% The computational cost being high, results are obtained by using the OpenMOLE model exploration software \citep{reuillon2013openmole}, which provides in a transparent way the optimization algorithms and the distribution of calibrations on a computation grid.
+
+
+%\footnotesize
+\justify
+
+\textit{Performance constraints: large number of calibration algorithms to be run}
 
 \medskip
 
-$\rightarrow$ Territorial systems as the strong coupling between territories and (potential and realized) networks \cite{dupuy1987vers}.
+$\rightarrow$ model implemented in \texttt{scala} and integrated within the \texttt{spatialdata} library for spatial sensitivity analysis (including implementations of
+
+\cite{raimbault2018indirect} \cite{raimbault2018calibration} \cite{favaro2011gibrat} \cite{cottineau2015modular})
+
+See \url{https://github.com/openmole/spatialdata}
 
 \medskip
 
-$\rightarrow$ Networks convey functional notions of centralities and accessibility, among others; have furthermore proper topological properties.
+$\rightarrow$ integration into the OpenMOLE model exploration open source software \cite{reuillon2013openmole}
+
+\begin{center}
+\includegraphics[height=0.13\textheight]{figures/iconOM.png}
+\includegraphics[height=0.13\textheight]{figures/openmole.png}
+\end{center}
+
+%(X year of computation for the results presented here)
+
+\footnotesize
+\textit{Enables seamlessly (i) model embedding; (ii) access to HPC resources; (iii) exploration and optimization algorithms}
+
+\medskip
+
+%\textbf{Come to the satellite \textit{New Methods and Epistemologies to Explore Simulation Models} tomorrow afternoon in LHN-TR+05}
+
+\textbf{Apply for the OpenMOLE summer school before January 15th}
+
+\url{https://exmodelo.org/}
+
+}
+
+\sframe{Examples of results}{
+
+% pareto fronts for two different areas
+
+\begin{center}
+
+\includegraphics[width=0.49\textwidth]{figures/pareto_indics-relpop_1_coloralpha.png}
+\includegraphics[width=0.49\textwidth]{figures/pareto_indics-relpop_100_coloralpha.png}
+
+\end{center}
+
+\textit{Different performance on indicator fit and forms of Pareto fronts}
+
+}
+
+
+\sframe{Adjusted parameters}{
+
+% maps : alpha, beta, tstep
+
+% We obtain therein comparable values for aggregation, diffusion and growth speed parameters on all these areas for the three periods given above. 
+ 
+ \centering
+ 
+\includegraphics[height=0.43\textheight]{figures/mapparam_meanalpha_2015.png}
+\includegraphics[height=0.43\textheight]{figures/mapparam_meanbeta_2015.png}
+
+ 
+}
+
+
+\sframe{Trajectories in phase diagrams}{
+
+% These values can be used for short terms projections, but also high-level policies by situating urban areas in the model phase diagrams and for example comparing them to more or less close phase transition parameter values.
+
+\begin{center}
+
+\includegraphics[height=0.49\textheight]{figures/phasediag_largestcities_moran_tsteps50.png}\includegraphics[height=0.49\textheight]{figures/phasediag_largestcities_slope_tsteps50.png}
+
+\end{center}
+
+\textit{Urban areas trajectories can be projected into model phase diagrams}
+
+}
+
+
+\sframe{Correlations}{
+
+% We also illustrate possible policy applications by relating estimated parameters to the EDGAR greenhouse gases emission database.
+
+\begin{center}
+
+\includegraphics[width=0.49\textwidth]{figures/deltavar-params_2000.png}
+\includegraphics[width=0.49\textwidth]{figures/deltavar-params_2015.png}
+
+\end{center}
+
+\textit{Slight significant correlations with growth rates of GHG emissions: more aggregation correlates with decreasing emissions e.g.}
 
 
 }
+
 
 
 
@@ -309,28 +436,48 @@ $\rightarrow$ Networks convey functional notions of centralities and accessibili
 
 \sframe{Discussion}{
 
+%  This work thus shows how simple models can be useful for global comparisons, which are necessary to contextualize territorial policies.
+
+
+% \textit{Which ontology to include more complex functional properties ?}
+%$\rightarrow$ Territorial systems as the strong coupling between territories and (potential and realized) networks \cite{dupuy1987vers}.
+%$\rightarrow$ Networks convey functional notions of centralities and accessibility, among others; have furthermore proper topological properties.
+
+
+
 \justify
 
 \vspace{-1cm}
 
 \textbf{Implications}
 
-$\rightarrow$ This rather simple model reproduces most of existing urban forms in Europe for both population distribution and road network : which intrinsic dimension to the urban system and its morphological aspect ?
+\smallskip
 
-$\rightarrow$ Ability to reproduce static correlations and a variety of dynamical lagged correlation regimes suggests that the model captures some of the processes of co-evolution
+$\rightarrow$ This rather simple model can effectively be calibrated on worldwide urban areas and provide comparable growth parameters
 
-% implications for morphogenesis ?
+\medskip
+
+$\rightarrow$ Link between urban form, urban dynamics and sustainability properties
+
 
 \bigskip
 
 \textbf{Developments}
 
+\smallskip
 
-$\rightarrow$ Towards a dynamical calibration ? Need of dynamical data
+$\rightarrow$ Benchmark with other simple models (e.g. \cite{li2019singularity} presented yesterday)
+
+\medskip
+
+$\rightarrow$ Coupling with macro-scale model for system of cities \cite{raimbault:halshs-02351722}
+
+
+\medskip
 
 $\rightarrow$ Investigate the link between spatial non-stationarity and non-ergodicity through simulation by the model
 
-$\rightarrow$ Compare network generation in a ``fair'' way (correcting for additional parameters, open question for models of simulation)
+%$\rightarrow$ Compare network generation in a ``fair'' way (correcting for additional parameters, open question for models of simulation)
 
 
 }
@@ -343,9 +490,13 @@ $\rightarrow$ Compare network generation in a ``fair'' way (correcting for addit
 
 \justify
 
-\textbf{More realistic models?}
+Within the same stream of modeling (complementary to more classical approaches to land-use change):
 
 \medskip
+
+\textbf{More realistic models?}
+
+\smallskip
 
 $\rightarrow$ Introducing more concrete ontologies, economic processes \\
 \cite{bonin2014modelisation}, qualitative differentiation \cite{bonin2012modele}, governance processes \cite{le2015modeling}
@@ -359,13 +510,10 @@ $\rightarrow$ Possible bridges with Land-use change models/Land-use Transport mo
 
 \textbf{More data-driven models?}
 
-\medskip
+\smallskip
 
-$\rightarrow$ Work in progress: calibration of the reaction-diffusion model on world urban areas with the Global Human Settlements Layer database
 
-\medskip
-
-$\rightarrow$ Link with sustainability indicators: GHG emissions, economics, etc. \cite{raimbault2019multi}
+$\rightarrow$ More systematic link with sustainability indicators: GHG emissions, economics, etc. \cite{raimbault2019multi}
 
 \medskip
 
@@ -383,21 +531,30 @@ $\rightarrow$ Study models on hybrid synthetic data \cite{raimbault2018space}: s
 
 \justify
 
-$\rightarrow$ A novel model of urban morphogenesis at the mesoscopic scale systematically explored: \textbf{need for more coupling and comparison of models.}
+$\rightarrow$ A simple model of urban morphogenesis at the mesoscopic scale systematically calibrated: \textbf{need for more benchmarking and comparison of models.}
 
-\medskip
+\smallskip
 
 $\rightarrow$ At the macro scale of the system of cities? \textbf{Need for multi-scale models.}
 
-\medskip
+\smallskip
 
 $\rightarrow$ With more refined urban characteristics and other dimensions ? \textbf{Need for more interdisciplinarity.}
 
 \bigskip
 \bigskip
+
+\textbf{Use and contribute to OpenMOLE: } \url{https://github.com/openmole}
+
 \bigskip
 
-\footnotesize{ - Code, data and results available at\\ \texttt{https://github.com/JusteRaimbault/CityNetwork}\\
+\textbf{Apply to the summer school: } \url{https://exmodelo.org/}
+
+
+\bigskip
+\bigskip
+
+\footnotesize{ - Code, data and results available at \texttt{https://github.com/JusteRaimbault/UrbanGrowth}\\
 - Acknowledgments: Thanks to the \textit{European Grid Infrastructure} and its \textit{National Grid Initiatives} (\textit{France-Grilles} in particular) to give the technical support and the infrastructure.
 
 }
@@ -416,6 +573,55 @@ $\rightarrow$ With more refined urban characteristics and other dimensions ? \te
 \Large
 
 \textbf{Reserve Slides}
+
+}
+
+
+
+\sframe{Generating Population Distributions}{
+
+
+% examples : fig 2 of paper
+
+\centering
+
+\includegraphics[height=0.8\textheight]{figures/density_Fig2}
+
+\footnotesize\textit{Examples of generated territorial shapes}
+
+}
+
+
+\sframe{Path-dependence and frozen accidents}{
+
+\centering
+
+\includegraphics[width=0.8\textwidth]{figures/density_Fig4}
+
+\footnotesize\textit{Illustration of path-dependence in a simplified one-dimensional version of the model: cell trajectories in time for 9 independent repetitions from the same initial configuration.}
+
+
+}
+
+
+
+
+\sframe{Empirical Data (moving window)}{
+
+
+\begin{columns}
+\column{0.6\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/density_indics_morpho_discrquantiles}
+\column{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/density_cluster_pca_k5_morpho}\\
+\includegraphics[width=\textwidth]{figures/density_cluster_map_k5_morpho}
+\end{columns}
+
+\justify
+
+\footnotesize\textit{Computation of morphological indicators on population density data for Europe (shown here on France), morphological classification.}
 
 }
 
@@ -453,29 +659,6 @@ The one-dimensional model verifies the PDE :
 
 
 
-\sframe{Morphological indicators}{
-
-\begin{enumerate}
-\item Rank-size slope $\gamma$, given by $\ln \left( P_{\tilde{i}}/P_0\right) \sim k \textrm{ + } \gamma\cdot \ln \left(\tilde{i}/i_0\right)$ where $\tilde{i}$ are the indexes of the distribution sorted in decreasing order.
-\item Entropy of the distribution:
-\begin{equation}
-\mathcal{E} \textrm{ = } \sum_{i=1}^{M}\frac{P_i}{P}\cdot \ln{\frac{P_i}{P}}
-\end{equation}
-$\mathcal{E}\textrm{ = }0$ means that all the population is in one cell whereas $\mathcal{E}\textrm{ = }0$ means that the population is uniformly distributed.
-\item Spatial-autocorrelation given by Moran index, with simple spatial weights given by $w_{ij} \textrm{ = } 1/d_{ij}$
-\[
-I \textrm{ = } M \cdot \frac{\sum_{i\neq j} w_{ij} \left(P_i - \bar{P}\right)\cdot\left(P_j - \bar{P}\right)}{\sum_{i\neq j} w_{ij} \sum_{i}{\left( P_i - \bar{P}\right)}^2}
-\]
-\item Mean distance between individuals
-\[
-\bar{d} \textrm{ = } \frac{1}{d_M}\cdot \sum_{i<j} \frac{P_i P_j}{P^2} \cdot d_{ij}
-\]
-where $d_M$ is a normalisation constant
-\end{enumerate}
-
-
-
-}
 
 
 \sframe{Model behavior : Convergence}{
@@ -523,6 +706,58 @@ $\rightarrow$ Classification using repeated k-means ; number of clusters taken a
 \includegraphics[width=0.65\textwidth]{figures/density_scatter}
 
 }
+
+
+
+
+\sframe{Model Targeted Exploration}{
+
+\centering
+
+\includegraphics[width=0.8\textwidth]{figures/density_Fig6}
+
+\footnotesize\textit{Potentialities of targeted model explorations: here feasible space using Pattern Space Exploration algorithm \cite{10.1371/journal.pone.0138212}.}
+
+}
+
+
+
+
+\sframe{Defining Morphogenesis}{
+
+% precise notions and defs
+
+\justify
+
+\textit{Proposition of an interdisciplinary definition}
+
+\bigskip
+
+
+
+
+\textbf{Meta-epistemological framework of imbricated notions:}
+
+Self-organization $\supsetneq$ Morphogenesis $\supsetneq$ Autopoiesis $\supsetneq$ Life
+
+
+\bigskip
+
+\textbf{Properties:}
+
+\begin{itemize}
+\item Architecture links form and function
+\item Emergence strength~\cite{bedau2002downward} increases with notion depth, as bifurcations~\cite{thom1974stabilite}
+\end{itemize}
+
+\bigskip
+
+\textbf{Definition of Morphogenesis :} \textit{Emergence of the form and the function in a strongly coupled manner, producing an emergent architecture \cite{doursat2012morphogenetic}}
+
+
+
+}
+
 
 
 
