@@ -7,3 +7,6 @@
 [submodule "Models/UrbanGrowth-model"]
 	path = Models/UrbanGrowth-model
 	url = git@github.com:JusteRaimbault/UrbanGrowth-model.git
+[submodule "Docs/Papers/EvolutionaryTheory/paper"]
+	path = Docs/Papers/EvolutionaryTheory/paper
+	url = git@github.com:JusteRaimbault/EvolutionaryTheory-paper.git
