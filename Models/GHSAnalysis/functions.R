@@ -73,14 +73,14 @@ simpleScaling <- function(areasdata,
   if(withPlot){
     
     g=ggplot(pops,aes(x=ranks,y=pops,color=region,linetype=year,shape=year,group=interaction(region,year)))
-    g+stat_smooth(method = 'lm',se = F)+geom_point(alpha=0.5)+scale_x_log10()+scale_y_log10()+
+    g+stat_smooth(method = 'lm',se = F)+geom_point(alpha=0.5)+scale_x_log10(labels = scales::scientific)+scale_y_log10(labels = scales::scientific)+
       scale_color_discrete(name='Region')+scale_linetype_discrete(name='Year')+scale_shape_discrete(name='Year')+
       xlab('Rank')+ylab('Population')+stdtheme
     ggsave(file=paste0(figresdir,'SimpleScaling/RankSize-fitted_',regionnames,'_years-',allyears,'.png'),width=25,height=22,units='cm')
     
     # also rank size plot without fitted
     g=ggplot(pops,aes(x=ranks,y=pops,color=region,linetype=year,shape=year,group=interaction(region,year)))
-    g+geom_line(size=0.7)+geom_point(alpha=0.5)+scale_x_log10()+scale_y_log10()+
+    g+geom_line(size=0.7)+geom_point(alpha=0.5)+scale_x_log10(labels = scales::scientific)+scale_y_log10(labels = scales::scientific)+
       scale_color_discrete(name='Region')+scale_linetype_discrete(name='Year')+scale_shape_discrete(name='Year')+
       xlab('Rank')+ylab('Population')+stdtheme
     ggsave(file=paste0(figresdir,'SimpleScaling/RankSize_',regionnames,'_years-',allyears,'.png'),width=25,height=22,units='cm')
