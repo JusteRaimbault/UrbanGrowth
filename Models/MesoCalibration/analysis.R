@@ -59,7 +59,7 @@ areasmorph = left_join(areasmorph,morphos,by=c('areaid'='areaid'))
 # better with outliers
 morphos = morphos[morphos$alpha1975>-4&morphos$alpha1990>-4&morphos$alpha2000>-4&morphos$alpha2015>-4,]
 
-timedf <- as_temporal_df(morphos,indics)
+timedf <- as_temporal_df(morphos,indics,years)
 
 classifindics = c('moran','avgDist','entropy','alpha')
 classdata = data.frame(id=morphos$areaid)
@@ -138,7 +138,7 @@ for(indic in indics){for(year in years){
 
 
 # clusters map
-areasmorphfilt = areasmorph[!apply(areasmorph[,names(morphosall)],1,function(r){length(which(is.na(r)))>0})&areasmorph$alpha1975>-4&areasmorph$alpha1990>-4&areasmorph$alpha2000>-4&areasmorph$alpha2015>-4,]
+areasmorphfilt = areasmorph[!apply(areasmorph[,names(morphos)],1,function(r){length(which(is.na(r)))>0})&areasmorph$alpha1975>-4&areasmorph$alpha1990>-4&areasmorph$alpha2000>-4&areasmorph$alpha2015>-4,]
 for(classindic in names(classdata)){
   currentd = classdata[[classindic]];names(currentd)<-classdata$id
   areasmorphfilt[[paste0("class",classindic)]] = currentd[areasmorphfilt$areaid]
@@ -146,7 +146,7 @@ for(classindic in names(classdata)){
 areasmorphfilt$classcluster=as.character(areasmorphfilt$classcluster)
 
 map(
-  areasmorphfilt,
+  areasmorphfilt[!is.na(areasmorphfilt$classcluster),],
   'classcluster',
   "totalPop2015",
   paste0(resdir,'mapindic_cluster.png'),

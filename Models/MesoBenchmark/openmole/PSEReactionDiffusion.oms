@@ -1,0 +1,58 @@
+logger.level("FINE")
+
+val beta = Val[Double]
+val diffusionSteps = Val[Double]
+val alpha = Val[Double]
+val growthRate = Val[Double]
+val population = Val[Double]
+val width = Val[Double]
+val hwRatio = Val[Double]
+val replication = Val[Long]
+
+val moran=Val[Double]
+val distance=Val[Double]
+val entropy=Val[Double]
+val slope=Val[Double]
+
+// Model
+val model =
+  ScalaTask(
+    """
+      |val (moran,distance,entropy,slope) = ReactionDiffusionModel(input.width,input.hwRatio*input.width,input.alpha,input.beta,input.diffusionSteps,input.population,input.growthRate,input.replication).runModel
+    """.stripMargin
+  ) set (
+    plugins += pluginsOf[org.openmole.spatialdata.application.mesobench.ReactionDiffusionModel],
+    (inputs,outputs) += (diffusion,diffusionSteps,alpha,growthRate,population,width,hwRatio,replication),
+    outputs += (moran,distance,entropy,slope)
+  )
+
+val purpose = "TEST_PSE_REACTIONDIFFUSION"
+//val purpose = "PSE_REACTIONDIFFUSION"
+
+val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
+
+val grid = EGIEnvironment("vo.complex-systems.eu")
+
+PSEEvolution(
+  evaluation = model,//(model on grid),
+  parallelism = 5,//200,
+  termination = 100,
+  genome = Seq(
+    beta in (0.0, 0.5),
+    alpha in (0.01,4.0),
+    growthRate in (10000.0,125000.0),
+    population in (250000.0,60000000.0),
+    diffusionSteps in (1.0,5.0),
+    width in (20.0,250.0),
+    hwRatio in (0.3,3.0)
+  ),
+  objective = Seq(
+    moran in (-1.0 to 1.0 by 0.05),
+    distance in (0.0 to 2.0 by 0.05),
+    entropy in (0.0 to 1.0 by 0.05),
+    slope in (-4.0 to 0.0 by 0.05)
+  ),
+  stochastic = Stochastic(seed = replication)//,
+  //distribution = Island(10 minutes)
+) hook (workDirectory / "pse" / resdir)//,
+  //frequency = 100)

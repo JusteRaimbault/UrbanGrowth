@@ -72,8 +72,10 @@
 %
 % % % % % % % % % % % % % % % % % % % % % % % %
 
-\documentclass[10pt,letterpaper]{article}
-\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+%\documentclass[10pt,letterpaper]{article}
+%\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+\documentclass[10pt]{article}
+%\usepackage[margin=2cm]{geometry}
 
 % amsmath and amssymb packages, useful for mathematical formulas and symbols
 \usepackage{amsmath,amssymb}
@@ -129,10 +131,10 @@
 %\doublespacing
 
 % Text layout
-\raggedright
-\setlength{\parindent}{0.5cm}
-\textwidth 5.25in 
-\textheight 8.75in
+%\raggedright
+%\setlength{\parindent}{0.5cm}
+%\textwidth 5.25in 
+%\textheight 8.75in
 
 % Bold the 'Figure #' in the caption and separate it from the title/caption with a period
 % Captions will be left justified
@@ -153,16 +155,16 @@
 \usepackage{lastpage,fancyhdr,graphicx}
 \usepackage{epstopdf}
 %\pagestyle{myheadings}
-\pagestyle{fancy}
-\fancyhf{}
-%\setlength{\headheight}{27.023pt}
-%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
-\rfoot{\thepage/\pageref{LastPage}}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
-\fancyheadoffset[L]{2.25in}
-\fancyfootoffset[L]{2.25in}
-\lfoot{\today}
+%\pagestyle{fancy}
+%\fancyhf{}
+%%\setlength{\headheight}{27.023pt}
+%%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+%\rfoot{\thepage/\pageref{LastPage}}
+%\renewcommand{\headrulewidth}{0pt}
+%\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+%\fancyheadoffset[L]{2.25in}
+%\fancyfootoffset[L]{2.25in}
+%\lfoot{\today}
 
 %% Include all macros below
 
@@ -172,76 +174,69 @@
 %% END MACROS SECTION
 
 
-\begin{document}
-\vspace*{0.2in}
+%\begin{document}
+%\vspace*{0.2in}
 
 % Title must be 250 characters or less.
-\begin{flushleft}
-{\Large
-\textbf\newline{A comparison of simple models for urban morphogenesis} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
-}
-\newline
+%\begin{flushleft}
+%\begin{center}
+%{\Large
+%\textbf\newline{A comparison of simple models for urban morphogenesis} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
+%}
+%\newline
 % Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
-\\
+%\\
+\title{A comparison of simple models for urban morphogenesis}
+\date{}
+
+\author{
 Juste Raimbault\textsuperscript{1,2,3,*}
+\bigskip\\
+\textsuperscript{1} Center for Advanced Spatial Analysis, University College London
 \\
-\bigskip
-\textbf{1} Center for Advanced Spatial Analysis, University College London, London, United Kingdom
+\textsuperscript{2} UPS CNRS 3611 ISC-PIF
 \\
-\textbf{2} UPS CNRS 3611 ISC-PIF, CNRS, Paris, France
-\\
-\textbf{3} UMR CNRS 8504 G{\'e}ographie-cit{\'e}s, Universit{\'e} Paris Diderot, Paris, France
-\\
-\bigskip
-
-% Insert additional author notes using the symbols described below. Insert symbol callouts after author names as necessary.
-% 
-% Remove or comment out the author notes below if they aren't used.
-%
-% Primary Equal Contribution Note
-%\Yinyang These authors contributed equally to this work.
-
-% Additional Equal Contribution Note
-% Also use this double-dagger symbol for special authorship notes, such as senior authorship.
-%\ddag These authors also contributed equally to this work.
-
-% Current address notes
-%\textcurrency Current Address: Dept/Program/Center, Institution Name, City, State, Country % change symbol to "\textcurrency a" if more than one current address note
-% \textcurrency b Insert second current address 
-% \textcurrency c Insert third current address
-
-% Deceased author note
-%\dag Deceased
-
-% Group/Consortium Author Note
-%\textpilcrow Membership list can be found in the Acknowledgments section.
-
-% Use the asterisk to denote corresponding authorship and provide email address in note below.
+\textsuperscript{3} UMR CNRS 8504 G{\'e}ographie-cit{\'e}s
+\bigskip\\
 * juste.raimbault@polytechnique.edu
+}
 
-\end{flushleft}
+\begin{document}
+
+\maketitle
+
+%\end{flushleft}
+%\end{center}
 % Please keep the abstract below 300 words
-\section*{Abstract}
+%\section*{Abstract}
+\vspace{1cm}
+\begin{abstract}
 The spatial distribution of population and activities within urban areas, or urban form at the mesoscopic scale, is the outcome of multiple antagonist processes. We propose in this paper to benchmark different models of urban morphogenesis, to systematically compare the urban forms they can produce. Different types of approaches are included, such as a reaction-diffusion model, a gravity-based model, and correlated percolation. Applying a diversity search algorithm, we estimate the feasible space of each model within a space of urban form indicators, in comparison of empirical values for worldwide urban areas. We find a complementarity of the different types of processes, advocating for a plurality of urban models.
+\end{abstract}
 
 
 
-
-\linenumbers
+%\linenumbers
 
 \section*{Introduction}
 
 % urban form and sustainability - urban form at the mesoscopic scale
 
+Understanding the dynamics of cities is an increasing issue for sustainability, since the proportion of the world population expected to live in cities will grow to a large majority in the next decades, and that cities combine both positive and negative externalities on most aspects. Their complexity implies that quantitative and qualitative predictions are not relevant, but planners can \emph{invent future cities} \cite{batty2018inventing}, what requires though a knowledge of key urban processes which can be acted upon. In that context, the growth of \emph{urban form} in its different definition and scales, is essential \cite{williams2000achieving}. Considering urban form at a mesoscopic scale, i.e. roughly the scale of urban areas, it can be understood as the spatial distribution of activities. More particularly the distribution of population density has a strong impact on commuting, energy consumption and emissions \cite{le2012urban}. Being able to link microscopic processes with the growth of different types of urban form is thus important for a long term planning of sustainable urban systems.
 
 % broad overview of approaches: CA, LUTI. why study simple models (include studied models)
+
+Urban modeling at the mesoscopic scale is the subject of diverse approaches and disciplines. Intra-urban urban economic models, building on works such as the Alonso-Mills-Muth model or the Fujita-Ogawa model
+Transportation and Urban Planning also have a long history in urban dynamics models, including Land-use transport interaction models \cite{wegener2004land}
+Spatial interaction models can also be used in a similar manner \cite{milton2019accelerating}
+At the interface of physics, artificial life and quantitative geography, a few approaches propose simple models to explain the growth of urban form. Although such models 
 
 \cite{10.1371/journal.pone.0203516}
 
 \cite{li2019singularity}
 
 
-% urban multi-modeling/multidimensionality: importance of plurality of views
+% urban multi-modeling/multidimensionality: importance of plurality of views: why benchmark
 
 
 % research question / contributions
@@ -278,8 +273,7 @@ The method to generate a spatial field exhibiting long range correlations was in
 
 \subsubsection*{Kernel mixtures}
 
-Finally, to provide some kind of null model to understand the advantages of each approach compared to a simple description of population distribution, we also include urban forms generated as kernel mixtures.
-\cite{anas1998urban}
+Finally, to provide some kind of null model to understand the advantages of each approach compared to a simple description of population distribution, we also include urban forms generated as kernel mixtures. We consider in particular exponential mixtures \cite{anas1998urban}, written as
 
 
 
@@ -289,10 +283,9 @@ Finally, to provide some kind of null model to understand the advantages of each
 
 \subsection*{Measures of urban form}
 
+% already computed for dynamical calib for world urban areas -> use same measures. todo future work: benchmark measures world areas: landscape eco, etc.
 
-
-\subsection*{Empirical data}
-
+Quantitative measures of urban form
 
 
 
@@ -301,8 +294,34 @@ Finally, to provide some kind of null model to understand the advantages of each
 
 \section*{Results}
 
-\subsection*{Behavior of models}
 
+\subsection*{Implementation}
+
+The models are implemented in \texttt{scala} and integrated into the \texttt{spatialdata} library for spatial sensitivity analysis \cite{raimbault2020scala}. The library is bundled as an OpenMOLE plugin for the numerical experiments. OpenMOLE is an open source software for model exploration and validation \cite{reuillon2013openmole} combining model embedding with state-of-the-art exploration methods (including for example sensitivity analysis, design of experiments, calibration with genetic algorithms) and a transparent distribution of computations on high performance computing environments. In our case, we use its workflow system and an integrated algorithm to determine the feasible space of models.
+
+
+\subsection*{Empirical data}
+
+
+
+%%%%%%%%%%%%%%
+\begin{figure}[!h]
+	\includegraphics[width=\linewidth]{figures/Fig1.png}
+	\caption{{\bf .}\label{fig:fig1}}
+\end{figure}
+%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%
+\begin{figure}[!h]
+	\includegraphics[width=\linewidth]{figures/Fig2.png}
+	\caption{{\bf .}\label{fig:fig1}}
+\end{figure}
+%%%%%%%%%%%%%%
+
+
+%\subsection*{Behavior of models}
+% also saltelli?
 
 \subsection*{Feasible morphological spaces}
 
@@ -311,8 +330,13 @@ Finally, to provide some kind of null model to understand the advantages of each
 
 \section*{Discussion}
 
+% results, implications
 
 
+% future dev
+
+% dynamical calib
+\cite{raimbault:halshs-02406539}
 
 \section*{Conclusion}
 
