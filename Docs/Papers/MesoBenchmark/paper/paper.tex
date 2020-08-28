@@ -226,23 +226,23 @@ Understanding the dynamics of cities is an increasing issue for sustainability, 
 
 % broad overview of approaches: CA, LUTI. why study simple models (include studied models)
 
-Urban modeling at the mesoscopic scale is the subject of diverse approaches and disciplines. Intra-urban urban economic models, building on works such as the Alonso-Mills-Muth model or the Fujita-Ogawa model
-Transportation and Urban Planning also have a long history in urban dynamics models, including Land-use transport interaction models \cite{wegener2004land}
-Spatial interaction models can also be used in a similar manner \cite{milton2019accelerating}
-At the interface of physics, artificial life and quantitative geography, a few approaches propose simple models to explain the growth of urban form. Although such models 
+Urban modeling at the mesoscopic scale is the subject of diverse approaches and disciplines. Intra-urban urban economic models, building on classic works such as the Alonso-Mills-Muth model or the Fujita-Ogawa model, propose models linking land-use with land and building markets, which are spatially explicit to different degrees \cite{viguie2012trade}. Transportation and Urban Planning also have a long history in urban dynamics models, including Land-use transport interaction models \cite{wegener2004land}. Spatial interaction models can also be used in a similar manner to study urban dynamics and as a by-product urban form \cite{milton2019accelerating}. Cellular automata models of urban growth are also a privileged approach to study the growth of urban form from a data-driven perspective \cite{batty1997cellular}.
 
-\cite{10.1371/journal.pone.0203516}
-
-\cite{li2019singularity}
-
+At the interface of physics, artificial life and quantitative geography, a few approaches propose simple models to explain the growth of urban form, and generally rely on an unidimensional description of urban form, namely the distribution of population or of the built environment. In that context, the correlated percolation model introduced by \cite{makse1998modeling} was a precursor. Such models can rely on abstract physical processes but also on agent behavior, such as in the Sugarscape model which according to \cite{batty2007cities} can be considered as a model for human settlements. \cite{murcio2015urban} use migration between cities at multiple scales to simulate urban growth. Diffusion-limited aggregation (DLA) is an other approach transferred from physics to urban modeling \cite{batty1989urban} and has shown relevant to reproduce fractal urban structures and urban migration processes \cite{murcio2009colored}. \cite{murcio2013second} combines DLA with percolation to obtain more realistic urban forms. Closer to the idea of urban morphogenesis, \cite{10.1371/journal.pone.0203516} proposes a reaction-diffusion model to capture fundamental urban growth processes. \cite{li2019singularity} describes an urban growth model based on geographical processes, namely an aggregation of population driven by spatial interaction. All these works have in common to model urban growth in synthetic settings, at a mesoscopic scale, considering population distribution only, and in a stylized way. They furthermore consider diverse processes, remaining simple in their structure although they lead to the emergence of a complex behavior. We will in this paper focus on such models, referring to them as \emph{models of urban morphogenesis}.
 
 % urban multi-modeling/multidimensionality: importance of plurality of views: why benchmark
+
+Exhibiting models with a few number of parameters and processes is useful from an explanative viewpoint, when these can reproduce real world configurations. Having multiple concurrent models which include diverse, complementary or contradictory processes, is furthermore useful for the construction of integrated urban theories, since concurrent explanations can be benchmarked, compared and possibly integrated into multi-modeling approaches. This plurality in urban modeling is intrinsic to a literature with multiple disciplines focusing on a same object of study \cite{pumain2020conclusion}.
 
 
 % research question / contributions
 
+We propose thus in this paper to benchmark several simple models of urban morphogenesis, in order to understand the potentialities of some of these models to exhibit a complex behavior and reproduce existing urban forms, and compare them in a systematic way. More precisely, our contributions are as follows: (i) we integrate four different models (correlated percolation, reaction-diffusion, gravity and exponential mixture) into a single software framework; (ii) we compute measures of urban form for urban areas worldwide; (iii) we apply a novelty search algorithm to the models in order to determine their feasible morphological space, and compare these to real urban form values. This contributes to a general understanding of the complementarity of urban models, more particularly for urban morphogenesis at this scale.
+
 
 % organization
+
+The rest of this paper is organized as follows:
 
 
 
