@@ -30,17 +30,18 @@ val purpose = "PSE_REACTIONDIFFUSION"
 
 val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
 
-val grid = EGIEnvironment("vo.complex-systems.eu")
+//val env = EGIEnvironment("vo.complex-systems.eu")
+val env = LocalEnvironment(10)
 
 PSEEvolution(
-  evaluation = (model on grid),
-  parallelism = 200,
-  termination = 20000,
+  evaluation = model,
+  parallelism = 10,
+  termination = 50000,
   genome = Seq(
     beta in (0.0, 0.5),
     alpha in (0.01,5.0),
     //growthRate in (10000.0,125000.0),population in (250000.0,60000000.0), // taking real population values does not bring anything as morphological indicator are invariant through rescaling
-    growthRate in (500.0,5000.0),population in (10000.0,100000.0),
+    growthRate in (1000.0,10000.0),population in (10000.0,100000.0),
     diffusionSteps in (1.0,5.0),
     width in (50.0,100.0),
     hwRatio in (0.5,2.0)
@@ -51,6 +52,6 @@ PSEEvolution(
     entropy in (0.0 to 1.0 by 0.05),
     slope in (-4.0 to 0.0 by 0.05)
   ),
-  stochastic = Stochastic(seed = replication),
-  distribution = Island(15 minutes)
-) hook (workDirectory / "pse" / resdir,frequency = 1000)
+  stochastic = Stochastic(seed = replication)//,
+  //distribution = Island(15 minutes)
+) on env hook (workDirectory / "pse" / resdir,frequency = 1000)

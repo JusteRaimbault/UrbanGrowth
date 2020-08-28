@@ -28,11 +28,12 @@ val purpose = "PSE_EXPMIXTURE"
 
 val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
 
-val grid = EGIEnvironment("vo.complex-systems.eu")
+//val env = EGIEnvironment("vo.complex-systems.eu")
+val env = LocalEnvironment(10)
 
 PSEEvolution(
   evaluation =  model,
-  parallelism = 200,
+  parallelism = 10,
   termination = 20000,
   genome = Seq(
     centers in (1.0, 100.0),
@@ -47,6 +48,6 @@ PSEEvolution(
     entropy in (0.0 to 1.0 by 0.05),
     slope in (-4.0 to 0.0 by 0.05)
   ),
-  stochastic = Stochastic(seed = replication),
-  distribution = Island(15 minutes)
-) on grid hook (workDirectory / "pse" / resdir , frequency = 1000)
+  stochastic = Stochastic(seed = replication)//,
+  //distribution = Island(15 minutes)
+) on env hook (workDirectory / "pse" / resdir , frequency = 1000)
