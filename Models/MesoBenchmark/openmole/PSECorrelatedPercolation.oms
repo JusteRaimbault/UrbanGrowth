@@ -34,13 +34,13 @@ val env = LocalEnvironment(10)
 PSEEvolution(
   evaluation = model,
   parallelism = 10,//200,
-  termination = 50000,
+  termination = 100000,
   genome = Seq(
     correlationRange in (0.01,4.0),
     centers in (1.0, 10.0),
     maxKernelRadiusRate in (0.01,1.0),
     centersPopulationScaling in (0.01,4.0),
-    width in (50.0,100.0)
+    width in (50.0,200.0)
   ),
   objective = Seq(
     moran in (-1.0 to 1.0 by 0.05),

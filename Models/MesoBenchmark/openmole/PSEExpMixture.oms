@@ -34,7 +34,7 @@ val env = LocalEnvironment(10)
 PSEEvolution(
   evaluation =  model,
   parallelism = 10,
-  termination = 20000,
+  termination = 100000,
   genome = Seq(
     centers in (1.0, 100.0),
     hierarchy in (0.01,5.0),

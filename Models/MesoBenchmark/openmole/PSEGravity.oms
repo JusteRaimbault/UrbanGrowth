@@ -17,7 +17,7 @@ val model =
   ScalaTask(
     """
       |import org.openmole.spatialdata.application.mesobench._
-      |val (moran,distance,entropy,slope) = GravityModel(input.width,input.hwRatio*input.width,,input.replication).runModel
+      |val (moran,distance,entropy,slope) = GravityModel(input.width,input.hwRatio*input.width,input.growthRate,input.gravity,input.populationHierarchy,input.nCenters,input.totalPopulation,input.replication).runModel
     """.stripMargin
   ) set (
     plugins += pluginsOf[org.openmole.spatialdata.application.mesobench.GravityModel],
@@ -42,7 +42,9 @@ PSEEvolution(
     gravity in (0.0,2.0),
     populationHierarchy in (0.0,2.0),
     nCenters in (1.0,20.0),
-    totalPopulation in (1000.0,10000.0)
+    totalPopulation in (1000.0,10000.0),
+    width in (50.0,100.0),
+    hwRatio in (0.5,2.0)
   ),
   objective = Seq(
     moran in (-1.0 to 1.0 by 0.05),
