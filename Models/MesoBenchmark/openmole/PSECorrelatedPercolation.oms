@@ -1,0 +1,53 @@
+val width = Val[Double]
+val correlationRange = Val[Double]
+val centers = Val[Double]
+val maxKernelRadiusRate = Val[Double]
+val centersPopulationScaling = Val[Double]
+val replication = Val[Long]
+
+val moran=Val[Double]
+val distance=Val[Double]
+val entropy=Val[Double]
+val slope=Val[Double]
+
+// Model
+val model =
+  ScalaTask(
+    """
+      |import org.openmole.spatialdata.application.mesobench._
+      |val (moran,distance,entropy,slope) = CorrelatedPercolationModel(input.width,input.correlationRange,input.centers,input.maxKernelRadiusRate*input.width,input.centersPopulationScaling,input.replication).runModel
+    """.stripMargin
+  ) set (
+    plugins += pluginsOf[org.openmole.spatialdata.application.mesobench.CorrelatedPercolationModel],
+    (inputs,outputs) += (width,correlationRange,centers,maxKernelRadiusRate,centersPopulationScaling,replication),
+    outputs += (moran,distance,entropy,slope)
+  )
+
+//val purpose = "TEST_PSE_CORRELATEDPERCO"
+val purpose = "PSE_CORRELATEDPERCO"
+
+val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
+
+//val env = EGIEnvironment("vo.complex-systems.eu")
+val env = LocalEnvironment(10)
+
+PSEEvolution(
+  evaluation = model,
+  parallelism = 10,//200,
+  termination = 50000,
+  genome = Seq(
+    correlationRange in (0.01,4.0),
+    centers in (1.0, 10.0),
+    maxKernelRadiusRate in (0.01,1.0),
+    centersPopulationScaling in (0.01,4.0),
+    width in (50.0,100.0)
+  ),
+  objective = Seq(
+    moran in (-1.0 to 1.0 by 0.05),
+    distance in (0.0 to 2.0 by 0.05),
+    entropy in (0.0 to 1.0 by 0.05),
+    slope in (-4.0 to 0.0 by 0.05)
+  ),
+  stochastic = Stochastic(seed = replication)//,
+  //distribution = Island(15 minutes)
+) on env hook (workDirectory / "pse" / resdir,frequency = 1000)
