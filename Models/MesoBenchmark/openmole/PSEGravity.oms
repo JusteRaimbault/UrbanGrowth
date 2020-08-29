@@ -1,8 +1,10 @@
 val width = Val[Double]
-val correlationRange = Val[Double]
-val centers = Val[Double]
-val maxKernelRadiusRate = Val[Double]
-val centersPopulationScaling = Val[Double]
+val hwRatio = Val[Double]
+val growthRate = Val[Double]
+val gravity = Val[Double]
+val populationHierarchy = Val[Double]
+val nCenters = Val[Double]
+val totalPopulation = Val[Double]
 val replication = Val[Long]
 
 val moran=Val[Double]
@@ -15,16 +17,16 @@ val model =
   ScalaTask(
     """
       |import org.openmole.spatialdata.application.mesobench._
-      |val (moran,distance,entropy,slope) = CorrelatedPercolationModel(input.width,input.correlationRange,input.centers,input.maxKernelRadiusRate*input.width,input.centersPopulationScaling,input.replication).runModel
+      |val (moran,distance,entropy,slope) = GravityModel(input.width,input.hwRatio*input.width,,input.replication).runModel
     """.stripMargin
   ) set (
-    plugins += pluginsOf[org.openmole.spatialdata.application.mesobench.CorrelatedPercolationModel],
-    (inputs,outputs) += (width,correlationRange,centers,maxKernelRadiusRate,centersPopulationScaling,replication),
+    plugins += pluginsOf[org.openmole.spatialdata.application.mesobench.GravityModel],
+    (inputs,outputs) += (width,hwRatio,growthRate,gravity,populationHierarchy,nCenters,totalPopulation,replication),
     outputs += (moran,distance,entropy,slope)
   )
 
-//val purpose = "TEST_PSE_CORRELATEDPERCO"
-val purpose = "PSE_CORRELATEDPERCO"
+//val purpose = "TEST_PSE_GRAVITY"
+val purpose = "PSE_GRAVITY"
 
 val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
 
@@ -33,14 +35,14 @@ val env = LocalEnvironment(10)
 
 PSEEvolution(
   evaluation = model,
-  parallelism = 10,//200,
-  termination = 50000,
+  parallelism = 10,
+  termination = 100000,
   genome = Seq(
-    correlationRange in (0.01,4.0),
-    centers in (1.0, 10.0),
-    maxKernelRadiusRate in (0.01,1.0),
-    centersPopulationScaling in (0.01,4.0),
-    width in (50.0,100.0)
+    growthRate in (0.5,1.0),
+    gravity in (0.0,2.0),
+    populationHierarchy in (0.0,2.0),
+    nCenters in (1.0,20.0),
+    totalPopulation in (1000.0,10000.0)
   ),
   objective = Seq(
     moran in (-1.0 to 1.0 by 0.05),
