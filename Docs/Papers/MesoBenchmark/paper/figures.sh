@@ -1,7 +1,7 @@
 
 JPGQUALITY=50
 PDFRESOLUTION=200
-WIDTH=2000
+WIDTH=1000
 HORIZONTALPADDING=10
 VERTICALPADDING=10
 
@@ -16,3 +16,6 @@ montage figuresraw/CorrelatedPerco_size200_gradient002_corr04_centers3_nonBinary
 
 # Fig 4
 cp figuresraw/scatter_all.png figures/Fig4.png
+
+# Fig 5
+cp figuresraw/overlap.png figures/Fig5.png

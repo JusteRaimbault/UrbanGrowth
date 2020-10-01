@@ -49,6 +49,7 @@ ggsave(plot = ggpairs(res[res$slope>-4,],aes(color=model),columns = indics,
 # for hypervolume intersection: https://rdrr.io/cran/hypervolume/man/hypervolume_set.html
 
 library(hypervolume)
+library(reshape2)
 
 models = c(names(files),'real')
 res=res[res$slope>-4,]
@@ -67,16 +68,19 @@ for(model1 in 1:length(models)){
   for (model2 in 1:length(models)){
     if(model1!=model2){
       show(paste0(models[model1],' / ',models[model2]))
-      hvset = hypervolume_set(hvs[[models[model1]]],hvs[[models[model2]]],check.memory=FALSE)
+      hvset = hypervolume_set(hvs[[models[model1]]],hvs[[models[model2]]],check.memory=FALSE,num.points.max=100000)
       overlaps[model1,model2] = hvset@HVList$Intersection@Volume / hvs[[models[model2]]]@Volume
     }
   }
 }
 rownames(overlaps)<-models
 colnames(overlaps)<-models
+diag(overlaps)=NA
+save(overlaps,hvs,file='hvs.RData')
 
-melt(overlaps)
-
+g=ggplot(melt(overlaps),aes(x=Var1,y=Var2,fill=value))
+g+geom_raster()+xlab('')+ylab('')+scale_fill_continuous(name='Overlap')+stdtheme
+ggsave(file=paste0(resdir,'overlap.png'),width=30,height=26,units='cm')
 
 
 
