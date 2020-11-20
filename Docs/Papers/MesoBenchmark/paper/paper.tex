@@ -72,9 +72,9 @@
 %
 % % % % % % % % % % % % % % % % % % % % % % % %
 
-%\documentclass[10pt,letterpaper]{article}
-%\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
-\documentclass[10pt]{article}
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+%\documentclass[10pt]{article}
 %\usepackage[margin=2cm]{geometry}
 
 % amsmath and amssymb packages, useful for mathematical formulas and symbols
@@ -127,14 +127,14 @@
 
 
 % Remove comment for double spacing
-%\usepackage{setspace} 
-%\doublespacing
+\usepackage{setspace} 
+\doublespacing
 
 % Text layout
-%\raggedright
-%\setlength{\parindent}{0.5cm}
-%\textwidth 5.25in 
-%\textheight 8.75in
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
 
 % Bold the 'Figure #' in the caption and separate it from the title/caption with a period
 % Captions will be left justified
@@ -154,17 +154,17 @@
 % Header and Footer with logo
 \usepackage{lastpage,fancyhdr,graphicx}
 \usepackage{epstopdf}
-%\pagestyle{myheadings}
-%\pagestyle{fancy}
-%\fancyhf{}
-%%\setlength{\headheight}{27.023pt}
-%%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
-%\rfoot{\thepage/\pageref{LastPage}}
-%\renewcommand{\headrulewidth}{0pt}
-%\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
-%\fancyheadoffset[L]{2.25in}
-%\fancyfootoffset[L]{2.25in}
-%\lfoot{\today}
+\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{27.023pt}
+%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\today}
 
 %% Include all macros below
 
@@ -174,22 +174,17 @@
 %% END MACROS SECTION
 
 
-%\begin{document}
-%\vspace*{0.2in}
+\begin{document}
+\vspace*{0.2in}
 
 % Title must be 250 characters or less.
-%\begin{flushleft}
-%\begin{center}
-%{\Large
-%\textbf\newline{A comparison of simple models for urban morphogenesis} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
-%}
-%\newline
+\begin{flushleft}
+{\Large
+\textbf\newline{A comparison of simple models for urban morphogenesis} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
+}
+\newline
 % Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
-%\\
-\title{A comparison of simple models for urban morphogenesis}
-\date{}
-
-\author{
+\\
 Juste Raimbault\textsuperscript{1,2,3,*}
 \bigskip\\
 \textsuperscript{1} Center for Advanced Spatial Analysis, University College London
@@ -199,25 +194,22 @@ Juste Raimbault\textsuperscript{1,2,3,*}
 \textsuperscript{3} UMR CNRS 8504 G{\'e}ographie-cit{\'e}s
 \bigskip\\
 * juste.raimbault@polytechnique.edu
-}
 
-\begin{document}
 
-\maketitle
 
-%\end{flushleft}
-%\end{center}
+\end{flushleft}
+
 % Please keep the abstract below 300 words
-%\section*{Abstract}
+\section*{Abstract}
 \vspace{1cm}
-\begin{abstract}
-The spatial distribution of population and activities within urban areas, or urban form at the mesoscopic scale, is the outcome of multiple antagonist processes. We propose in this paper to benchmark different models of urban morphogenesis, to systematically compare the urban forms they can produce. Different types of approaches are included, such as a reaction-diffusion model, a gravity-based model, and correlated percolation. Applying a diversity search algorithm, we estimate the feasible space of each model within a space of urban form indicators, in comparison of empirical values for worldwide urban areas. We find a complementarity of the different types of processes, advocating for a plurality of urban models.
-\end{abstract}
+The spatial distribution of population and activities within urban areas, or urban form at the mesoscopic scale, is the outcome of multiple antagonist processes. We propose in this paper to benchmark different models of urban morphogenesis, to systematically compare the urban forms they can produce. Different types of approaches are included, such as a reaction-diffusion model, a gravity-based model, and correlated percolation. Applying a diversity search algorithm, we estimate the feasible space of each model within a space of urban form indicators, in comparison of empirical values for worldwide urban areas. We find a complementarity of the different types of processes, advocating for a plurality of urban models.
+% urban morphogenesis; reaction-diffusion; correlated percolation; gravity model; novelty search
 
 
+\linenumbers
 
-%\linenumbers
-
+
+\cite{jun2020modling} entropy and urban growth
 \section*{Introduction}
 
 % urban form and sustainability - urban form at the mesoscopic scale
@@ -253,28 +245,43 @@ The rest of this paper is organized as follows: we first describe the models ben
 
 \subsection*{Urban morphogenesis models}
 
-\subsubsection*{Gravity-based model}
+We study and compare four different models of urban morphogenesis. We consider a population grid of size $N = W\times H$ (not necessarily square), each cell being characterized by its population $P_i$ with $1\leq i \leq N$.
 
-Following the so-called ``first law of geography'', entities in space have interaction patterns which can be described with spatial interaction models, including the gravity model. \cite{li2019singularity}
+\subsubsection*{Gravity-based model}
 
 % modified: exponent for spatial interaction model; multiple seeds (polycentricity)
 
+Following the so-called ``first law of geography'', entities in space have interaction patterns which can be described with spatial interaction models \cite{fotheringham1989spatial}, including the gravity model. \cite{li2019singularity} proposed an urban growth model including this process within an iterative growth with population aggregation processes, extending a more simple model introduced by \cite{rybski2013distance}. We generalize this model by adding (i) a hierarchy parameter regarding population aggregation and (ii) seeding multiple initial sites to allow the emergence of polycentric urban forms.
+
+Formally, an initial grid is seeded with $P_0^{(G)}$ sites with population 1, randomly selected. Then, iteratively, one unit of population is added to each cell at each time step with a probability proportional to 
+\begin{equation}
+p_i \propto \frac{\sum_{j\neq i} P_j^{\gamma_P^{(G)}} \cdot d_{ij}^{- \gamma_D^{(G)}}}{\sum d_{ij}^{- \gamma_D^{(G)}}}
+\end{equation}
+
+where probabilities are rescaled such that the cell with the larger value has a probability of $g^{(G)}$. This last parameter allows modifying the speed of growth. The model is stopped when a total population $P_M^{(G)}$ is reached.
+
 \subsubsection*{Reaction-diffusion}
 
-\cite{10.1371/journal.pone.0203516}
-% modify: max density?
+% modify: max density? - NO
+
+In his attempt to understand embryogenesis, Alan Turing proposed to use chemical partial differential equations (PDEs) to model morphogenesis, introducing the nowadays famous reaction-diffusion equations \cite{turing1990chemical}. In such systems, chemical substances react together and diffuse in space, leading to the emergence of complex geometrical patterns. The concept of morphogenesis has been since well used in urban studies \cite{raimbault2018co}, but very few models have actually implemented reaction-diffusion equations, \cite{bonin2014modelisation} being a notable exception. \cite{10.1371/journal.pone.0203516} proposes to capture the fundamental processes of agglomeration economies (positive externalities) leading to aggregation and of congestion (negative externalities) leading to sprawl, as an ``aggregation-diffusion'' model of urban morphogenesis. The model yields indeed in certain limits reaction-diffusion PDEs. Formally, starting from an empty grid, $N^{(R)}$ units of population are added at each time step, and attributed independently to cells with a probability proportional to $P_i^{\alpha^{(R)}}$ (probabilities are rescaled to obtain a probability distribution over all cells). Population is then diffused in space $d^{(R)}$ times with a strength $\beta^{(R)}$. The model is stopped when a maximum population $P_M^{(R)}$ is reached.
+
 
 
 \subsubsection*{Correlated percolation}
 
-\cite{makse1998modeling}
+The first two models presented are iterative and can in theory be used dynamically. Other approaches, closer to procedural modeling \cite{parish2001procedural}, do not simulate the progressive growth of population. They can however capture processes at play in the growth of urban form. The correlated percolation model described by \cite{makse1998modeling} integrates for example clustering processes in cities. A method to generate a spatial field exhibiting long range correlations was introduced for problems in physics by \cite{makse1996method}. It is combined to a monocentric density profile in \cite{makse1998modeling} to produce urban forms. In practice, a correlated field $p_i$ is generated by (i) generating a random spatial field; (ii) compute its spatial Fourier transform; (iii) introduce a correlation by multiplying it with a spectral density function with a power-law exponent $\alpha^{(C)}$; (iv) retrieve a long-range correlated spatial field by taking the inverse Fourier transform. This field is combined to a density field $\rho_i$ to determine a binary value for the cell: it is populated if $p_i > \theta_i$ with $\rho_i = \int_{-\infty}^{\theta_i} d\mathbb{P}(p_i)$. We generalize the initial model by taking a polycentric density field with 
 
-The method to generate a spatial field exhibiting long range correlations was introduced for problems in physics by \cite{makse1996method}.
+\begin{equation}
+\rho_i (\vec{x}) = \sum_{j=1}^{n^{(C)}} \exp\left(\lVert\vec{x} - \vec{x}_j\rVert / r_j\right)
+\label{eq:kernelmixture}
+\end{equation}
+
+where the kernel centers are chosen at random and kernel sizes $r_j$ are taken such that kernel populations follow a rank-size law of hierarchy $\beta^{(C)}$ and the largest kernel has a fixed size $r_0^{(C)}$.
 
 \subsubsection*{Kernel mixtures}
 
-Finally, to provide some kind of null model to understand the advantages of each approach compared to a simple description of population distribution, we also include urban forms generated as kernel mixtures. We consider in particular exponential mixtures \cite{anas1998urban}, written as
-
+Finally, to provide some kind of null model to understand the advantages of each approach compared to a simple description of population distribution, we also include urban forms generated as kernel mixtures. We consider in particular exponential mixtures \cite{anas1998urban}, where population density is written as previously in Eq.~\ref{eq:kernelmixture}. Parameters for this model are the number of kernels $n^{(E)}$, the rank-size hierarchy $\alpha^{(E)}$, the size of the largest kernel $r_0^{E}$. Contrary to previous models in which total population had an influence by controlling the speed of growth, density can here be rescaled arbitrarily (morphological indicators used are not changed through rescaling, see below), and we set the maximal density for one kernel to one.
 
 
 % null model: white noise? (for robustness of indicators)
@@ -285,7 +292,7 @@ Finally, to provide some kind of null model to understand the advantages of each
 
 % already computed for dynamical calib for world urban areas -> use same measures. todo future work: benchmark measures world areas: landscape eco, etc.
 
-Quantitative measures of urban form
+Quantitative measures of urban form are multiple and depend on the scale considered \cite{zhang2005metrics}. \cite{raimbault2019generating} for example introduces measures for buildings at the district scale. The field of Landscape Ecology has its own metrics similar to urban form measures \cite{10.1371/journal.pone.0225734}. For the scale we consider and considering population distribution only, metrics of urban form have been proposed for example to quantify sprawl \cite{tsai2005quantifying}. These can be related to fractal approaches to urban form \cite{chen2011derivation}. The effective dimension when applied to real cities is reasonably low \cite{schwarz2010urban}, and a few complementary indicators can be used. We thus follow \cite{10.1371/journal.pone.0203516} and consider urban form measures which are: (i) Moran index to capture spatial autocorrelation and the existence of centers; (ii) average distance between individuals which captures a level of aggregation; (iii) distribution entropy (aspatial) to capture the uniformity of the distribution; and (iv) rank-size slope which captures the hierarchy of population distribution.
 
 
 
@@ -297,9 +304,9 @@ Quantitative measures of urban form
 
 \subsection*{Implementation}
 
-The models are implemented in \texttt{scala} and integrated into the \texttt{spatialdata} library for spatial sensitivity analysis \cite{raimbault2020scala}. The library is bundled as an OpenMOLE plugin for the numerical experiments. OpenMOLE is an open source software for model exploration and validation \cite{reuillon2013openmole} combining model embedding with state-of-the-art exploration methods (including for example sensitivity analysis, design of experiments, calibration with genetic algorithms) and a transparent distribution of computations on high performance computing environments. In our case, we use its workflow system and an integrated algorithm to determine the feasible space of models.
+The models are implemented in \texttt{scala} and integrated into the \texttt{spatialdata} library for spatial sensitivity analysis \cite{raimbault2020scala}. The library is bundled as an OpenMOLE plugin for the numerical experiments. OpenMOLE is an open source software for model exploration and validation \cite{reuillon2013openmole} combining model embedding with state-of-the-art exploration methods (including for example sensitivity analysis, design of experiments, calibration with genetic algorithms) and a transparent distribution of computations on high performance computing environments. In our case, we use its workflow system and an integrated algorithm to determine the feasible space of models. Source code for models is available in the open source code of the \texttt{spatialdata} library at \url{https://github.com/openmole/spatialdata}. Source code for numerical experiments, simulation data and results used in this paper are available on an open git repository at \url{https://github.com/JusteRaimbault/UrbanGrowth}. Full simulation data is available on the dataverse repository at \url{https://doi.org/10.7910/DVN/VVIEYO}.
 
-% TODO examples for each model
+
 
 \subsection*{Empirical data}
 
@@ -307,47 +314,109 @@ The models are implemented in \texttt{scala} and integrated into the \texttt{spa
 
 %%%%%%%%%%%%%%
 \begin{figure}[!h]
-	\includegraphics[width=\linewidth]{figures/Fig1.png}
-	\caption{{\bf .}\label{fig:fig1}}
+	%\includegraphics[width=\linewidth]{figures/Fig1.png}
+	\vspace{2cm}
+	\caption{{\bf Maps of urban morphology indicators for worldwide urban areas.} (Top) Rank-size hierarchy; (Bottom) Moran spatial autocorrelation index. Area of circles gives population.\label{fig:fig1}}
 \end{figure}
 %%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%
 \begin{figure}[!h]
-	\includegraphics[width=\linewidth]{figures/Fig2.png}
-	\caption{{\bf .}\label{fig:fig1}}
+	%\includegraphics[width=\linewidth]{figures/Fig2.png}
+	\vspace{2cm}
+	\caption{{\bf Urban form typology. Using an unsupervised k-means clustering algorithm, we find clusters among urban areas.} (Top) Map of cluster belonging; (Bottom) Statistical distribution of indicator values, within each cluster and in time for all dates in the GHSL dataset.\label{fig:fig2}}
 \end{figure}
 %%%%%%%%%%%%%%
+
+We compare model simulation results to urban form measures computed on worldwide urban areas. We use therefore the Global Human Settlement Layer database (GHSL), which provides an exhaustive worldwide population raster with a 1km resolution \cite{melchiorri2018unveiling}. \cite{Raimbault_2020} has shown the relevance of using this database for worldwide simulation models. It is available at four dates from 1975 onwards, but as not all models are dynamical we use the most recent population configuration only (2015). The database provides a layer of urban areas, within which we extract for the 1000 largest areas in terms of population a covering window ($\pm 25\%$ of extent on each side) from the population raster (note that some windows may be overlapping, as in the case of Hong-Kong which is separated from the main cluster of the Pearl River Delta mega-city region). Morphological indicators are computed on these extracted areas.
+
+We show in Fig.~\ref{fig:fig1} maps of indicators. More particularly, we map the rank-size hierarchy and Moran spatial autocorrelation which have meaningful geographical variations. Rank-size hierarchy will tell if the metropolitan area is strongly dominated by one center or if it more balanced. We retrieve the fact that in Europe, Paris and London are known for such a strong monocentricity, compared to cities in Germany for example. Similarly, mega-city regions in East Asia (Pearl River delta, Yangtze River delta, Beijing-Tianjin) are more polycentric and thus balanced than Wuhan or Seoul. Regarding spatial autocorrelation, we also observe a strong variation in East Asia (Tokyo compared to Chinese megacities for example), and within India (agglomerations in the Gange plain making a cluster of non-correlated, thus highly sprawled areas).
+
+The areas can be clustered following a non-supervised approach. We proceed to a k-means clustering on normalized indicator values, and find $k=4$ clusters as meaningful regarding the derivative of within-cluster variance. A map of cluster belonging and cluster profiles are shown in Fig.~\ref{fig:fig2}. We retrieve the variation within East Asia (Tokyo, Seoul and Shanghai being each in a different cluster) but less in Europe. The main cluster (light blue) corresponds to strongly monocentric urban areas. We see in density distributions of indicator values that clusters have clearly different profiles, which correspond to different typologies of urban morphology that the models try to approximate. For example, cluster 3 (light blue) and 1 (red) have the same level of hierarchy, but the latter has a much higher autocorrelation and entropy, and corresponds thus to more polycentric configurations.
+
 
 
 %\subsection*{Behavior of models}
 % also saltelli?
 
+
+
+
+%%%%%%%%%%%%%%
+\begin{figure}[!h]
+	%\includegraphics[width=\linewidth]{figures/Fig3.png}
+	\vspace{2cm}
+	\caption{{\bf Examples of generated urban forms for a square world of width $W = 50$.} From Left to Right and Top to Bottom: (i) Correlated percolation model for $r_0^{(C)} = 50$, $\alpha^{(C)} = 0.4$, $n^{(C)} = 3$; (ii) Exponential mixture model for $n^{(E)} = 10$, $r_0^{(E)} = 40$, $\alpha^{(E)} = 1$; (iii) Gravity model for $g^{(G)} = 0.3$, $\gamma_D^{(G)} = 2.5$, $\gamma_P^{(G)} = 0.5$, $P_0^{(G)} = 3$, $P_M^{(G)} = 20000$; (iv) Reaction-diffusion model for $\alpha^{(R)} = 0.8$, $\beta^{(R)} = 0.2$, $d^{(R)} = 1$, $N^{(R)} = 100$, $P_M^{(R)} = 5000$.\label{fig:fig3}}
+\end{figure}
+%%%%%%%%%%%%%%
+
+
+\subsection*{Generated urban forms}
+
+% examples for each model
+
+
+We show in Fig.~\ref{fig:fig3} examples of generated urban forms for each model included in this study. Visually, these urban form look rather different. To what extent they are statistically distant for the morphology indicators can only be determined by systematic experiments. The gravity and percolation results look similar, although at a slightly different scale. This particular configuration of the reaction-diffusion model corresponds more to a rural or peri-urban configuration, while the exponential mixture is fuzzy and would resemble a blurred polycentric urban configuration.
+
+
+
+%%%%%%%%%%%%%%
+\begin{figure}[!h]
+	%\includegraphics[width=\linewidth]{figures/Fig4.png}
+	\vspace{2cm}
+	\caption{{\bf Feasible morphological space for each simulation model.} The lower part of the plot matrix gives a scatterplot between each indicator. We also plot real urban areas in purple. The diagonal gives statistical distribution, while the correlation matrix is given in the upper part, conditionally to each model.\label{fig:fig4}}
+\end{figure}
+%%%%%%%%%%%%%%
+
 \subsection*{Feasible morphological spaces}
 
+We now turn to the main experiment of this paper: using a diversity search algorithm to determine the full feasible morphological space for each model. Therefore, we use the Pattern Space Exploration (PSE) algorithm \cite{cherel2015beyond} embedded in OpenMOLE. Diversity search was introduced in the field of artificial life as genetic algorithms with the aim to maximize diversity of the population \cite{lehman2008exploiting}. In the case of the PSE algorithm, a novelty criteria leads the search towards new regions of the indicator space, and results are stored in a hitmap. When running long enough, convergence in terms of number of solutions found is generally reached, and one can consider the final population as the feasible space of the model. We run here the algorithm up to 100,000 generations for each model, with grid of step 0.05 in the indicator space. Convergence was reached separately for each model.
+% equivalent in terms of Islands generation?
+% which spatialdata commit? 4ef6bc7c4e7887bb35138773ae87b158e6e9a19b
+% (replace plugin on myoml-27/08 16h52 + remove urbgrowth acc)
+% latest 36fb676ce20f1ca6586defb9f8a15ea2a366477b
+% (remove urbanevolution_2.12 29/04 15:03: pb compat) (remove saltelli exec - time ok)(remove zombiesbundle 31/08 9:55)
 
+We show in Fig~\ref{fig:fig4} a scatterplot of the final population in the morphological space. First of all, we observe that correlation are very different for each model (for example opposite value for gravity and reaction-diffusion between entropy and slope), confirming that the way urban form is produced is very different although the final form may be the same. Then, we observe that the point clouds slightly intersect but also have their own proper space that which no other model can reach. For example, in the entropy-slope space, the reaction-diffusion model is very flexible and covers a large part of space, while gravity is restricted to a small region and correlated percolation and exponential mixture exhibit much less variability with a strong correlation between the two dimensions. The models cover a similar region for the Moran-entropy space, but all fail to capture an important part of real points (in purple), corresponding to configurations with a high Moran index but a relatively low entropy. Models systematically associate a high moran with a high entropy. In other dimensions, real points are reasonably covered. Thus, we can conclude that (i) the different models are complementary in terms of urban forms produced and (ii) that a part of real configurations are approached by some of the models, but other can not be reproduced.
 
+%%%%%%%%%%%%%%
+\begin{figure}[!h]
+	%\begin{center}
+	%\includegraphics[width=0.6\linewidth]{figures/Fig5.png}
+	%\end{center}
+	\vspace{2cm}
+	\caption{{\bf Overlap between point cloud hypervolumes.}\label{fig:fig5}}
+\end{figure}
+%%%%%%%%%%%%%%
+
+To better quantify how each model are similar and how they approach real configurations, we compute the hypervolume (in the four dimensional indicator space) corresponding to each point cloud and the intersections between these hypervolumes. We use the \texttt{hypervolume} \texttt{R} package \cite{hypervolume} with a gaussian kernel density estimation with adaptable bandwidth. Then, we compute for each couple of model the ratio between the intersection of hypervolumes and the second model. The non-symmetric relative overlap matrix is plotted in Fig.~\ref{fig:fig5} (diagonal was removed for a better readability). We find that the closer model are the correlated percolation and reaction diffusion, with close to 50\% overlap. Then the gravity point cloud is mostly contained by reaction-diffusion and correlated percolation, but not the other way around. Thus models produce similar points in the parameter space, but most of their output cloud is original. Finally, we find regarding the proximity to real configurations that the best model is the exponential mixture. At the price of producing blurry urban forms, the flexibility therein is the best to approach the best existing configurations. Then comes the reaction-diffusion model, and the least flexible to approach real values is the correlated percolation model.
 
 \section*{Discussion}
 
+geodesign: uncertainty - compromises - no prediction models
+
 % results, implications
+
+We have shown that different simple urban morphogenesis models are strongly complementary in the morphological space, confirming that a complementarity of processes also leads to a complementarity in patterns produced. This result rejoins the results obtained by \cite{raimbault2018multi} in the case of transportation network generative models at a similar mesoscopic scale, the results of \cite{raimbault2019generating} for generating building configurations, and the results of \cite{raimbault2018systematic} in the case of dynamical models for systems of cities. Both found a complementarity of approach including different types of processes. We argue that this is further evidence of the multi-dimensionality of urban systems and for a necessity of a plurality of urban models to capture both diverse processes but also outcomes.
 
 
 % future dev
 
 % dynamical calib
-\cite{raimbault:halshs-02406539}
+
+This work is a first step towards a systematic benchmark of simple urban morphogenesis models. Future work should include the search for an explanation of the unreachable real urban configuration, and possibly alternative models approaching these. Other urban form indicators should also be tested. Finally, dynamical calibration of models remains an open question, investigated in the case of the reaction-diffusion model by \cite{raimbault:halshs-02406539}. An issue is that some models such as the correlated percolation model are not dynamical and should thus be adapted to be calibrated between successive points in time.
 
 \section*{Conclusion}
 
+We have implemented and systematically compared four very different simple models for urban morphogenesis, including reaction-diffusion, correlated percolation, exponential mixture and a gravitational aggregation model. We applied a diversity search algorithm to obtain the feasible morphological space. The results confirm a complementarity between the models and the relevance of a plurality in urban modeling approaches.
 
 
 %\section*{Supporting information}
 
 
 
-\section*{Acknowledgments}
+%\section*{Acknowledgments}
 
 
 
