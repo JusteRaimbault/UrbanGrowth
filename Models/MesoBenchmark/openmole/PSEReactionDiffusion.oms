@@ -26,17 +26,17 @@ val model =
   )
 
 //val purpose = "TEST_PSE_REACTIONDIFFUSION"
-val purpose = "PSE_REACTIONDIFFUSION"
+val purpose = "PSE_REACTIONDIFFUSION_GRID"
 
 val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
 
-//val env = EGIEnvironment("vo.complex-systems.eu")
-val env = LocalEnvironment(10)
+val env = EGIEnvironment("vo.complex-systems.eu")
+//val env = LocalEnvironment(10)
 
 PSEEvolution(
   evaluation = model,
-  parallelism = 10,
-  termination = 50000,
+  parallelism = 200,
+  termination = 10000,
   genome = Seq(
     beta in (0.0, 0.5),
     alpha in (0.01,5.0),
@@ -52,6 +52,6 @@ PSEEvolution(
     entropy in (0.0 to 1.0 by 0.05),
     slope in (-4.0 to 0.0 by 0.05)
   ),
-  stochastic = Stochastic(seed = replication)//,
-  //distribution = Island(15 minutes)
+  stochastic = Stochastic(seed = replication),
+  distribution = Island(15 minutes)
 ) on env hook (workDirectory / "pse" / resdir,frequency = 1000)
