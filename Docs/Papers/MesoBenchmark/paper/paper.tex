@@ -207,7 +207,9 @@ The spatial distribution of population and activities within urban areas, or urb
 
 
 \linenumbers
-
+
+
+\cite{jun2020modling} entropy and urban growth
 \section*{Introduction}
 
 % urban form and sustainability - urban form at the mesoscopic scale
@@ -302,7 +304,7 @@ Quantitative measures of urban form are multiple and depend on the scale conside
 
 \subsection*{Implementation}
 
-The models are implemented in \texttt{scala} and integrated into the \texttt{spatialdata} library for spatial sensitivity analysis \cite{raimbault2020scala}. The library is bundled as an OpenMOLE plugin for the numerical experiments. OpenMOLE is an open source software for model exploration and validation \cite{reuillon2013openmole} combining model embedding with state-of-the-art exploration methods (including for example sensitivity analysis, design of experiments, calibration with genetic algorithms) and a transparent distribution of computations on high performance computing environments. In our case, we use its workflow system and an integrated algorithm to determine the feasible space of models. Source code for models is available in the open source code of the \texttt{spatialdata} library at \url{https://github.com/openmole/spatialdata}. Source code for numerical experiments, simulation data and results used in this paper are available on an open git repository at \url{https://github.com/JusteRaimbault/UrbanGrowth}.
+The models are implemented in \texttt{scala} and integrated into the \texttt{spatialdata} library for spatial sensitivity analysis \cite{raimbault2020scala}. The library is bundled as an OpenMOLE plugin for the numerical experiments. OpenMOLE is an open source software for model exploration and validation \cite{reuillon2013openmole} combining model embedding with state-of-the-art exploration methods (including for example sensitivity analysis, design of experiments, calibration with genetic algorithms) and a transparent distribution of computations on high performance computing environments. In our case, we use its workflow system and an integrated algorithm to determine the feasible space of models. Source code for models is available in the open source code of the \texttt{spatialdata} library at \url{https://github.com/openmole/spatialdata}. Source code for numerical experiments, simulation data and results used in this paper are available on an open git repository at \url{https://github.com/JusteRaimbault/UrbanGrowth}. Full simulation data is available on the dataverse repository at \url{https://doi.org/10.7910/DVN/VVIEYO}.
 
 
 
@@ -370,6 +372,10 @@ We show in Fig.~\ref{fig:fig3} examples of generated urban forms for each model 
 \subsection*{Feasible morphological spaces}
 
 We now turn to the main experiment of this paper: using a diversity search algorithm to determine the full feasible morphological space for each model. Therefore, we use the Pattern Space Exploration (PSE) algorithm \cite{cherel2015beyond} embedded in OpenMOLE. Diversity search was introduced in the field of artificial life as genetic algorithms with the aim to maximize diversity of the population \cite{lehman2008exploiting}. In the case of the PSE algorithm, a novelty criteria leads the search towards new regions of the indicator space, and results are stored in a hitmap. When running long enough, convergence in terms of number of solutions found is generally reached, and one can consider the final population as the feasible space of the model. We run here the algorithm up to 100,000 generations for each model, with grid of step 0.05 in the indicator space. Convergence was reached separately for each model.
+% equivalent in terms of Islands generation?
+% which spatialdata commit? 4ef6bc7c4e7887bb35138773ae87b158e6e9a19b
+% (replace plugin on myoml-27/08 16h52 + remove urbgrowth acc)
+% latest 36fb676ce20f1ca6586defb9f8a15ea2a366477b
 
 We show in Fig~\ref{fig:fig4} a scatterplot of the final population in the morphological space. First of all, we observe that correlation are very different for each model (for example opposite value for gravity and reaction-diffusion between entropy and slope), confirming that the way urban form is produced is very different although the final form may be the same. Then, we observe that the point clouds slightly intersect but also have their own proper space that which no other model can reach. For example, in the entropy-slope space, the reaction-diffusion model is very flexible and covers a large part of space, while gravity is restricted to a small region and correlated percolation and exponential mixture exhibit much less variability with a strong correlation between the two dimensions. The models cover a similar region for the Moran-entropy space, but all fail to capture an important part of real points (in purple), corresponding to configurations with a high Moran index but a relatively low entropy. Models systematically associate a high moran with a high entropy. In other dimensions, real points are reasonably covered. Thus, we can conclude that (i) the different models are complementary in terms of urban forms produced and (ii) that a part of real configurations are approached by some of the models, but other can not be reproduced.
 
@@ -386,6 +392,8 @@ We show in Fig~\ref{fig:fig4} a scatterplot of the final population in the morph
 To better quantify how each model are similar and how they approach real configurations, we compute the hypervolume (in the four dimensional indicator space) corresponding to each point cloud and the intersections between these hypervolumes. We use the \texttt{hypervolume} \texttt{R} package \cite{hypervolume} with a gaussian kernel density estimation with adaptable bandwidth. Then, we compute for each couple of model the ratio between the intersection of hypervolumes and the second model. The non-symmetric relative overlap matrix is plotted in Fig.~\ref{fig:fig5} (diagonal was removed for a better readability). We find that the closer model are the correlated percolation and reaction diffusion, with close to 50\% overlap. Then the gravity point cloud is mostly contained by reaction-diffusion and correlated percolation, but not the other way around. Thus models produce similar points in the parameter space, but most of their output cloud is original. Finally, we find regarding the proximity to real configurations that the best model is the exponential mixture. At the price of producing blurry urban forms, the flexibility therein is the best to approach the best existing configurations. Then comes the reaction-diffusion model, and the least flexible to approach real values is the correlated percolation model.
 
 \section*{Discussion}
+
+geodesign: uncertainty - compromises - no prediction models
 
 % results, implications
 
