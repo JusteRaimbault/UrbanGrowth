@@ -9,14 +9,54 @@ source(paste0(Sys.getenv('CS_HOME'),'/Organisation/Models/Utils/R/plots.R'))
 
 resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/MesoBenchmark/')
 
-files = list(
-  'expmixture' = 'openmole/pse/20200829_1514_PSE_EXPMIXTURE_res/population100000.csv',
-  'reactiondiffusion' = 'openmole/pse/20200828_1624_PSE_REACTIONDIFFUSION_res/population50000.csv',
-  'correlatedperco' = 'openmole/pse/20200829_1330_PSE_CORRELATEDPERCO_res/population100000.csv',
-  'gravity' = 'openmole/pse/20200829_1526_PSE_GRAVITY_res/population37000.csv'
+resdirs = list(
+  'expmixture' = 'openmole/pse/20200829_1514_PSE_EXPMIXTURE_res',
+  'reactiondiffusion' = 'openmole/pse/20200828_1624_PSE_REACTIONDIFFUSION_res',
+  'correlatedperco' = 'openmole/pse/20201121_1802_PSE_CORRELATEDPERCO_GRID/',
+  'gravity' = 'openmole/pse/20200829_1526_PSE_GRAVITY_res'
 )
 
+gen<-function(filename){as.integer(sapply(strsplit(sapply(strsplit(filename,"population"),function(s){s[2]}),".csv"),function(s){s[1]}))}
+
+latestgen <- function(dir){
+  if(is.null(dir)){return(NULL)}
+  else{return(max(sapply(list.files(dir,pattern=".csv"),gen)))}
+}
+
 indics = c('moran','distance','entropy','slope')
+
+#####
+# Convergence
+
+allres = data.frame()
+for(model in names(resdirs)){
+  currentdir = resdirs[[model]]
+  currentfiles = paste0(currentdir,'/',list.files(currentdir,pattern = '.csv'))
+  for(currentfile in currentfiles){
+    currentres = as.tbl(read.csv(currentfile));currentgen=gen(currentfile)
+    allres = rbind(allres,cbind(currentres[,c(indics,'evolution.samples')],model=rep(model,nrow(currentres)),generation=rep(currentgen,nrow(currentres))))
+  }
+}
+
+sres = allres %>% group_by(model,generation) %>% summarise(patterns = n())
+
+g=ggplot(sres[sres$model=='correlatedperco',],aes(x=generation,y=patterns,color=model,group=model))
+g+geom_point()+geom_line()
+
+sres = allres[allres$evolution.samples>=10,] %>% group_by(model,generation) %>% summarise(patterns = n())
+
+g=ggplot(sres[sres$model=='correlatedperco',],aes(x=generation,y=patterns,color=model,group=model))
+g+geom_point()+geom_line()
+
+# for correlated perco: 20200829_1330_PSE_CORRELATEDPERCO has much more patterns but is not robust to stochasticity; 
+# 20201121_1802_PSE_CORRELATEDPERCO_GRID still increasing at gen 20000 for patterns with more than 10 samples
+# -> test with repetitions
+
+
+#####
+# PSE plots
+
+
 
 res = data.frame()
 for(model in names(files)){
@@ -45,7 +85,8 @@ ggsave(plot = ggpairs(res[res$slope>-4,],aes(color=model),columns = indics,
 
 
 
-####
+#####
+# Hypervolumes
 # for hypervolume intersection: https://rdrr.io/cran/hypervolume/man/hypervolume_set.html
 
 library(hypervolume)
