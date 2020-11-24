@@ -34,7 +34,7 @@ val env = EGIEnvironment("vo.complex-systems.eu")
 PSEEvolution(
   evaluation = model,
   parallelism = 200,
-  termination = 10000,
+  termination = 20000,
   genome = Seq(
     correlationRange in (0.01,4.0),
     centers in (1.0, 10.0),
