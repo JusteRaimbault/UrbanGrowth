@@ -1,0 +1,57 @@
+val width = Val[Double]
+val hwRatio = Val[Double]
+val growthRate = Val[Double]
+val gravity = Val[Double]
+val populationHierarchy = Val[Double]
+val nCenters = Val[Double]
+val totalPopulation = Val[Double]
+val replication = Val[Long]
+
+val moran=Val[Double]
+val distance=Val[Double]
+val entropy=Val[Double]
+val slope=Val[Double]
+
+// Model
+val model =
+  ScalaTask(
+    """
+      |import org.openmole.spatialdata.application.mesobench._
+      |val (moran,distance,entropy,slope) = GravityModel(input.width,input.hwRatio*input.width,input.growthRate,input.gravity,input.populationHierarchy,input.nCenters,input.totalPopulation,input.replication).runModel
+    """.stripMargin
+  ) set (
+    plugins += pluginsOf[org.openmole.spatialdata.application.mesobench.GravityModel],
+    (inputs,outputs) += (width,hwRatio,growthRate,gravity,populationHierarchy,nCenters,totalPopulation,replication),
+    outputs += (moran,distance,entropy,slope)
+  )
+
+//val purpose = "TEST_PSE_GRAVITY"
+val purpose = "PSE_GRAVITY_GRID"
+
+val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
+
+val env = EGIEnvironment("vo.complex-systems.eu")
+//val env = LocalEnvironment(10)
+
+PSEEvolution(
+  evaluation = model,
+  parallelism = 200,
+  termination = 20000,
+  genome = Seq(
+    growthRate in (0.5,1.0),
+    gravity in (0.0,2.0),
+    populationHierarchy in (0.0,2.0),
+    nCenters in (1.0,20.0),
+    totalPopulation in (1000.0,10000.0),
+    width in (50.0,100.0),
+    hwRatio in (0.5,2.0)
+  ),
+  objective = Seq(
+    moran in (-1.0 to 1.0 by 0.05),
+    distance in (0.0 to 2.0 by 0.05),
+    entropy in (0.0 to 1.0 by 0.05),
+    slope in (-4.0 to 0.0 by 0.05)
+  ),
+  stochastic = Stochastic(seed = replication),
+  distribution = Island(15 minutes)
+) on env hook (workDirectory / "pse" / resdir,frequency = 1000)

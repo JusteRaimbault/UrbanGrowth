@@ -12,9 +12,11 @@ resdir = paste0(Sys.getenv('CS_HOME'),'/UrbanGrowth/Results/MesoBenchmark/')
 resdirs = list(
   'expmixture' = 'openmole/pse/20200829_1514_PSE_EXPMIXTURE_res',
   'reactiondiffusion' = 'openmole/pse/20200828_1624_PSE_REACTIONDIFFUSION_res',
-  'correlatedperco' = 'openmole/pse/20201121_1802_PSE_CORRELATEDPERCO_GRID/',
+  'correlatedperco' = 'openmole/pse/20201124_1816_PSE_CORRELATEDPERCO_REPLICATIONS_GRID/',
   'gravity' = 'openmole/pse/20200829_1526_PSE_GRAVITY_res'
 )
+
+stochastic = FALSE
 
 gen<-function(filename){as.integer(sapply(strsplit(sapply(strsplit(filename,"population"),function(s){s[2]}),".csv"),function(s){s[1]}))}
 
@@ -34,7 +36,12 @@ for(model in names(resdirs)){
   currentfiles = paste0(currentdir,'/',list.files(currentdir,pattern = '.csv'))
   for(currentfile in currentfiles){
     currentres = as.tbl(read.csv(currentfile));currentgen=gen(currentfile)
-    allres = rbind(allres,cbind(currentres[,c(indics,'evolution.samples')],model=rep(model,nrow(currentres)),generation=rep(currentgen,nrow(currentres))))
+    # toggle for stochastic runs
+    if (stochastic){
+      allres = rbind(allres,cbind(currentres[,c(indics,'evolution.samples')],model=rep(model,nrow(currentres)),generation=rep(currentgen,nrow(currentres))))
+    }else{
+      allres = rbind(allres,cbind(currentres[,indics],model=rep(model,nrow(currentres)),generation=rep(currentgen,nrow(currentres))))
+    }
   }
 }
 
@@ -43,14 +50,15 @@ sres = allres %>% group_by(model,generation) %>% summarise(patterns = n())
 g=ggplot(sres[sres$model=='correlatedperco',],aes(x=generation,y=patterns,color=model,group=model))
 g+geom_point()+geom_line()
 
-sres = allres[allres$evolution.samples>=10,] %>% group_by(model,generation) %>% summarise(patterns = n())
-
-g=ggplot(sres[sres$model=='correlatedperco',],aes(x=generation,y=patterns,color=model,group=model))
-g+geom_point()+geom_line()
+if (stochastic){
+  sres = allres[allres$evolution.samples>=10,] %>% group_by(model,generation) %>% summarise(patterns = n())
+  g=ggplot(sres[sres$model=='correlatedperco',],aes(x=generation,y=patterns,color=model,group=model))
+  g+geom_point()+geom_line()
+}
 
 # for correlated perco: 20200829_1330_PSE_CORRELATEDPERCO has much more patterns but is not robust to stochasticity; 
 # 20201121_1802_PSE_CORRELATEDPERCO_GRID still increasing at gen 20000 for patterns with more than 10 samples
-# -> test with repetitions
+# -> test with repetitions - rq: does not have antecedent param in that case (but not used anyway)
 
 
 #####
@@ -59,10 +67,17 @@ g+geom_point()+geom_line()
 
 
 res = data.frame()
-for(model in names(files)){
-  currentres = as.tbl(read.csv(files[[model]]))
-  res = rbind(res,cbind(currentres[,c(indics,'evolution.samples')],model=rep(model,nrow(currentres))))
+for(model in names(resdirs)){
+  currentdir = resdirs[[model]];currentgen = latestgen(currentdir)
+  currentres = as.tbl(read.csv(paste0(currentdir,'/population',currentgen,'.csv')))
+  if (stochastic){
+    res = rbind(res,cbind(currentres[,c(indics,'evolution.samples')],model=rep(model,nrow(currentres))))
+  }else{
+    res = rbind(res,cbind(currentres[,indics],model=rep(model,nrow(currentres))))
+  }
 }
+
+#plot(res[res$model=='correlatedperco',indics])
 
 
 ggsave(plot = ggpairs(res[res$slope>-4,],aes(color=model),columns = indics,

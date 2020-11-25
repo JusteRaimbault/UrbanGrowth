@@ -390,6 +390,10 @@ We show in Fig~\ref{fig:fig4} a scatterplot of the final population in the morph
 \end{figure}
 %%%%%%%%%%%%%%
 
+
+Correlations/PCA for each model and for all points? (plus analysis in link to params? not possible in stoch? (does replication strain params? Y!)
+
+
 To better quantify how each model are similar and how they approach real configurations, we compute the hypervolume (in the four dimensional indicator space) corresponding to each point cloud and the intersections between these hypervolumes. We use the \texttt{hypervolume} \texttt{R} package \cite{hypervolume} with a gaussian kernel density estimation with adaptable bandwidth. Then, we compute for each couple of model the ratio between the intersection of hypervolumes and the second model. The non-symmetric relative overlap matrix is plotted in Fig.~\ref{fig:fig5} (diagonal was removed for a better readability). We find that the closer model are the correlated percolation and reaction diffusion, with close to 50\% overlap. Then the gravity point cloud is mostly contained by reaction-diffusion and correlated percolation, but not the other way around. Thus models produce similar points in the parameter space, but most of their output cloud is original. Finally, we find regarding the proximity to real configurations that the best model is the exponential mixture. At the price of producing blurry urban forms, the flexibility therein is the best to approach the best existing configurations. Then comes the reaction-diffusion model, and the least flexible to approach real values is the correlated percolation model.
 
 \section*{Discussion}
