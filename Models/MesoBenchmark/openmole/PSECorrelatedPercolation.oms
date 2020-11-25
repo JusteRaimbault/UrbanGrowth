@@ -23,11 +23,11 @@ val model =
     outputs += (moran,distance,entropy,slope)
   )
 
-val replication = Replication(
+val repli = Replication(
   evaluation = model,
   seed = replication,
   sample = 100,
-  aggregation = Seq(moran aggregate mean, distance aggregate mean, entropy aggregate mean, slope aggregate mean) // mean will be more noisy but will capture skewness/rare events more than median
+  aggregation = Seq(moran aggregate average, distance aggregate average, entropy aggregate average, slope aggregate average) // mean will be more noisy but will capture skewness/rare events more than median
 )
 
 //val purpose = "TEST_PSE_CORRELATEDPERCO"
@@ -39,7 +39,7 @@ val env = EGIEnvironment("vo.complex-systems.eu")
 //val env = LocalEnvironment(10)
 
 PSEEvolution(
-  evaluation = replication,
+  evaluation = repli,
   parallelism = 1000,
   termination = 100000,
   genome = Seq(
