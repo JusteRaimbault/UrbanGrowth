@@ -77,7 +77,7 @@ for(model in names(resdirs)){
   }
 }
 
-#plot(res[res$model=='correlatedperco',indics])
+#plot(res[res$model=='correlatedperco'&res$slope>-4,indics])
 
 
 ggsave(plot = ggpairs(res[res$slope>-4,],aes(color=model),columns = indics,
