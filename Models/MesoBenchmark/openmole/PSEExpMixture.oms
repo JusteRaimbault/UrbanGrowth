@@ -21,19 +21,28 @@ val model =
     plugins += pluginsOf[org.openmole.spatialdata.application.mesobench.ExpMixtureModel],
     (inputs,outputs) += (centers,hierarchy,maxRadiusRate,width,hwRatio,replication),
     outputs += (moran,distance,entropy,slope)
-  )
+)
+
+
+val repli = Replication(
+  evaluation = model,
+  seed = replication,
+  sample = 100,
+  aggregation = Seq(moran aggregate average, distance aggregate average, entropy aggregate average, slope aggregate average) // mean will be more noisy but will capture skewness/rare events more than median
+)
+
 
 //val purpose = "TEST_PSE_EXPMIXTURE"
-val purpose = "PSE_EXPMIXTURE"
+val purpose = "PSE_EXPMIXTURE_REPLICATIONS_GRID"
 
 val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
 
-//val env = EGIEnvironment("vo.complex-systems.eu")
-val env = LocalEnvironment(10)
+val env = EGIEnvironment("vo.complex-systems.eu")
+//val env = LocalEnvironment(10)
 
 PSEEvolution(
-  evaluation =  model,
-  parallelism = 10,
+  evaluation = repli,
+  parallelism = 1000,
   termination = 100000,
   genome = Seq(
     centers in (1.0, 100.0),
@@ -48,6 +57,6 @@ PSEEvolution(
     entropy in (0.0 to 1.0 by 0.05),
     slope in (-4.0 to 0.0 by 0.05)
   ),
-  stochastic = Stochastic(seed = replication)//,
-  //distribution = Island(15 minutes)
+  //stochastic = Stochastic(seed = replication)//,
+  distribution = Island(30 minutes)
 ) on env hook (workDirectory / "pse" / resdir , frequency = 1000)
