@@ -14,6 +14,8 @@ Paper for results presented in Juste Raimbault. A multi-scalar model for system 
 
 ### Calibration
 
+Models of Urban Sprawl calibrated on functional urban areas worldwide (special issue IJGI)
+
 Paper for results presented in Raimbault, J. (2019). Worldwide estimation of parameters for a simple reaction-diffusion model of urban growth (No. halshs-02406539). ILUS 2019, Paris.
 
 ### CityGrowth
