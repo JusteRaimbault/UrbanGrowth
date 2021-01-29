@@ -1,6 +1,19 @@
 
 
 
+## 2021/01/20
+
+(mail bib nature sust):
+idea: shrinking pop in macro models of urban systems: jnterplay between neg Gibrat but still pop attractivity? review eq to have effective migrations? // stoch models?
+
+https://www.nature.com/npjurbansustain/about/editors-perspective-world-cities-day
+
+
+
+## 2021/01/14
+
+10.1073/pnas.2011990118 : pnas urban-rural: // global multiscale model: macro/meso
+
 ## 2020/12/01
 
 crit reading of Growth eq for cities paper
