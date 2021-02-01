@@ -1,60 +1,83 @@
-\documentclass[11pt]{article}
+\documentclass[ijgi,article,submit,moreauthors,pdftex]{Definitions/mdpi} 
 
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage[margin=2cm]{geometry}
-\usepackage{multirow}
+%=================================================================
+\firstpage{1} 
+\makeatletter 
+\setcounter{page}{\@firstpage} 
+\makeatother
+\pubvolume{xx}
+\issuenum{x}
+\articlenumber{x}
+\pubyear{2020}
+\copyrightyear{2020}
+%\externaleditor{Academic Editor: name}
+\history{Received: date; Accepted: date; Published: date}
+%\updates{yes} % If there is an update available, un-comment this line
+%% MDPI internal command: uncomment if new journal that already uses continuous page numbers 
+%\continuouspages{yes}
+
+%=================================================================
+% Full title of the paper (Capitalized)
+\Title{Strong coupling between scales in a multi-scalar model of urban dynamics}
+
+% Author Orchid ID: enter ID or remove command
+\newcommand{\orcidauthorA}{0000-0003-0768-9480} % Add \orcidA{} behind the author's name
+%\newcommand{\orcidauthorB}{0000-0000-000-000X} % Add \orcidB{} behind the author's name
+
+% Authors, for the paper (add full first names)
+\Author{Juste Raimbault $^{1,2,3,*}$\orcidA{}}
+
+% Authors, for metadata in PDF
+\AuthorNames{Juste Raimbault}
+
+% Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
+\address{%
+$^{1}$ \quad CASA, University College London\\
+$^{2}$ \quad Institut des Syst{\`e}mes Complexes Paris-Ile-de-France, CNRS\\
+$^{3}$ \quad UMR G{\'e}ographie-cit{\'e}s, CNRS}
+
+% Contact information of the corresponding author
+\corres{Correspondence: juste.raimbault@polytechnique.edu}
+
+% Current address and/or shared authorship
+% \dagger,\ddagger
+%\firstnote{Current address: Affiliation 3} 
+%\secondnote{These authors contributed equally to this work.}
+% The commands \thirdnote{} till \eighthnote{} are available for further notes
+
+
+%Dear Editor,
+
+%I am pleased to submit an original research article entitled "Strong coupling between scales in a multi-scalar model of urban dynamics" for consideration for publication in IJGI. This article introduces a novel modeling study on the dynamics of multi-scalar urban systems, with a particular on feedbacks between scales. The subject is in my opinion furthermore particularly suited for the special issue "Spatio-Temporal Models and Geo-Technologies".
+
+%A preliminary version of the methodology and results were presented as a main track talk at the Conference on Complex Systems 2019. A preprint was submitted on arXiv at the same date of this submission (identifier not yet attributed).
+
+%I had no previous contact with journal editors regarding this manuscript. This manuscript has not been published and is not under consideration for publication elsewhere. I have no conflicts of interest to disclose. I do not have any opposed reviewer.
+
+%Thank you for your consideration.
+
+%Yours faithfully,
+
+%Juste Raimbault
+%University College London
 
 
 
-\title{Strong coupling between scales in a multi-scalar model of urban dynamics}
+
+\abstract{Urban evolution processes occur at different scales, with intricate interactions between levels and relatively distinct type of processes. To what extent actual urban dynamics include an actual strong coupling between scales, in the sense of both top-down and bottom-up feedbacks, remains an open issue with important practical implications for the sustainable management of territories. We introduce in this paper a multi-scalar simulation model of urban growth, coupling a system of cities interaction model at the macroscopic scale with morphogenesis models for the evolution of urban form at the scale of metropolitan areas. Strong coupling between scales is achieved through an update of model parameters at each scale depending on trajectories at the other scale. The model is applied and explored on synthetic systems of cities. Simulation results show a non-trivial effect of the strong coupling. As a consequence, an optimal action on policy parameters such as containing urban sprawl is shifted. We also run a multi-objective optimization algorithm on the model, showing showing that compromise between scales are captured. Our approach opens new research directions towards more operational urban dynamics models including a strong feedback between scales.}
+
+% Keywords
+\keyword{Urban dynamics; Systems of cities; Urban morphogenesis; Multi-scalar modeling; Strong coupling}
 
 
-\author{Juste Raimbault$^{1,2,3,\ast}$\medskip\\
-$^{1}$ Center for Advanced Spatial Analysis, University College London\\
-$^{2}$ UPS CNRS 3611 ISC-PIF\\
-$^{3}$ UMR CNRS 8504 G{\'e}ographie-cit{\'e}s\medskip\\
-$^{\ast}$ \texttt{juste.raimbault@polytechnique.edu}
-}
 
-\date{}
-
-
+%\setcounter{secnumdepth}{4}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-
-
-\maketitle
-
-
-\begin{abstract}
-	Urban evolution processes occur at different scales, with intricate interactions between levels and relatively distinct type of processes. To what extent actual urban dynamics include an actual strong coupling between scales, in the sense of both top-down and bottom-up feedbacks, remains an open issue with important practical implications for the sustainable management of territories. We introduce in this paper a multi-scalar simulation model of urban growth, coupling a system of cities interaction model at the macroscopic scale with morphogenesis models for the evolution of urban form at the scale of metropolitan areas. Strong coupling between scales is achieved through an update of model parameters at each scale depending on trajectories at the other scale. The model is applied and explored on synthetic systems of cities. Simulation results show a non-trivial effect of the strong coupling. As a consequence, an optimal action on policy parameters such as containing urban sprawl is shifted. We also run a multi-objective optimization algorithm on the model, showing showing that compromise between scales are captured. Our approach opens new research directions towards more operational urban dynamics models including a strong feedback between scales.
-	\medskip\\
-\textbf{Keywords: } Urban dynamics; Systems of cities; Urban morphogenesis; Multi-scalar modeling; Strong coupling
-\end{abstract}
-
-%  relevant target CEUS? https://www.elsevier.com/journals/computers-environment-and-urban-systems/0198-9715/guide-for-authors => special issue expired; IJGI 31/01:  https://www.mdpi.com/journal/ijgi/special_issues/spatio_temporal_models_geo
-
-% Systems of cities
-%Multi-scalar model
-%Spatial interaction
-%Reaction-diffusion
-
-% abstract CCS
-% 
-%The modeling of urban growth is a crucial issue for the design of sustainable territorial policies, through the understanding of past urbanization processes and the forecasting of future urban trajectories. Several models have been proposed at different scales and integrating differ- ent dimensions of urban systems, such as land-use transport interaction models [1] or systems of cities models [2]. While multi-scalar models are recognized as crucial for the study of such systems [3], they remain in practice unexplored.
-%This contribution introduces a parsimonious multi-scalar model for systems of cities, based on simple dimensions (mainly populations) with stylized processes, but yielding an effective strong coupling between the metropolitan mesoscopic scale and the macroscopic scale of the system of cities. The model couples the spatial interaction model of [4] for the macro scale with the reaction-diffusion model for urban form studied by [5]. More precisely, urban areas viewed as a population grid are embedded into the macroscopic interaction model. To evolve populations and local urban forms, one time step consists of (i) population differences are computed by the interaction model; (ii) top-down feedback modifies parameters of mesoscopic models, given control parameters to capture typical scenarios (transit-oriented development or sprawl for diffusion, metropolization or uniformization for aggregation); (iii) local urban form are evolved with the reaction-diffusion models at a given speed conditionally to the population variations; (iv) changes in urban form influence macroscopic interaction ranges (capturing the impact of local activity on global insertion), by integrating gravity flows in the area with a squared cost function making a compromise between congestion and flows.
-%The model is applied on synthetic systems of cities typical of a continental range (500km, hierarchy around 1, 20 cities), with initial local population grid configurations as monocen- tric. Parameter space is explored with the OpenMOLE model exploration software [6], eased by the implementation of the model in scala [7]. First results show a strong impact of the strong meso-macro coupling, such as for example a qualitative inversion of the behavior as a function of interaction range of macroscopic indicators trajectories when switching from a “transit-oriented development” scenario (negative feedback of population growth on diffusion) to a “sprawl” scenario (positive feedback). Similarly, mesoscopic urban form indicators are significantly influenced by the coupling process.
-%Further work will consist in more targeted simulation experiments, including specific ex- ploration algorithms such as diversity search for model regimes [6], to test the model as a proof-of-concept of models for policies. Such a model can also be calibrated on real city sys- tems and urban form trajectories, to extrapolate coupling parameters that would be difficult to obtain otherwise. Our contribution is thus a first step towards multi-scalar simulation models for systems of cities.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-% multilevel models : check https://scholar.google.fr/citations?user=x1BwVXoAAAAJ&hl=fr
-% + Morvan, G. (2014). Bibliographic database on multi-level and multi-scale agent-based modeling. Transportation Research Procedia, 2, 495-500.
-
-%\cite{louail2010comparer}
 
 \section{Introduction}
 
@@ -102,7 +125,7 @@ The main characteristic of our model is a strong coupling between the macroscopi
 
 To couple the scales, we assume that (i) macroscopic performance of a city will influence the choices made by planers in terms of land-use, and thus parameters of the morphogenesis mode locally - empirical evidence of such links have been suggested in the literature \cite{joy2015toronto} and we stylise them here; (ii) urban form influences the inner workings of a city through congestion and the fostering of exchanges between agents (individuals, firms), and finally the global insertion of the city - thus spatial interaction parameters are updated as a function of local urban form. This last link is the most discutable in terms of empirical evidence and implies many other dimensions than population only. We however work on a stylised explicative model which must keep a simple structure but on which a systematic knowledge of model behavior can be developed. We show in Fig.~\ref{fig:fig1} a schematic description of model structure.
 
-\begin{figure}
+\begin{figure}[H]
 %  figure: more details?
  \includegraphics[width=\linewidth]{figures/multiscale_morph.pdf}
  \caption{Schematic representation of model architecture. Urban areas with their own urban form are inserted into the macroscopic spatial interaction model, and strong coupling is achieved through top-down and bottom-up feedbacks.\label{fig:fig1}}
@@ -187,27 +210,7 @@ Mesoscopic grids population grids are evolved separately within each urban area,
 
 In terms of implementation, small population differences in the end between macroscopic and mesoscopic levels (due to rounding in computing the number of steps) is corrected by adjusting the macroscopic increments by the effective mesoscopic increments (which are assumed to be more precise).
 	
-	
-\begin{table}
-	\caption{Summary of model parameters\label{tab:parameters}}
-	\centering
-	\begin{tabular}{|c|c|c|c|}
-	\hline
-		Type & Parameter & Process & Range \\\hline
-		\multirow{4}{*}{Macro} & $g_i = g_0$ & Endogenous growth & $\left[0 ; 0.5\right]$ \\
-		& $w_i = w_G$ & Interactions weight & $\left[0 ; 0.1\right]$ \\
-		& $\gamma_i = \gamma_G$ & Interactions hierarchy & $\left[0 ; 5.0\right]$ \\
-		& $d_i$ & Interactions decay & $\left[0 ; 1000\right]$ \\ \hline
-		\multirow{4}{*}{Meso} & $\alpha_i$ & Aggregation & $\left[0 ; 5\right]$ \\
-		& $\beta_i$ & Diffusion & $\left[0 ; 0.5\right]$ \\
-		& $t_m$ & Urban growth speed & $\left[0 ; 20\right]$ \\
-		& $n_d$ & Diffusion & $\left[0 ; 5\right]$ \\ \hline
-		\multirow{4}{*}{Multiscale} & $\delta\alpha$ & Downward feedback & $\left[-0.5 ; 0.5\right]$ \\
-		& $\delta\beta$ & Downward feedback & $\left[-0.5 ; 0.5\right]$ \\
-		& $\delta d$ & Upward feedback & $\left[-0.5 ; 0.5\right]$ \\\hline
-		& $\lambda$ & Cost of congestion & $\left[0 ; 2\right]$ \\\hline
-	\end{tabular}
-\end{table}
+
 	
 
 \subsubsection{Bottom-up feedback}
@@ -236,7 +239,27 @@ where the multiplier parameter $\delta d$ allows controlling for the influence o
 
 The Table~\ref{tab:parameters} summarizes model parameters. For clarity, we do not include parameters linked to synthetic model setup, and distinguish them by the scale to which they are attached.
 
-
+	
+\begin{table}[H]
+	\caption{Summary of model parameters\label{tab:parameters}}
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+	\hline
+		Type & Parameter & Process & Range \\\hline
+		\multirow{4}{*}{Macro} & $g_i = g_0$ & Endogenous growth & $\left[0 ; 0.5\right]$ \\
+		& $w_i = w_G$ & Interactions weight & $\left[0 ; 0.1\right]$ \\
+		& $\gamma_i = \gamma_G$ & Interactions hierarchy & $\left[0 ; 5.0\right]$ \\
+		& $d_i$ & Interactions decay & $\left[0 ; 1000\right]$ \\ \hline
+		\multirow{4}{*}{Meso} & $\alpha_i$ & Aggregation & $\left[0 ; 5\right]$ \\
+		& $\beta_i$ & Diffusion & $\left[0 ; 0.5\right]$ \\
+		& $t_m$ & Urban growth speed & $\left[0 ; 20\right]$ \\
+		& $n_d$ & Diffusion & $\left[0 ; 5\right]$ \\ \hline
+		\multirow{4}{*}{Multiscale} & $\delta\alpha$ & Downward feedback & $\left[-0.5 ; 0.5\right]$ \\
+		& $\delta\beta$ & Downward feedback & $\left[-0.5 ; 0.5\right]$ \\
+		& $\delta d$ & Upward feedback & $\left[-0.5 ; 0.5\right]$ \\\hline
+		& $\lambda$ & Cost of congestion & $\left[0 ; 2\right]$ \\\hline
+	\end{tabular}
+\end{table}
 
 % ! provide nominal values
 
@@ -247,18 +270,9 @@ The system is initialized with synthetic systems of cities. A number $N=20$ citi
 The model is simulated for 20 macroscopic time steps (order of magnitude of half a century), each representing $t_m$ mesoscopic time steps (parameter changed in experiments).
 
 
-%%%
-% ! fig placement
 
-\begin{figure}[h!]
-	\includegraphics[width=\linewidth]{figures/allindics_hist.png}
-	\caption{Statistical distribution of indicators for a sample of 10 parameter values.\label{fig:fig2}}
-\end{figure}
 
-\begin{figure}[h!]
-	\includegraphics[width=\linewidth]{figures/onefactor_allindics_mesoMacroDecayUpdateMax_errorbars.png}
-	\caption{Variations of indicators as a function of $\delta d$, when all other parameters are fixed to their nominal value.\label{fig:fig3}}
-\end{figure}
+
 
 %%
 
@@ -279,6 +293,10 @@ Model implementation is done under some performance constraints: $N$ mesoscopic 
 \subsection{Statistical consistency}
 
 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{figures/allindics_hist.png}
+	\caption{Statistical distribution of indicators for a sample of 10 parameter values.\label{fig:fig2}}
+\end{figure}
 
 % one factor sampling
 %(min around 1 for 3 indicators, above 5 for 2 and around 0.5 for 2)}
@@ -289,28 +307,11 @@ Obtained statistical distribution are shown in Fig.~\ref{fig:fig2} for a sample 
 
 
 
-\begin{figure}[h!]
-	\includegraphics[width=\linewidth]{figures/deltaHierarchymacroPopulations-mesoTimeSteps_colorMacroInteractionDecay_facetmesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png}
-	\caption{Macroscopic hierarchy of populations as a function of mesoscopic time steps $t_m$, for different values of interaction decay $d_G$ (colour), and of feedback parameters $\delta d$ (columns) and $\delta \beta$ (rows).\label{fig:fig4}}
-\end{figure}
 
 
-\begin{figure}[h!]
-	\includegraphics[width=\linewidth]{figures/deltamesoMorans-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
-	\caption{Relative evolution of average mescoscopic Moran, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig5}}
-\end{figure}
 
-\begin{figure}[h!]
-	\includegraphics[width=\textwidth]{figures/deltamesoSlopes-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
-	\caption{Relative evolution of average mescoscopic population hierarchy, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig6}}
-\end{figure}
 
-\begin{figure}[h!]
-	\begin{center}
-	\includegraphics[width=0.6\linewidth]{figures/pareto_macroHierarchy-mesoHierarchy.png}
-	\end{center}
-	\caption{Pareto front obtained with a NSGA2 genetic algorithm, to minimize simultaneously hierarchy at the macroscopic and mesoscopic scales. Point size gives the number of stochastic samples and colour the value of $\delta \beta$.\label{fig:fig7}}
-\end{figure}
+
 
 
 \subsection{Grid exploration}
@@ -328,9 +329,25 @@ Obtained statistical distribution are shown in Fig.~\ref{fig:fig2} for a sample 
 We then turn to a grid exploration of the parameter space. %precise successive experiments, step values and varied parameters
 Results show an important role of the strong coupling between scales. This is shown for example by the variation of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion $\delta \beta$) to a ``sprawl'' scenario (positive feedback $\delta \beta$) as shown in Fig.~\ref{fig:fig4} below.
 
-
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{figures/deltaHierarchymacroPopulations-mesoTimeSteps_colorMacroInteractionDecay_facetmesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png}
+	\caption{Macroscopic hierarchy of populations as a function of mesoscopic time steps $t_m$, for different values of interaction decay $d_G$ (colour), and of feedback parameters $\delta d$ (columns) and $\delta \beta$ (rows).\label{fig:fig4}}
+\end{figure}
 
 We show in Fig.~\ref{fig:fig3} that both macroscopic and mesoscopic indicators have a U-shaped behavior as a function of the bottom-up feedback parameter $\delta d$. In terms of macroscopic trajectories, we see that hierarchies of accessibilities, closeness centrality and population are maximal in negative value when the mechanism is deactivated, what means that the feedback process moderates the hierarchisation of the global urban system. For the urban form, this feedback also mitigates the aggregation of population.
+
+
+
+
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{figures/onefactor_allindics_mesoMacroDecayUpdateMax_errorbars.png}
+	\caption{Variations of indicators as a function of $\delta d$, when all other parameters are fixed to their nominal value.\label{fig:fig3}}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{figures/deltamesoMorans-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
+	\caption{Relative evolution of average mescoscopic Moran, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig5}}
+\end{figure}
 
 
 % 20190506_135221_MULTISCALE_TARGETEDGRID_GRID
@@ -342,16 +359,35 @@ The strong coupling of scales, in particular the interaction between bottom-up a
 
 
 
+
+
 \subsection{Impact of policy parameters}
+
+
 
 
 We then proceed to a targeted experiment by detailing more the grid for $\delta \beta$ and $\delta \alpha$. The aim is to investigate the influence of policies taken at the level of urban areas, but which can also be constrained by a higher level of governance. We show in Fig.~\ref{fig:fig5} the influence of $\delta \beta$ on urban form. In particular, the average variation of Moran index captures the centralisation of urban areas. This centralisation exhibits a minimal value when $\delta \alpha$ is low, consistent across values of $\lambda$. This implicates that when decentralisation policies are implemented by acting on aggregation ($\delta \alpha$), the policy on urban sprawl will have an unexpected effect on centralisation. This is an illustration of complex and possibly negative interaction between policies.
 % influenced by upward feedback? No, rather stable when \lambda = 0 -> why? - check influence of lambda
 
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/deltamesoSlopes-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
+	\caption{Relative evolution of average mescoscopic population hierarchy, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig6}}
+\end{figure}
+
 When investigating population hierarchy the mesoscopic scale, i.e. inequalities of population distribution within the urban area, we find in Fig.~\ref{fig:fig6} a U-shaped behavior as a function of $\delta \beta$ for negative $\delta \alpha$ values, but has a plateau for positive values of $\delta \alpha$, showing also an interaction effect between policies. In terms of hierarchy, a maximal negative value may be wanted to limit inequalities (slopes are negative), and this optimum is reached for a slightly positive value of $\delta \beta$ (left columns in Fig.~\ref{fig:fig6}). This means that sprawl may be needed in some configurations to optimise this objective.
 
 
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.6\linewidth]{figures/pareto_macroHierarchy-mesoHierarchy.png}
+	\end{center}
+	\caption{Pareto front obtained with a NSGA2 genetic algorithm, to minimize simultaneously hierarchy at the macroscopic and mesoscopic scales. Point size gives the number of stochastic samples and colour the value of $\delta \beta$.\label{fig:fig7}}
+\end{figure}
+
 \subsection{Multiscale optimization}
+
+
 
 We finally turn to an optimization objective to investigate if compromises have to be made when targets are simultaneously aimed for at different scales. We therefore use a NSGA2 algorithm implemented in OpenMOLE, with a population of 200 individuals, run for 100,000 generations. Objectives are the average mesoscopic hierarchy which can be minimized for more compact and thus sustainable cities, at the macroscopic population hierarchy. Convergence is reached in terms of hypervolume and points in the Pareto front.
 
@@ -389,21 +425,80 @@ Regarding an application of the model on real systems of cities, a calibration o
 
 Our model is a first step towards multi-scalar models of urban dynamics which effectively include a strong coupling between processes at different scales. While remaining highly stylised, we showed an important role of the coupling and unveiled for example interaction effects between different types of policies. This type of approach will need in the future to be further developed, towards multi-scalar models for sustainable policy making \cite{Rozenblat2018}. This works paves the way for such more complex models.
 
-% conclusion not needed
-%\section{Conclusion}
-%This paper provides a first step towards strongly multi-scalar models to capture urban complexity towards policy models. 
-%Towards integrative models and theories for urban systems \cite{raimbault2019methods}
-
-
-\section*{Acknowledgments}
-
-The author acknowledges the funding of their institutions and the EPSRC project number EP/M023583/1. Results obtained in this paper were computed on the vo.complex-system.eu virtual organisation of the European Grid Infrastructure (http://www.egi.eu). We thank the European Grid Infrastructure and its supporting National Grid Initiatives (France-Grilles in particular) for providing the technical support and infrastructure.
 
 
 
 
-\bibliographystyle{apalike}
-\bibliography{biblio}
 
 
-\end{document} 
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{6pt} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\authorcontributions{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\funding{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\acknowledgments{The author acknowledges the funding of their institutions and the EPSRC project number EP/M023583/1. Results obtained in this paper were computed on the vo.complex-system.eu virtual organisation of the European Grid Infrastructure (http://www.egi.eu). We thank the European Grid Infrastructure and its supporting National Grid Initiatives (France-Grilles in particular) for providing the technical support and infrastructure.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\conflictsofinterest{} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\reftitle{References}
+
+
+\externalbibliography{yes}
+\bibliography{biblio.bib}
+
+
+
+%% for journal Sci
+%\reviewreports{\\
+%Reviewer 1 comments and authors’ response\\
+%Reviewer 2 comments and authors’ response\\
+%Reviewer 3 comments and authors’ response
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=2 cm]{Definitions/logo-mdpi}
+%\caption{This is a figure, Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.}
+%\end{figure}   
+
+
+
+%\begin{table}[H]
+%\caption{This is a table caption. Tables should be placed in the main text near to the first time they are cited.}
+%\centering
+%% \tablesize{} %% You can specify the fontsize here, e.g., \tablesize{\footnotesize}. If commented out \small will be used.
+%\begin{tabular}{ccc}
+%\toprule
+%\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+%\midrule
+%entry 1		& data			& data\\
+%entry 2		& data			& data\\
+%\bottomrule
+%\end{tabular}
+%\end{table}
+
+
+%\begin{listing}[H]
+%\caption{Title of the listing}
+%\rule{\textwidth}{1pt}
+%\raggedright Text of the listing. In font size footnotesize, small, or normalsize. Preferred format: left aligned and single spaced. Preferred border format: top border line and bottom border line.
+%\rule{\textwidth}{1pt}
+%\end{listing}
