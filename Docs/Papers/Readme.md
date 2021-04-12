@@ -4,6 +4,13 @@
 ## In progress
 
 
+### UrbSystemsOptimality
+
+apply urbevol model: compromise innovation/emissions
+
+Paravantis, J. A., Tasios, P. D., Dourmas, V., Andreakos, G., Velaoras, K., Kontoulis, N., & Mihalakakou, P. (2021). A Regression Analysis of the Carbon Footprint of Megacities. Sustainability, 13(3), 1379.
+
+
 ### StochasticUrbGrowth
 
 Idea: benchmark/calibrate different PDE on proper data?
