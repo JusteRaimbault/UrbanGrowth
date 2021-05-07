@@ -25,8 +25,16 @@ val model =
     outputs += (moran,distance,entropy,slope)
   )
 
+val repli = Replication(
+  evaluation = model,
+  seed = replication,
+  sample = 100,
+  aggregation = Seq(moran aggregate average, distance aggregate average, entropy aggregate average, slope aggregate average)
+)
+
+
 //val purpose = "TEST_PSE_GRAVITY"
-val purpose = "PSE_GRAVITY"
+val purpose = "PSE_GRAVITY_REPLICATIONS_LOCAL"
 
 val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
 
@@ -34,7 +42,7 @@ val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.
 val env = LocalEnvironment(10)
 
 PSEEvolution(
-  evaluation = model,
+  evaluation = repli,
   parallelism = 10,
   termination = 100000,
   genome = Seq(
@@ -51,7 +59,7 @@ PSEEvolution(
     distance in (0.0 to 2.0 by 0.05),
     entropy in (0.0 to 1.0 by 0.05),
     slope in (-4.0 to 0.0 by 0.05)
-  ),
-  stochastic = Stochastic(seed = replication)//,
+  )//,
+  //stochastic = Stochastic(seed = replication)//,
   //distribution = Island(15 minutes)
 ) on env hook (workDirectory / "pse" / resdir,frequency = 1000)
