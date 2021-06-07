@@ -14,10 +14,12 @@ dir.create(resdir)
 resdirs = list(
   #'expmixture' = '20200828_1515_PSE_EXPMIXTURE_res'
   'expmixture' = 'openmole/pse/20201125_1115_PSE_EXPMIXTURE_REPLICATIONS_GRID',
-  'reactiondiffusion' = 'openmole/pse/20200828_1624_PSE_REACTIONDIFFUSION_res',
+  #'reactiondiffusion' = 'openmole/pse/20200828_1624_PSE_REACTIONDIFFUSION_res',
+  'reactiondiffusion' = 'openmole/pse/20210531_0803_PSE_REACTIONDIFFUSION_REPLICATIONS_LOCAL_res/',
   # 'correlatedperco' = '20200829_1330_PSE_CORRELATEDPERCO_res'
   'correlatedperco' = 'openmole/pse/20201124_1816_PSE_CORRELATEDPERCO_REPLICATIONS_GRID/',
-  'gravity' = 'openmole/pse/20200829_1526_PSE_GRAVITY_res'
+  #'gravity' = 'openmole/pse/20200829_1526_PSE_GRAVITY_res'
+  'gravity' = 'openmole/pse/20210507_1744_PSE_GRAVITY_REPLICATIONS_LOCAL/'
 )
 
 stochastic = FALSE
