@@ -22,7 +22,6 @@
 
 % Author Orchid ID: enter ID or remove command
 \newcommand{\orcidauthorA}{0000-0003-0768-9480} % Add \orcidA{} behind the author's name
-%\newcommand{\orcidauthorB}{0000-0000-000-000X} % Add \orcidB{} behind the author's name
 
 % Authors, for the paper (add full first names)
 \Author{Juste Raimbault $^{1,2,3,*}$\orcidA{}}
@@ -32,7 +31,7 @@
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
-$^{1}$ \quad CASA, University College London\\
+$^{1}$ \quad Center for Advanced Spatial Analysis, University College London\\
 $^{2}$ \quad Institut des Syst{\`e}mes Complexes Paris-Ile-de-France, CNRS\\
 $^{3}$ \quad UMR G{\'e}ographie-cit{\'e}s, CNRS}
 
@@ -78,6 +77,10 @@ $^{3}$ \quad UMR G{\'e}ographie-cit{\'e}s, CNRS}
 
 
 
+\cite{lockerby2015asynchronous} physics multiscale simulations
++ multiscale traffic models (Nancy?)
+
+
 \cite{vinci2021population} : link macro migration - meso structure (polycentrism)
 
 def of scale \cite{atkinson2000spatial}
@@ -99,6 +102,8 @@ Multi-scalar models of urban dynamics are however still at their beginnings. \ci
 
 In disciplines neighbour to urban modeling, methods have been developed for multi-scale models. For example in spatial epidemiology, \cite{banos2015importance} combines agent-based modeling for local diffusion dynamics with differential equations at the population scale. The NetLogo software for agent-based modeling includes a specific extension for multi-scale modeling \cite{hjorth2020levelspace}. Multi-scale models have also been used for the simulation of crowd dynamics \cite{crociani2016multi}. The study of traffic is also made more accurate by coupling macroscopic and microscopic models \cite{boulet2020coupling}. The management of ecosystems  requires integrating across actors and scales \cite{belem2013organizational}. These non-exhaustive illustrations highlight how the integration of scales is a crucial feature and issue in the understanding of complex systems \cite{chavalarias2009french}.
 
+
+% TODO emphasize more the research problem
 
 This paper contributes to the open question of multi-scalar models of urban dynamics by introducing a new simulation model that integrates a strong coupling between the mesoscopic scale and the macroscopic scale. The dynamics within each scale influence the other and reciprocally in an iterative way. More precisely, the model is simple in its components as we focus on the spatial structure of processes rather than on their multi-dimensionality. Therefore, we take into account only population variables, but both at the macroscopic scale of the system of cities and at the mesoscopic scale of the metropolitan area with an urban morphogenesis model. Our contribution is novel regarding previous works in particular regarding the following points: (i) the stylised model explicitly couples distinct scales and ontologies in a strong manner, most models operating only a weak coupling between scales (i.e. no reciprocal and dynamical feedbacks); (ii) the behavior of the model is systematically studied on synthetic systems of cities using model exploration methods.
  
@@ -124,17 +129,16 @@ The rest of this paper is organised as follows: we first describe the model; we 
 
 \subsection{Rationale}
 
-% ! reformulate - this is the CCS abstract
+% TODO ! reformulate - this is the CCS abstract
 
 The main characteristic of our model is a strong coupling between the macroscopic scale of a system of cities with the mesoscopic scale of metropolitan areas. We consider simple urban dimensions with population variables only to describe cities, and use stylised processes. The system of cities evolves following a spatial interaction model as described by \cite{raimbault2020indirect}, assuming that interaction flows between cities will increase their attractivity and thus their population growth rate. Population updates are not done directly following migration flows as in stochastic urban models such as in \cite{james2018zipf}, but with the hypothesis of hidden variables (generally scaling with population) capturing for example economic dimensions, which influence population growth rate. At the mesoscopic scale, we consider the spatial distribution of population within an urban area and focus on the growth of urban form. To achieve this, the reaction-diffusion model of urban morphogenesis described by \cite{raimbault2018calibration} allows capturing concentration forces and dispersion forces, and has been shown to reproduce a large range of existing urban forms. Furthermore, \cite{raimbault2020comparison} showed that this model had good coverage of the morphological space when compared to other models of urban morphogenesis.
 
-To couple the scales, we assume that (i) macroscopic performance of a city will influence the choices made by planers in terms of land-use, and thus parameters of the morphogenesis mode locally - empirical evidence of such links have been suggested in the literature \cite{joy2015toronto} and we stylise them here; (ii) urban form influences the inner workings of a city through congestion and the fostering of exchanges between agents (individuals, firms), and finally the global insertion of the city - thus spatial interaction parameters are updated as a function of local urban form. This last link is the most % discutable % TODO slippery?
- in terms of empirical evidence and implies many other dimensions than population only. We however work on a stylised explicative model which must keep a simple structure but on which a systematic knowledge of model behavior can be developed. We show in Fig.~\ref{fig:fig1} a schematic description of model structure.
+To couple the scales, we assume that (i) macroscopic performance of a city will influence the choices made by planers in terms of land-use, and thus parameters of the morphogenesis mode locally - empirical evidence of such links have been suggested in the literature \cite{joy2015toronto} and we stylise them here; (ii) urban form influences the inner workings of a city through congestion and the fostering of exchanges between agents (individuals, firms), and finally the global insertion of the city - thus spatial interaction parameters are updated as a function of local urban form. This last link is the most questionable assumption in terms of empirical evidence and implies many other dimensions than population only. We however work on a stylised explicative model which must keep a simple structure but on which a systematic knowledge of model behavior can be developed. We show in Fig.~\ref{fig:fig1} a schematic description of model structure.
 
 \begin{figure}[H]
-%  figure: more details?
+% TODO figure: more details?
  \includegraphics[width=\linewidth]{figures/multiscale_morph.pdf}
- \caption{Schematic representation of model architecture. Urban areas with their own urban form are inserted into the macroscopic spatial interaction model, and strong coupling is achieved through top-down and bottom-up feedbacks.\label{fig:fig1}}
+ \caption{Schematic representation of the model architecture. Urban areas with their own urban form are inserted into the macroscopic spatial interaction model, and strong coupling is achieved through top-down and bottom-up feedbacks.\label{fig:fig1}}
 \end{figure}
 
 \subsection{Formalization}
@@ -145,8 +149,8 @@ We consider $N$ urban areas, represented at the macroscopic scale by their popul
 The simulation model operates iteratively, and at each time step goes sequentially through the following steps:
 \begin{enumerate}
 	\item populations of urban areas are evolved at the macroscopic scale with the spatial interaction model (Equations \ref{eq:eq1} to \ref{eq:eq3} below);
-	\item for each urban area, parameters of the moprhogenesis model are updated given parameters capturing typical scenarios: transit-oriented development or sprawl for the diffusion parameter, metropolisation or uniformisation for the aggregation parameter (Equations \ref{eq:eq4} to \ref{eq:eq6});
-	\item local urban form are evolved conditionally to a fixed population increase and following the mescoscopic parameters;
+	\item for each urban area, parameters of the morphogenesis model are updated given parameters capturing typical scenarios: transit-oriented development or sprawl for the diffusion parameter, metropolisation or uniformisation for the aggregation parameter (Equations \ref{eq:eq4} to \ref{eq:eq6});
+	\item local urban form are evolved conditionally to a fixed population increase and following the mesoscopic parameters;
 	\item congestions and interactions within areas are synthesised following a cost function, which is used to update the macroscopic interaction parameters (Equations \ref{eq:eq7} and \ref{eq:eq8}).
 \end{enumerate}
 
@@ -200,7 +204,7 @@ The aggregation parameter evolves in a similar way but as a function of accessib
 where the multiplier parameter $\delta\alpha$ allows switching between a metropolisation scenario (more aggregation) and an uniformisation scenario (less aggregation). In that context, the accessibility is computed as
 			
 \begin{equation}
-	\label{eq:eq5}
+	\label{eq:eq6}
 	Z_i = \sum_j \frac{P_j}{\sum_k P_k} \cdot \exp( - d_{ij} / d_i)
 \end{equation}
 			
@@ -224,14 +228,14 @@ In terms of implementation, small population differences in the end between macr
 Finally, bottom-up feedback is captured by updating the macroscopic parameters. For the sake of simplicity, only interaction decays are updated, assuming that patterns of urban form play a role in the global insertion of the city. More precisely, we compute gravity flows within the area, and aggregate their value as an economic activity with a squared negative externality interpreted as a congestion with a cost parameter $\lambda$, following
 	
 \begin{equation}
-\label{eq:eq6}
+\label{eq:eq7}
 		U_i = \sum_{kl} \left( \frac{P_k P_l}{P^2} \cdot \frac{1}{d_{kl}} - \lambda \left(\frac{P_k P_l}{P^2} \cdot \frac{1}{d_{kl}}\right)^2 \right)
 \end{equation}
 	
 This utility $U_i$ is used to update the interaction decays following
 	
 \begin{equation}
-\label{eq:eq7}
+\label{eq:eq8}
 	d_i (t+1) = d_i (t) \left( 1 + \delta d \cdot \frac{U_i}{\max_k \left|U_k\right|} \right)
 \end{equation}
 
@@ -243,8 +247,8 @@ where the multiplier parameter $\delta d$ allows controlling for the influence o
 
 \subsection{Parameters}
 
-The Table~\ref{tab:parameters} summarizes model parameters. For clarity, we do not include parameters linked to synthetic model setup, and distinguish them by the scale to which they are attached.
-
+The Table~\ref{tab:parameters} summarises model parameters. For clarity, we do not include parameters linked to synthetic model setup, and distinguish them by the scale to which they are attached.
+% TODO ref table beginning section
 	
 \begin{table}[H]
 	\caption{Summary of model parameters\label{tab:parameters}}
@@ -262,7 +266,7 @@ The Table~\ref{tab:parameters} summarizes model parameters. For clarity, we do n
 		& $n_d$ & Diffusion & $\left[0 ; 5\right]$ \\ \hline
 		\multirow{4}{*}{Multiscale} & $\delta\alpha$ & Downward feedback & $\left[-0.5 ; 0.5\right]$ \\
 		& $\delta\beta$ & Downward feedback & $\left[-0.5 ; 0.5\right]$ \\
-		& $\delta d$ & Upward feedback & $\left[-0.5 ; 0.5\right]$ \\\hline
+		& $\delta d$ & Upward feedback & $\left[-0.5 ; 0.5\right]$ \\
 		& $\lambda$ & Cost of congestion & $\left[0 ; 2\right]$ \\\hline
 	\end{tabular}
 \end{table}
@@ -286,6 +290,7 @@ The model is simulated for 20 macroscopic time steps (order of magnitude of half
 
 Model behavior is characterized using the following indicators: at the  macroscopic scale: distributions of population, accessibilities, and centralities (summarized by average, hierarchy, entropy), following \cite{raimbault2020unveiling}. At the mesoscopic scale, urban form is captured following the indicators used by \cite{raimbault2018calibration}, i.e. Moran index, average distance between individuals, hierarchy of population distribution, and entropy of population distribution.
 
+% TODO extend indicator descritpion
 
 \section{Results}
 
@@ -293,7 +298,7 @@ Model behavior is characterized using the following indicators: at the  macrosco
 
 \subsection{Implementation}
 
-Model implementation is done under some performance constraints: $N$ mesoscopic morphogenesis models must be simulated in parallel at each macroscopic time step. On the contrary, macroscopic interactions are efficient to implement as they are based on matrices computations. The model is implemented in \texttt{scala} and integrated into a broader library for spatial sensitivity analysis and dynamical models for settlement systems, namely the \texttt{spatialdata} library \cite{raimbault2020scala}. This library in particular already includes implementations of the models used in \cite{raimbault2020indirect} and \cite{raimbault2018calibration}, but also of other urban interaction models such as \cite{favaro2011gibrat}. The relative large number of parameters and output indicators imposes the use of appropriate model exploration methods to get a grasp of model behavior. Therefore, the parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}. Standalone source code for the model is available on an open git repository at \url{https://github.com/JusteRaimbault/UrbanGrowth-model}, while the repository for results is at \url{https://github.com/JusteRaimbault/UrbanGrowth}. Simulation data used in this paper is available on the dataverse repository at \url{https://doi.org/10.7910/DVN/IRHMQK}.
+Model implementation is done under some performance constraints: $N$ mesoscopic morphogenesis models must be simulated in parallel at each macroscopic time step. On the contrary, macroscopic interactions are efficient to implement as they are based on matrices computations. The model is implemented in \texttt{scala} and integrated into a broader library for spatial sensitivity analysis and dynamical models for settlement systems, namely the \texttt{spatialdata} library \cite{raimbault2020scala}. This library in particular already includes implementations of the models used in \cite{raimbault2020indirect} and \cite{raimbault2018calibration}, but also of other urban interaction models such as \cite{favaro2011gibrat}. The relative large number of parameters and output indicators imposes the use of appropriate model exploration methods to get a grasp of model behavior. Therefore, the parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}. Standalone source code for the model is available on an open git repository as \cite{urbangrowthmodel}. An other open repository for the analysis of results is also available as \cite{urbangrowth}. Simulation data used in this paper is available on the dataverse repository as \cite{dataverse}.
 
 
 \subsection{Statistical consistency}
@@ -403,9 +408,13 @@ We show in Fig.~\ref{fig:fig7} the Pareto front obtained after convergence of th
 
 \section{Discussion}
 
+% TODO improve discussion - link with literature: related results, interpretation regarding previous studies
 
+% TODO limitations of the work 
 
 \subsection{Theoretical and practical implications}
+
+% TODO implication of results in a broad context
 
 Our model effectively captures an interaction between downward and upward feedback. In that sense, it illustrates weak emergence in its proper sense \cite{bedau2002downward}. This suggests this view can be effectively operationalised into models of urban dynamics.
 
