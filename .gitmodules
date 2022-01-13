@@ -10,3 +10,6 @@
 [submodule "Docs/Papers/EvolutionaryTheory/paper"]
 	path = Docs/Papers/EvolutionaryTheory/paper
 	url = git@github.com:JusteRaimbault/EvolutionaryTheory-paper.git
+[submodule "Docs/Papers/Territorialisation/paper"]
+	path = Docs/Papers/Territorialisation/paper
+	url = git@github.com:JusteRaimbault/Territorialisation-paper.git
