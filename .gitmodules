@@ -13,3 +13,6 @@
 [submodule "Docs/Papers/Territorialisation/paper"]
 	path = Docs/Papers/Territorialisation/paper
 	url = git@github.com:JusteRaimbault/Territorialisation-paper.git
+[submodule "Docs/Papers/CityGrowth/CityGrowthRegularities-chapter"]
+	path = Docs/Papers/CityGrowth/CityGrowthRegularities-chapter
+	url = git@github.com:JusteRaimbault/CityGrowthRegularities-chapter.git
