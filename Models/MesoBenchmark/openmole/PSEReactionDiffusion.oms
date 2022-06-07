@@ -35,22 +35,24 @@ val repli = Replication(
 
 //val purpose = "TEST_PSE_REACTIONDIFFUSION"
 //val purpose = "PSE_REACTIONDIFFUSION_REPLICATIONS_CLUSTER"
-val purpose = "PSE_REACTIONDIFFUSION_REPLICATIONS_LOCAL"
+val purpose = "PSE_REACTIONDIFFUSION_REPLICATIONS_GRID"
 
 val resdir = ((new java.text.SimpleDateFormat("yyyyMMdd_HHmm")).format(new java.util.Date()))+"_"+purpose
 
+//val env = SLURMEnvironment("jraimb03", "myria.criann.fr", queue = "knl", wallTime = 240 minutes, nTasks = 1, memory = 2500, workDirectory = "/tmp", reservation = "resa")
 //val env = SGEEnvironment("", "", wallTime = 60 minutes)
-//val env = EGIEnvironment("vo.complex-systems.eu")
-val env = LocalEnvironment(10)
+val env = EGIEnvironment("vo.complex-systems.eu")
+//val env = LocalEnvironment(10)
 
 PSEEvolution(
   evaluation = repli,
-  parallelism = 10,
+  parallelism = 1000,
   termination = 100000,
   genome = Seq(
     beta in (0.0, 0.5),
-    alpha in (0.01,5.0),
-    growthRate in (1000.0,10000.0),population in (10000.0,100000.0),
+    alpha in (0.0, 5.0),
+    growthRate in (1000.0,10000.0),
+    population in (10000.0,100000.0),
     diffusionSteps in (1.0,5.0),
     width in (50.0,100.0),
     hwRatio in (0.5,2.0)
@@ -60,7 +62,7 @@ PSEEvolution(
     distance in (0.0 to 2.0 by 0.05),
     entropy in (0.0 to 1.0 by 0.05),
     slope in (-4.0 to 0.0 by 0.05)
-  )//,
+  ),
   //stochastic = Stochastic(seed = replication),
-  //distribution = Island(30 minutes)
+  distribution = Island(60 minutes)
 ) on env hook (workDirectory / "pse" / resdir)//,frequency = 1000)
