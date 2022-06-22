@@ -1,6 +1,12 @@
 
 
 
+## 2022/06/22
+
+
+CCS2018: stylised facts correlations -> not exploited. old project paper macrobench gean: replaced by sust? - paper with mmultimod? - reorg!
+
+
 ## 2021/01/20
 
 (mail bib nature sust):
