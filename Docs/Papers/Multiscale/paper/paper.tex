@@ -1,55 +1,30 @@
-\documentclass[ijgi,article,submit,moreauthors,pdftex]{Definitions/mdpi} 
+\documentclass[referee,lineno,pdflatex,sn-apa]{sn-jnl}
 
-%=================================================================
-\firstpage{1} 
-\makeatletter 
-\setcounter{page}{\@firstpage} 
-\makeatother
-\pubvolume{xx}
-\issuenum{x}
-\articlenumber{x}
-\pubyear{2020}
-\copyrightyear{2020}
-%\externaleditor{Academic Editor: name}
-\history{Received: date; Accepted: date; Published: date}
-%\updates{yes} % If there is an update available, un-comment this line
-%% MDPI internal command: uncomment if new journal that already uses continuous page numbers 
-%\continuouspages{yes}
 
-%=================================================================
-% Full title of the paper (Capitalized)
-\Title{Strong coupling between scales in a multi-scalar model of urban dynamics}
+\jyear{2022}%
 
-% Author Orchid ID: enter ID or remove command
-\newcommand{\orcidauthorA}{0000-0003-0768-9480} % Add \orcidA{} behind the author's name
+\raggedbottom
 
-% Authors, for the paper (add full first names)
-\Author{Juste Raimbault $^{1,2,3,*}$\orcidA{}}
+\begin{document}
 
-% Authors, for metadata in PDF
-\AuthorNames{Juste Raimbault}
+\title[Multi-scalar urban dynamics model]{Strong coupling between scales in a multi-scalar model of urban dynamics}
 
-% Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
-\address{%
-$^{1}$ \quad Center for Advanced Spatial Analysis, University College London\\
-$^{2}$ \quad Institut des Syst{\`e}mes Complexes Paris-Ile-de-France, CNRS\\
-$^{3}$ \quad UMR G{\'e}ographie-cit{\'e}s, CNRS}
 
-% Contact information of the corresponding author
-\corres{Correspondence: juste.raimbault@polytechnique.edu}
+\author*[1,2,3,4]{\pfx{Dr} \fnm{Juste} \sur{Raimbault} \dgr{PhD}}\email{juste.raimbault@ign.fr}
+% orcid 0000-0003-0768-9480
 
-% Current address and/or shared authorship
-% \dagger,\ddagger
-%\firstnote{Current address: Affiliation 3} 
-%\secondnote{These authors contributed equally to this work.}
-% The commands \thirdnote{} till \eighthnote{} are available for further notes
+\affil*[1]{\orgdiv{LASTIG}, \orgname{Univ. Gustave Eiffel, IGN-ENSG}} %, \orgaddress{\street{73 avenue de Paris}, \city{Saint-Mand{\'e}}, \postcode{93160}, \country{France}}
+\affil[2]{\orgdiv{Center for Advanced Spatial Analysis}, \orgname{University College London}} % , \orgaddress{\street{90 Tottenham Court Road}, \city{London}, \postcode{}, \country{UK}}
+\affil[3]{\orgdiv{UPS CNRS 3611 ISC-PIF}, \orgname{CNRS}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
+\affil[4]{\orgdiv{UMR CNRS 8504 G{\'e}ographie-cit{\'e}s}, \orgname{Universit{\'e} Paris 1}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
+
 
 
 %Dear Editor,
 
-%I am pleased to submit an original research article entitled "Strong coupling between scales in a multi-scalar model of urban dynamics" for consideration for publication in IJGI. This article introduces a novel modeling study on the dynamics of urban systems, with a particular on feedbacks between scales. The subject is in my opinion furthermore particularly suited for the special issue "Spatio-Temporal Models and Geo-Technologies".
+%I am pleased to submit an original research article entitled "Strong coupling between scales in a multi-scalar model of urban dynamics" for consideration for publication in Urban Informatics. This article introduces a novel modeling study on the dynamics of urban systems, with a particular focus on feedbacks between scales.
 
-%A preliminary version of the methodology and results were presented as a main track talk at the Conference on Complex Systems 2019. A preprint was submitted on arXiv at the same date of this submission.
+%A preliminary version of the methodology and results were presented as a main track talk at the Conference on Complex Systems 2019. An older preprint was deposited on arXiv with the identifier arXiv:2101.12725.
 
 %I had no previous contact with journal editors regarding this manuscript. This manuscript has not been published and is not under consideration for publication elsewhere. I have no conflicts of interest to disclose. I do not have any opposed reviewer.
 
@@ -58,22 +33,17 @@ $^{3}$ \quad UMR G{\'e}ographie-cit{\'e}s, CNRS}
 %Yours faithfully,
 
 %Juste Raimbault
-%University College London
-
-
+%IGN-ENSG
 
 
 \abstract{Urban evolution processes occur at different scales, with intricate interactions between levels and relatively distinct type of processes. To what extent actual urban dynamics include an actual strong coupling between scales, in the sense of both top-down and bottom-up feedbacks, remains an open issue with important practical implications for the sustainable management of territories. We introduce in this paper a multi-scalar simulation model of urban growth, coupling a system of cities interaction model at the macroscopic scale with morphogenesis models for the evolution of urban form at the scale of metropolitan areas. Strong coupling between scales is achieved through an update of model parameters at each scale depending on trajectories at the other scale. The model is applied and explored on synthetic systems of cities. Simulation results show a non-trivial effect of the strong coupling. As a consequence, an optimal action on policy parameters such as containing urban sprawl is shifted. We also run a multi-objective optimization algorithm on the model, showing showing that compromise between scales are captured. Our approach opens new research directions towards more operational urban dynamics models including a strong feedback between scales.}
 
 % Keywords
-\keyword{Urban dynamics; Systems of cities; Urban morphogenesis; Multi-scalar modeling; Strong coupling}
+\keywords{Urban dynamics, Systems of cities, Urban morphogenesis, Multi-scalar modelling, Strong coupling}
 
 
+\maketitle
 
-%\setcounter{secnumdepth}{4}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{document}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \cite{feng2022effects}
@@ -94,59 +64,47 @@ def of scale \cite{atkinson2000spatial}
 
 \section{Introduction}
 
-The modeling of urban growth and more generally the dynamics of urban systems is central to the design of sustainable territorial policies, through the understanding of past urbanisation processes and the anticipation of future urban trajectories. The design of sustainable future cities requires an historical knowledge of how past cities came to be and evolved \cite{batty2018inventing}. Several models have been developed at different scales and integrating different urban systems dimensions. Some typical examples are models of land-use change at a mesoscopic scale \cite{iacono2008models}, or systems of cities models at a macroscopic scale \cite{pumain2017urban}.
+Modelling urban growth and more generally the dynamics of urban systems is central to the design of sustainable territorial policies, enabling the understanding of past urbanisation processes and the anticipation of future urban trajectories. The design of sustainable future cities requires an historical knowledge of how past cities came to be and evolved \citep{batty2018inventing}. Several models have been developed at different scales and integrating multiple urban systems dimensions. Some typical examples are models of land-use change at a mesoscopic scale \citep{iacono2008models}, or systems of cities models at a macroscopic scale \citep{pumain2017urban}.
 
-At the scale of a metropolitan area, Land-use Transport Interaction models \cite{wegener2004land} are for example a widely used tool to estimate the dynamics of spatial distributions of activities (mostly residential location and economic activities) in response to an evolution of the accessibility landscape caused by new transportation infrastructures \cite{raimbault:halshs-02265423}. In a similar context, cellular automata models of urban growth or land-use change study more generally land-use transitions with a high spatial resolution, and are mostly data-driven \cite{clarke2007decade}. At the smaller scale of the system of cities, macroscopic models of urban growth have focused on reproducing the distribution of city sizes, either through economic processes as e.g. \cite{gabaix1999zipf}, or from a geographical point of view focusing on interactions between cities \cite{favaro2011gibrat}.
+At the scale of a metropolitan area, Land-use Transport Interaction models \citep{wegener2004land} are a widely used tool to estimate the dynamics of spatial distributions of activities (mostly residential location and economic activities) in response to an evolution of the accessibility landscape caused by new transportation infrastructures \citep{raimbault:halshs-02265423}. In a similar context, cellular automata models of urban growth or land-use change study more generally land-use transitions with a high spatial resolution, and are mostly data-driven \citep{clarke2007decade}. At the smaller scale of the system of cities, macroscopic models of urban growth have focused on reproducing the distribution of city sizes, either through economic processes as e.g. \citep{gabaix1999zipf}, or from a geographical point of view focusing on interactions between cities \citep{favaro2011gibrat}.
 
-Territorial dynamics, and more particularly urban dynamics, have according to \cite{pumain1997pour} an intrinsic multi-scalar nature, with successive autonomous levels of emergence from individual microscopic agents to the mesoscopic scale of the city and the macroscopic scale of the system of cities. While models at each scale with distinct ontologies are useful to answer their own questions, an explicit account of inter-scale feedbacks, both top-down and bottom-up, would allow testing policies and interventions distributed and differentiated across scales while not neglecting the interactions between scales \cite{wegener2018multi}. Indeed, the need for sustainable territorial policies would imply the construction of multi-scalar models to take simultaneously into account issues associated to each relevant scale \cite{Rozenblat2018,raimbault:halshs-02284933}.
+Territorial dynamics, and more particularly urban dynamics, have according to \cite{pumain1997pour} an intrinsic multi-scalar nature, with successive autonomous levels of emergence from individual microscopic agents to the mesoscopic scale of the city and the macroscopic scale of the system of cities. While models at each scale with distinct ontologies are useful to answer their own questions, an explicit account of inter-scale feedbacks, both top-down and bottom-up, would allow testing policies and interventions distributed and differentiated across scales while not neglecting the interactions between scales \citep{wegener2018multi}. Indeed, the need for sustainable territorial policies would imply the construction of multi-scalar models to take simultaneously into account issues associated to each relevant scale \cite{Rozenblat2018,raimbault:halshs-02284933}.
 
 
 % rq: no def nor clarification of what is meant by "scale"!
 
 Multi-scalar models of urban dynamics are however still at their beginnings. \cite{murcio2015urban} consider population flows at different spatial ranges from the urban area to the country, but does not incorporate distinct ontologies and processes for the different scales. \cite{batty2005agents} however suggests that a similar formalism can be applied to urban processes at different scales. Multi-level statistical models capture some information at imbricated scales \cite{shu2020modelling}, although they can not be used as dynamical simulation models. Similarly, multi-level cellular automata (CA) models for urban growth include factors influencing urban expansion at multiple scales \cite{xu2019directional}. \cite{cheng2003modelling} propose a general framework for such approaches. \cite{torrens2001cellular} suggest that hybrid models coupling CA with other formalisms is a crucial development in the field. \cite{white2006modeling} introduces a CA with variable grid size to account for heterogeneities across scales. \cite{zhu2020dynamic} couple an agent-based model with a CA at multiple scales. \cite{yu2018modeling} embed a local CA into a regional intercity model and a macroscopic potential model. \cite{ford2019multi} couple at different scales an urban development model with a flooding risk model to forecast the future impact of extreme climate events on the London metropolitan region. \cite{xu2020urban} develop an agent-based model of urban expansion with both macro and micro agents. \cite{raimbault:halshs-02013006} suggests that integrating network dynamics at the link level in a macroscopic urban system models is a way to implement a multi-scale model, as done by \cite{raimbault2020hierarchy} which explores hierarchy properties of cities and networks in this context.
 
-In disciplines neighbour to urban modeling, methods have been developed for multi-scale models. For example in spatial epidemiology, \cite{banos2015importance} combines agent-based modeling for local diffusion dynamics with differential equations at the population scale. The NetLogo software for agent-based modeling includes a specific extension for multi-scale modeling \cite{hjorth2020levelspace}. Multi-scale models have also been used for the simulation of crowd dynamics \cite{crociani2016multi}. The study of traffic is also made more accurate by coupling macroscopic and microscopic models \cite{boulet2020coupling}. The management of ecosystems  requires integrating across actors and scales \cite{belem2013organizational}. These non-exhaustive illustrations highlight how the integration of scales is a crucial feature and issue in the understanding of complex systems \cite{chavalarias2009french}.
+In disciplines close to urban modelling, methods have been developed for multi-scale models. For example in spatial epidemiology, \cite{banos2015importance} combines agent-based modelling for local diffusion dynamics with differential equations at the population scale. The NetLogo software for agent-based modelling includes a specific extension for multi-scale modelling \cite{hjorth2020levelspace}. Multi-scale models have also been used for the simulation of crowd dynamics \cite{crociani2016multi}. The study of traffic is also made more accurate by coupling macroscopic and microscopic models \cite{boulet2020coupling}. The management of ecosystems  requires integrating across actors and scales \cite{belem2013organizational}. These non-exhaustive illustrations highlight how the integration of scales is a crucial feature and issue in the understanding of complex systems \cite{chavalarias2009french}.
 
 
 % TODO emphasize more the research problem
 
-This paper contributes to the open question of multi-scalar models of urban dynamics by introducing a new simulation model that integrates a strong coupling between the mesoscopic scale and the macroscopic scale. The dynamics within each scale influence the other and reciprocally in an iterative way. More precisely, the model is simple in its components as we focus on the spatial structure of processes rather than on their multi-dimensionality. Therefore, we take into account only population variables, but both at the macroscopic scale of the system of cities and at the mesoscopic scale of the metropolitan area with an urban morphogenesis model. Our contribution is novel regarding previous works in particular regarding the following points: (i) the stylised model explicitly couples distinct scales and ontologies in a strong manner, most models operating only a weak coupling between scales (i.e. no reciprocal and dynamical feedbacks); (ii) the behavior of the model is systematically studied on synthetic systems of cities using model exploration methods.
+This paper contributes to the open question of multi-scalar models of urban dynamics by introducing a new simulation model that integrates a strong coupling between the mesoscopic scale and the macroscopic scale. The dynamics within each scale influence the other and reciprocally in an iterative way. More precisely, the model is simple in its components as we focus on the spatial structure of processes rather than on their multi-dimensionality. Therefore, we take into account only population variables, but both at the macroscopic scale of the system of cities and at the mesoscopic scale of the metropolitan area with an urban morphogenesis model. Our contribution is novel regarding previous works in particular regarding the following points: (i) the stylised model explicitly couples distinct scales and ontologies in a strong manner, most models operating only a weak coupling between scales (i.e. no reciprocal and dynamical feedbacks); (ii) the behaviour of the model is systematically studied on synthetic systems of cities using model exploration methods.
  
 % rq positioning: not large model but simple whih can be understood (cf requiem for large scale models)
  
 The rest of this paper is organised as follows: we first describe the model; we then develop its exploration on synthetic systems of cities, and optimization using a genetic algorithm; we finally discuss developments and implications of this work.
-
-% We describe in the following stylized facts justifying the approach => this could (should?) be an important development/basis for the work?
-
-%Strong coupling and multi-scalarity 
-%   Distinct processes and objects within each different scale
-%   Weak inter-scale coupling, such as progressive resolution for land-use model, does not considers emergence and autonomous scales
-% An integrated model, or strongly coupled, would be \textit{a new model extending the two coupled models in the sense that it includes them in some parameter settings or limit conditions}
-%Urban multi-scalar complexity must be captured by a strongly coupled model
-%no strongly coupled multi-scalar model in the literature (few examples such as  \cite{murcio2015urban} but without distinct ontologies)
-%need to however consider ``simple'' models to be able to understand their behavior and extract knowledge from them
-%\textbf{Research objective: }
-%\textit{Investigate a strong coupling of a simple urban system interaction network at the macroscopic scale with an urban morphogenesis model at the mesoscopic scale}
-
 
 
 \section{Multi-scale urban dynamics model}
 
 \subsection{Rationale}
 
-% TODO ! reformulate - this is the CCS abstract
 
-The main characteristic of our model is a strong coupling between the macroscopic scale of a system of cities with the mesoscopic scale of metropolitan areas. We consider simple urban dimensions with population variables only to describe cities, and use stylised processes. The system of cities evolves following a spatial interaction model as described by \cite{raimbault2020indirect}, assuming that interaction flows between cities will increase their attractivity and thus their population growth rate. Population updates are not done directly following migration flows as in stochastic urban models such as in \cite{james2018zipf}, but with the hypothesis of hidden variables (generally scaling with population) capturing for example economic dimensions, which influence population growth rate. At the mesoscopic scale, we consider the spatial distribution of population within an urban area and focus on the growth of urban form. To achieve this, the reaction-diffusion model of urban morphogenesis described by \cite{raimbault2018calibration} allows capturing concentration forces and dispersion forces, and has been shown to reproduce a large range of existing urban forms. Furthermore, \cite{raimbault2020comparison} showed that this model had good coverage of the morphological space when compared to other models of urban morphogenesis.
+The central feature of our urban simulation model is a strong coupling between the macroscopic scale of a system of cities with the mesoscopic scale of metropolitan areas. We consider simple urban dimensions with population variables only to describe cities, and use stylised processes. The system of cities evolves following a spatial interaction model as described by \cite{raimbault2020indirect}, assuming that interaction flows between cities will increase their attractiveness and thus their population growth rate. Population updates are not done directly following migration flows as in stochastic urban models such as in \cite{james2018zipf}, but with the hypothesis of hidden variables (generally scaling with population) capturing for example economic dimensions, which influence population growth rate. At the mesoscopic scale, we consider the spatial distribution of population within an urban area and focus on the growth of urban form. To achieve this, the reaction-diffusion model of urban morphogenesis described by \cite{raimbault2018calibration} allows capturing concentration forces and dispersion forces, and has been shown to reproduce a large range of existing urban forms. Furthermore, \cite{raimbault2020comparison} showed that this model had good coverage of the morphological space when compared to other models of urban morphogenesis.
 
-To couple the scales, we assume that (i) macroscopic performance of a city will influence the choices made by planers in terms of land-use, and thus parameters of the morphogenesis mode locally - empirical evidence of such links have been suggested in the literature \cite{joy2015toronto} and we stylise them here; (ii) urban form influences the inner workings of a city through congestion and the fostering of exchanges between agents (individuals, firms), and finally the global insertion of the city - thus spatial interaction parameters are updated as a function of local urban form. This last link is the most questionable assumption in terms of empirical evidence and implies many other dimensions than population only. We however work on a stylised explicative model which must keep a simple structure but on which a systematic knowledge of model behavior can be developed. We show in Fig.~\ref{fig:fig1} a schematic description of model structure.
+To couple the scales, we assume that (i) macroscopic performance of a city will influence the choices made by planers in terms of land-use, and thus parameters of the morphogenesis mode locally - empirical evidence of such links have been suggested in the literature \cite{joy2015toronto} and we stylise them here; (ii) urban form influences the inner workings of a city through congestion and the fostering of exchanges between agents (individuals, firms), and finally the global insertion of the city - thus spatial interaction parameters are updated as a function of local urban form. This last link is the most questionable assumption in terms of empirical evidence and implies many other dimensions than population only. We however work on a stylised explicative model which must keep a simple structure but on which a systematic knowledge of model behaviour can be developed. We show in Fig.~\ref{fig:fig1} a schematic description of model structure.
 
-\begin{figure}[H]
-% TODO figure: more details?
+%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
  \includegraphics[width=\linewidth]{figures/multiscale_morph.pdf}
  \caption{Schematic representation of the model architecture. Urban areas with their own urban form are inserted into the macroscopic spatial interaction model, and strong coupling is achieved through top-down and bottom-up feedbacks.\label{fig:fig1}}
 \end{figure}
+%%%%%%%%%%%%%%%%%%
 
-\subsection{Formalization}
+
+\subsection{Formalisation}
 
 
 We consider $N$ urban areas, represented at the macroscopic scale by their population $P_j(t)$ at time $t$, and at the mesoscopic scale by a population grid $p_{kl}^{(j)}(t)$. The model runs for a total number $t_f$ of time steps, and we will assume that $\Delta t = 1$ for the sake of simplicity (the formulas can be generalised for arbitrary values of the time step, for example when running on real data with irregular time sampling).
@@ -240,8 +198,7 @@ Finally, bottom-up feedback is captured by updating the macroscopic parameters. 
 This utility $U_i$ is used to update the interaction decays following
 	
 \begin{equation}
-\label{eq:eq8}
-	d_i (t+1) = d_i (t) \left( 1 + \delta d \cdot \frac{U_i}{\max_k \left|U_k\right|} \right)
+	d_i (t+1) = d_i (t) \left( 1 + \delta d \cdot \frac{U_i}{\max_k \lvert U_k \rvert } \right) \label{eq:eq8}
 \end{equation}
 
 where the multiplier parameter $\delta d$ allows controlling for the influence of local performance on global insertion.
@@ -255,7 +212,7 @@ where the multiplier parameter $\delta d$ allows controlling for the influence o
 The Table~\ref{tab:parameters} summarises model parameters. For clarity, we do not include parameters linked to synthetic model setup, and distinguish them by the scale to which they are attached.
 % TODO ref table beginning section
 	
-\begin{table}[H]
+\begin{table}[h]
 	\caption{Summary of model parameters\label{tab:parameters}}
 	\centering
 	\begin{tabular}{|c|c|c|c|}
@@ -309,7 +266,7 @@ Model implementation is done under some performance constraints: $N$ mesoscopic 
 \subsection{Statistical consistency}
 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\includegraphics[width=\linewidth]{figures/allindics_hist.png}
 	\caption{Statistical distribution of indicators for a sample of 10 parameter values.\label{fig:fig2}}
 \end{figure}
@@ -355,12 +312,12 @@ We show in Fig.~\ref{fig:fig3} that both macroscopic and mesoscopic indicators h
 
 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\includegraphics[width=\linewidth]{figures/onefactor_allindics_mesoMacroDecayUpdateMax_errorbars.png}
 	\caption{Variations of indicators as a function of $\delta d$, when all other parameters are fixed to their nominal value.\label{fig:fig3}}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\includegraphics[width=\linewidth]{figures/deltamesoMorans-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
 	\caption{Relative evolution of average mescoscopic Moran, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig5}}
 \end{figure}
@@ -385,7 +342,7 @@ The strong coupling of scales, in particular the interaction between bottom-up a
 We then proceed to a targeted experiment by detailing more the grid for $\delta \beta$ and $\delta \alpha$. The aim is to investigate the influence of policies taken at the level of urban areas, but which can also be constrained by a higher level of governance. We show in Fig.~\ref{fig:fig5} the influence of $\delta \beta$ on urban form. In particular, the average variation of Moran index captures the centralisation of urban areas. This centralisation exhibits a minimal value when $\delta \alpha$ is low, consistent across values of $\lambda$. This implicates that when decentralisation policies are implemented by acting on aggregation ($\delta \alpha$), the policy on urban sprawl will have an unexpected effect on centralisation. This is an illustration of complex and possibly negative interaction between policies.
 % influenced by upward feedback? No, rather stable when \lambda = 0 -> why? - check influence of lambda
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\includegraphics[width=\textwidth]{figures/deltamesoSlopes-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
 	\caption{Relative evolution of average mescoscopic population hierarchy, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig6}}
 \end{figure}
@@ -394,7 +351,7 @@ When investigating population hierarchy the mesoscopic scale, i.e. inequalities 
 
 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\begin{center}
 	\includegraphics[width=0.6\linewidth]{figures/pareto_macroHierarchy-mesoHierarchy.png}
 	\end{center}
@@ -454,71 +411,49 @@ Our model is a first step towards multi-scalar models of urban dynamics which ef
 
 
 
+% acknowledgments
+%The author acknowledges the funding of their institutions and the EPSRC project number EP/M023583/1. Results obtained in this paper were computed on the vo.complex-system.eu virtual organisation of the European Grid Infrastructure (http://www.egi.eu). We thank the European Grid Infrastructure and its supporting National Grid Initiatives (France-Grilles in particular) for providing the technical support and infrastructure.}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{6pt} 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\authorcontributions{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\funding{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\acknowledgments{The author acknowledges the funding of their institutions and the EPSRC project number EP/M023583/1. Results obtained in this paper were computed on the vo.complex-system.eu virtual organisation of the European Grid Infrastructure (http://www.egi.eu). We thank the European Grid Infrastructure and its supporting National Grid Initiatives (France-Grilles in particular) for providing the technical support and infrastructure.}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\conflictsofinterest{} 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\reftitle{References}
-
-
-\externalbibliography{yes}
-\bibliography{biblio.bib}
+\bibliography{biblio}
 
 
 
-%% for journal Sci
-%\reviewreports{\\
-%Reviewer 1 comments and authors’ response\\
-%Reviewer 2 comments and authors’ response\\
-%Reviewer 3 comments and authors’ response
-%}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 
 
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=2 cm]{Definitions/logo-mdpi}
-%\caption{This is a figure, Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.}
-%\end{figure}   
 
 
 
-%\begin{table}[H]
-%\caption{This is a table caption. Tables should be placed in the main text near to the first time they are cited.}
-%\centering
-%% \tablesize{} %% You can specify the fontsize here, e.g., \tablesize{\footnotesize}. If commented out \small will be used.
-%\begin{tabular}{ccc}
-%\toprule
-%\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+
+
+
+
+%\begin{table}[h]
+%\begin{center}
+%\begin{minipage}{\textwidth}
+%\caption{Example of a lengthy table which is set to full textwidth}\label{tab2}
+%\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccc@{\extracolsep{\fill}}}
+%\toprule%
+%& \multicolumn{3}{@{}c@{}}{Element 1\footnotemark[1]} & \multicolumn{3}{@{}c@{}}{Element 2\footnotemark[2]} \\\cmidrule{2-4}\cmidrule{5-7}%
+%Project & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ \\
 %\midrule
-%entry 1		& data			& data\\
-%entry 2		& data			& data\\
-%\bottomrule
-%\end{tabular}
+%Element 3  & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$\\
+%Element 4  & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$\\
+%\botrule
+%\end{tabular*}
+%\footnotetext{Note: This is an example of table footnote. This is an example of table footnote this is an example of table footnote this is an example of~table footnote this is an example of table footnote.}
+%\footnotetext[1]{Example for a first table footnote.}
+%\footnotetext[2]{Example for a second table footnote.}
+%\end{minipage}
+%\end{center}
 %\end{table}
-
-
-%\begin{listing}[H]
-%\caption{Title of the listing}
-%\rule{\textwidth}{1pt}
-%\raggedright Text of the listing. In font size footnotesize, small, or normalsize. Preferred format: left aligned and single spaced. Preferred border format: top border line and bottom border line.
-%\rule{\textwidth}{1pt}
-%\end{listing}
+%
+%
+%\begin{figure}[h]%
+%\centering
+%\includegraphics[width=0.9\textwidth]{fig.eps}
+%\caption{This is a widefig. This is an example of long caption this is an example of long caption  this is an example of long caption this is an example of long caption}\label{fig1}
+%\end{figure}
+%
