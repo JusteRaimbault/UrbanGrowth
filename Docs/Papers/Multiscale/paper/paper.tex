@@ -9,14 +9,13 @@
 
 \title[Multi-scalar urban dynamics model]{Strong coupling between scales in a multi-scalar model of urban dynamics}
 
+\author{}
+%\author*[1,2,3,4]{\pfx{Dr} \fnm{Juste} \sur{Raimbault} }\email{juste.raimbault@ign.fr}% \dgr{PhD} % orcid 0000-0003-0768-9480
 
-\author*[1,2,3,4]{\pfx{Dr} \fnm{Juste} \sur{Raimbault} \dgr{PhD}}\email{juste.raimbault@ign.fr}
-% orcid 0000-0003-0768-9480
-
-\affil*[1]{\orgdiv{LASTIG}, \orgname{Univ. Gustave Eiffel, IGN-ENSG}} %, \orgaddress{\street{73 avenue de Paris}, \city{Saint-Mand{\'e}}, \postcode{93160}, \country{France}}
-\affil[2]{\orgdiv{Center for Advanced Spatial Analysis}, \orgname{UCL}} % , \orgaddress{\street{90 Tottenham Court Road}, \city{London}, \postcode{}, \country{UK}}
-\affil[3]{\orgdiv{UPS CNRS 3611 ISC-PIF}, \orgname{CNRS}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
-\affil[4]{\orgdiv{UMR CNRS 8504 G{\'e}ographie-cit{\'e}s}, \orgname{Universit{\'e} Paris 1}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
+%\affil*[1]{\orgdiv{LASTIG}, \orgname{Univ. Gustave Eiffel, IGN-ENSG}} %, \orgaddress{\street{73 avenue de Paris}, \city{Saint-Mand{\'e}}, \postcode{93160}, \country{France}}
+%\affil[2]{\orgdiv{Center for Advanced Spatial Analysis}, \orgname{UCL}} % , \orgaddress{\street{90 Tottenham Court Road}, \city{London}, \postcode{}, \country{UK}}
+%\affil[3]{\orgdiv{UPS CNRS 3611 ISC-PIF}, \orgname{CNRS}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
+%\affil[4]{\orgdiv{UMR CNRS 8504 G{\'e}ographie-cit{\'e}s}, \orgname{Universit{\'e} Paris 1}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
 
 
 
@@ -98,7 +97,7 @@ To couple the scales, we assume that (i) macroscopic performance of a city will 
 
 %%%%%%%%%%%%%%%%%%
 \begin{figure}[h]
- \includegraphics[width=\linewidth]{figures/multiscale_morph.pdf}
+ \includegraphics[width=\linewidth]{figures/Fig1.jpg}
  \caption{Schematic representation of the model architecture. Urban areas with their own urban form are inserted into the macroscopic spatial interaction model, and strong coupling is achieved through top-down and bottom-up feedbacks.\label{fig:fig1}}
 \end{figure}
 %%%%%%%%%%%%%%%%%%
@@ -179,7 +178,7 @@ Change in the level of sprawl ($\beta_i$) depends on the population pressure onl
 
 \subsubsection{Evolution of urban form at the mesoscopic scale}
 	
-Mesoscopic grids population grids are evolved separately within each urban area, using the updated morphogenesis model parameters. We follow here the same exact steps described in \cite{raimbault2018calibration}, with parameters $N_G^{(i)}$ total population increase, $\beta_i$ diffusion level, $\alpha_i$ aggregation level, $t_m$ time steps and $n_d$ number of diffusions. The model adds iteratively population to grid cells, by distributing it with a probability following a preferential attachment to population, and diffusing it.
+Mesoscopic grids population grids are evolved separately within each urban area, using the updated morphogenesis model parameters. We follow here the same exact steps described in \cite{raimbault2018calibration}, with parameters $N_G^{(i)}$ total population increase, $\beta_i$ diffusion level, $\alpha_i$ aggregation level, $t_m$ time steps and $n_d$ number of diffusions. The model iteratively adds population to grid cells by distributing it with a probability following a preferential attachment to population, and then diffuses it in space.
 
 In terms of implementation, small population differences in the end between macroscopic and mesoscopic levels (due to rounding in computing the number of steps) is corrected by adjusting the macroscopic increments by the effective mesoscopic increments (which are assumed to be more precise).
 	
@@ -209,8 +208,7 @@ where the multiplier parameter $\delta d$ allows controlling for the influence o
 
 \subsection{Parameters}
 
-The Table~\ref{tab:parameters} summarises model parameters. For clarity, we do not include parameters linked to synthetic model setup, and distinguish them by the scale to which they are attached.
-% TODO ref table beginning section
+Model parameters are summarised in Table~\ref{tab:parameters}. For clarity, we do not include parameters linked to synthetic model setup, and distinguish them by the scale to which they correspond.
 	
 \begin{table}[h]
 	\caption{Summary of model parameters\label{tab:parameters}}
@@ -250,7 +248,7 @@ The model is simulated for 20 macroscopic time steps (order of magnitude of half
 
 \subsection{Indicators}
 
-Model behavior is characterized using the following indicators: at the  macroscopic scale: distributions of population, accessibilities, and centralities (summarized by average, hierarchy, entropy), following \cite{raimbault2020unveiling}. At the mesoscopic scale, urban form is captured following the indicators used by \cite{raimbault2018calibration}, i.e. Moran index, average distance between individuals, hierarchy of population distribution, and entropy of population distribution.
+Model behaviour is characterised using the following indicators: at the  macroscopic scale: distributions of population, accessibilities, and centralities (summarized by average, hierarchy, entropy), following \cite{raimbault2020unveiling}. At the mesoscopic scale, urban form is captured following the indicators used by \cite{raimbault2018calibration}, i.e. Moran index, average distance between individuals, hierarchy of population distribution, and entropy of population distribution.
 
 % TODO extend indicator descritpion
 
@@ -260,14 +258,14 @@ Model behavior is characterized using the following indicators: at the  macrosco
 
 \subsection{Implementation}
 
-Model implementation is done under some performance constraints: $N$ mesoscopic morphogenesis models must be simulated in parallel at each macroscopic time step. On the contrary, macroscopic interactions are efficient to implement as they are based on matrices computations. The model is implemented in \texttt{scala} and integrated into a broader library for spatial sensitivity analysis and dynamical models for settlement systems, namely the \texttt{spatialdata} library \cite{raimbault2020scala}. This library in particular already includes implementations of the models used in \cite{raimbault2020indirect} and \cite{raimbault2018calibration}, but also of other urban interaction models such as \cite{favaro2011gibrat}. The relative large number of parameters and output indicators imposes the use of appropriate model exploration methods to get a grasp of model behavior. Therefore, the parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}. Standalone source code for the model is available on an open git repository as \cite{urbangrowthmodel}. An other open repository for the analysis of results is also available as \cite{urbangrowth}. Simulation data used in this paper is available on the dataverse repository as \cite{dataverse}.
+Model implementation has to meet some performance constraints: $N$ mesoscopic morphogenesis models must be simulated in parallel at each macroscopic time step. On the contrary, macroscopic interactions are efficient to implement as they are based on matrices computations. The model is implemented in \texttt{scala} and integrated into a broader library for spatial sensitivity analysis and dynamical models for settlement systems, namely the \texttt{spatialdata} library \cite{raimbault2020scala}. This library in particular already includes implementations of the models used in \cite{raimbault2020indirect} and \cite{raimbault2018calibration}, but also of other urban interaction models such as \cite{favaro2011gibrat}. The relative large number of parameters and output indicators imposes the use of appropriate model exploration methods to get a grasp of model behavior. Therefore, the parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}. Standalone source code for the model is available on an open git repository as \cite{urbangrowthmodel}. An other open repository for the analysis of results is also available as \cite{urbangrowth}. Simulation data used in this paper is available on the dataverse repository as \cite{dataverse}.
 
 
 \subsection{Statistical consistency}
 
 
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{figures/allindics_hist.png}
+	\includegraphics[width=\linewidth]{figures/Fig2.jpg}
 	\caption{Statistical distribution of indicators for a sample of 10 parameter values.\label{fig:fig2}}
 \end{figure}
 
@@ -300,25 +298,25 @@ Obtained statistical distribution are shown in Fig.~\ref{fig:fig2} for a sample 
 % -> in the grid exp?
 
 We then turn to a grid exploration of the parameter space. %precise successive experiments, step values and varied parameters
-Results show an important role of the strong coupling between scales. This is shown for example by the variation of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion $\delta \beta$) to a ``sprawl'' scenario (positive feedback $\delta \beta$) as shown in Fig.~\ref{fig:fig4} below.
+Results show an important role of the strong coupling between scales. This is shown for example by the variation of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion $\delta \beta$) to a ``sprawl'' scenario (positive feedback $\delta \beta$) as shown in Fig.~\ref{fig:fig3} below.
 
 \begin{figure}[H]
-	\includegraphics[width=\linewidth]{figures/deltaHierarchymacroPopulations-mesoTimeSteps_colorMacroInteractionDecay_facetmesoMacroDecayUpdateMax-macroMesoBetaUpdateMax.png}
-	\caption{Macroscopic hierarchy of populations as a function of mesoscopic time steps $t_m$, for different values of interaction decay $d_G$ (colour), and of feedback parameters $\delta d$ (columns) and $\delta \beta$ (rows).\label{fig:fig4}}
+	\includegraphics[width=\linewidth]{figures/Fig3.jpg}
+	\caption{Macroscopic hierarchy of populations as a function of mesoscopic time steps $t_m$, for different values of interaction decay $d_G$ (colour), and of feedback parameters $\delta d$ (columns) and $\delta \beta$ (rows).\label{fig:fig3}}
 \end{figure}
 
-We show in Fig.~\ref{fig:fig3} that both macroscopic and mesoscopic indicators have a U-shaped behavior as a function of the bottom-up feedback parameter $\delta d$. In terms of macroscopic trajectories, we see that hierarchies of accessibilities, closeness centrality and population are maximal in negative value when the mechanism is deactivated, what means that the feedback process moderates the hierarchisation of the global urban system. For the urban form, this feedback also mitigates the aggregation of population.
+We show in Fig.~\ref{fig:fig4} that both macroscopic and mesoscopic indicators have a U-shaped behaviour as a function of the bottom-up feedback parameter $\delta d$. In terms of macroscopic trajectories, we see that hierarchies of accessibilities, closeness centrality and population are maximal in negative value when the mechanism is deactivated, what means that the feedback process moderates the hierarchisation of the global urban system. For the urban form, this feedback also mitigates the aggregation of population.
 
 
 
 
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{figures/onefactor_allindics_mesoMacroDecayUpdateMax_errorbars.png}
-	\caption{Variations of indicators as a function of $\delta d$, when all other parameters are fixed to their nominal value.\label{fig:fig3}}
+	\includegraphics[width=\linewidth]{figures/Fig4.jpg}
+	\caption{Variations of indicators as a function of $\delta d$, when all other parameters are fixed to their nominal value.\label{fig:fig4}}
 \end{figure}
 
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{figures/deltamesoMorans-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
+	\includegraphics[width=\linewidth]{figures/Fig5.jpg}
 	\caption{Relative evolution of average mescoscopic Moran, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig5}}
 \end{figure}
 
@@ -347,7 +345,7 @@ We then proceed to a targeted experiment by detailing more the grid for $\delta 
 	\caption{Relative evolution of average mescoscopic population hierarchy, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig6}}
 \end{figure}
 
-When investigating population hierarchy the mesoscopic scale, i.e. inequalities of population distribution within the urban area, we find in Fig.~\ref{fig:fig6} a U-shaped behavior as a function of $\delta \beta$ for negative $\delta \alpha$ values, but has a plateau for positive values of $\delta \alpha$, showing also an interaction effect between policies. In terms of hierarchy, a maximal negative value may be wanted to limit inequalities (slopes are negative), and this optimum is reached for a slightly positive value of $\delta \beta$ (left columns in Fig.~\ref{fig:fig6}). This means that sprawl may be needed in some configurations to optimise this objective.
+When investigating population hierarchy the mesoscopic scale, i.e. inequalities of population distribution within the urban area, we find in Fig.~\ref{fig:fig6} a U-shaped behaviour as a function of $\delta \beta$ for negative $\delta \alpha$ values, but has a plateau for positive values of $\delta \alpha$, showing also an interaction effect between policies. In terms of hierarchy, a maximal negative value may be wanted to limit inequalities (slopes are negative), and this optimum is reached for a slightly positive value of $\delta \beta$ (left columns in Fig.~\ref{fig:fig6}). This means that sprawl may be needed in some configurations to optimise this objective.
 
 
 
@@ -390,7 +388,7 @@ Although a stylised and highly simplified model, we were already able to integra
 
 %\subsection{Multi-modeling and concurrent processes}
 
-This model is only a first structural sketch with very restrictive assumption, in particular regarding the downward and upward feedbacks on submodel parameters. There may be no link between urban form and global insertion, or it may be due to other processes, be expressed as an other functional form. An important stage before shifting to robust knowledge will consist in (i) reviewing and making a typology of such potential processes across scales; (ii) including most in a multi-modeling fashion to compare possible concurrent mechanisms.
+This model is only a first structural sketch with very restrictive assumption, in particular regarding the downward and upward feedbacks on submodel parameters. There may be no link between urban form and global insertion, or it may be due to other processes, be expressed as an other functional form. An important stage before shifting to robust knowledge will consist in (i) reviewing and making a typology of such potential processes across scales; (ii) including most in a multi-modelling fashion to compare possible concurrent mechanisms.
 
 Future work also implies the use of more elaborated model exploration and validation methods. For example, using the diversity search integrated in OpenMOLE \cite{reuillon2013openmole} would allow unveiling the diversity of possible future urban trajectories, and possibly unexpected novel pathways towards sustainability, finding for example regimes with the strongest effect of feedback parameters on indicators related to sustainability.
 % spatial sensitivity - influence of synthetic system of cities
