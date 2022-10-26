@@ -236,9 +236,11 @@ Model parameters are summarised in Table~\ref{tab:parameters}. For clarity, we d
 
 \subsection{Synthetic setup}
 
-The system is initialized with synthetic systems of cities. A number $N=20$ cities are distributed randomly into a regional urban system, as a square world of width $w=500km$ (reference unit for the decay parameter). City populations follow a Zipf law with hierarchy parameter $\alpha_0 = 1$ (may be modified in experiments), and $P_0 (0) = 100,000$ the initial size of the largest city. Within each city, we consider initial population grids as monocentric (grid of size $W=50$ and center cell density $P_m = 1000$ population units, following an exponential kernel of width one fifth of the world). %check param + necessary experiment: influecne of other initial configs: at least kernel mixture?
-The model is simulated for 20 macroscopic time steps (order of magnitude of half a century), each representing $t_m$ mesoscopic time steps (parameter changed in experiments).
+We setup the model with synthetic systems of cities. This allows obtaining conclusions independently of geographical contingencies \cite{raimbault2019space}. Setup on real configurations is left for future studies at this stage.
 
+A number $N=20$ cities are distributed randomly into a regional urban system, as a square world of width $w=500km$ (reference unit for the decay parameter). City populations follow a Zipf law with hierarchy parameter $\alpha_0 = 1$ (may be modified in experiments), and $P_0 (0) = 100,000$ the initial size of the largest city. Within each city, we consider initial population grids as monocentric (grid of size $W=50$ and center cell density $P_m = 1000$ population units, following an exponential kernel of width one fifth of the world). The model is simulated for 20 macroscopic time steps (order of magnitude of half a century), each representing $t_m$ mesoscopic time steps (parameter changed in experiments).
+
+%For the mesoscopic monocentric kernel: check param + necessary experiment: influecne of other initial configs: at least kernel mixture?
 
 
 
@@ -248,17 +250,16 @@ The model is simulated for 20 macroscopic time steps (order of magnitude of half
 
 \subsection{Indicators}
 
-Model behaviour is characterised using the following indicators: at the  macroscopic scale: distributions of population, accessibilities, and centralities (summarized by average, hierarchy, entropy), following \cite{raimbault2020unveiling}. At the mesoscopic scale, urban form is captured following the indicators used by \cite{raimbault2018calibration}, i.e. Moran index, average distance between individuals, hierarchy of population distribution, and entropy of population distribution.
+Model behaviour is characterised using aggregated indicators at each scale considered. At the  macroscopic scale, we follow \cite{raimbault2020unveiling} and consider distributions of population, accessibilities, and centralities, all three summarised by their respective average, hierarchy, and entropy. At the mesoscopic scale, urban form is captured following the indicators used by \cite{raimbault2018calibration}, i.e. Moran index, average distance between individuals, hierarchy of population distribution, and entropy of population distribution.
 
-% TODO extend indicator descritpion
+% extend indicator description? not necessary, refs?
 
 \section{Results}
 
 
-
 \subsection{Implementation}
 
-Model implementation has to meet some performance constraints: $N$ mesoscopic morphogenesis models must be simulated in parallel at each macroscopic time step. On the contrary, macroscopic interactions are efficient to implement as they are based on matrices computations. The model is implemented in \texttt{scala} and integrated into a broader library for spatial sensitivity analysis and dynamical models for settlement systems, namely the \texttt{spatialdata} library \cite{raimbault2020scala}. This library in particular already includes implementations of the models used in \cite{raimbault2020indirect} and \cite{raimbault2018calibration}, but also of other urban interaction models such as \cite{favaro2011gibrat}. The relative large number of parameters and output indicators imposes the use of appropriate model exploration methods to get a grasp of model behavior. Therefore, the parameter space is explored with the OpenMOLE model exploration software \cite{reuillon2013openmole}. Standalone source code for the model is available on an open git repository as \cite{urbangrowthmodel}. An other open repository for the analysis of results is also available as \cite{urbangrowth}. Simulation data used in this paper is available on the dataverse repository as \cite{dataverse}.
+Model implementation has to meet some performance constraints: $N$ mesoscopic morphogenesis models must be simulated in parallel at each macroscopic time step. On the contrary, macroscopic interactions are efficient to implement as they are based on matrices computations. The model is implemented in \texttt{scala} and integrated into a broader library for spatial sensitivity analysis and dynamical models for settlement systems, namely the \texttt{spatialdata} library \cite{raimbault2020scala}. This library in particular already includes implementations of the models used in \cite{raimbault2020indirect} and \cite{raimbault2018calibration}, but also of other urban interaction models such as \cite{favaro2011gibrat}. The relative large number of parameters and output indicators imposes the use of appropriate model exploration methods to get a grasp of model behavior. Therefore, the parameter space is explored with the OpenMOLE model exploration software \citep{reuillon2013openmole}. Standalone source code for the model is available on an open git repository as \cite{urbangrowthmodel}. An other open repository for the analysis of results is also available as \cite{urbangrowth}. Simulation data used in this paper is available on the dataverse repository as \cite{dataverse}.
 
 
 \subsection{Statistical consistency}
@@ -271,9 +272,9 @@ Model implementation has to meet some performance constraints: $N$ mesoscopic mo
 
 % one factor sampling
 %(min around 1 for 3 indicators, above 5 for 2 and around 0.5 for 2)}
+% % check these values for steps and repetitions?
 
-The first numerical experiment is aimed at checking the statistical consistency of model output across stochastic repetitions. We run a one-factor-at-a-time sampling on all parameters with 5 steps for each within the domain provided in Table~\ref{tab:parameters}, and 500 stochastic repetitions for each parameter.% check these values
-Obtained statistical distribution are shown in Fig.~\ref{fig:fig2} for a sample of 10 parameters. Different indicators exhibit various distribution shapes, but are always unimodal and generally rather localized. This means different parameter values can be discriminated when considering summary statistics. To estimate the role of noise, we compute Sharpe ratios (rate between average and standard deviations) for each indicators and parameter values. Median values of these across parameters are always larger than 1.6, confirming a reasonable influence of noise on model outputs. We run experiments with 50 replications for each parameter value in the following.
+The first numerical experiment is aimed at checking the statistical consistency of model output across stochastic repetitions. We run a one-factor-at-a-time sampling on all parameters with 5 steps for each within the domain provided in Table~\ref{tab:parameters}, and 500 stochastic repetitions for each parameter. Obtained statistical distribution are shown in Fig.~\ref{fig:fig2} for a sample of 10 parameters. Different indicators exhibit various distribution shapes, but are always unimodal and generally rather localized. Therefore, different parameter values can be discriminated when considering summary statistics. To estimate the role of noise, we compute Sharpe ratios (rate between average and standard deviations) for each indicators and parameter values. Median values of these across parameters are always larger than 1.6, confirming a reasonable influence of noise on model outputs. We run experiments with 50 replications for each parameter value in the following.
 
 
 
@@ -297,8 +298,9 @@ Obtained statistical distribution are shown in Fig.~\ref{fig:fig2} for a sample 
 % We fix the congestion cost for bottom-up feedback to a rather strong effect with $\lambda = 1$.
 % -> in the grid exp?
 
-We then turn to a grid exploration of the parameter space. %precise successive experiments, step values and varied parameters
-Results show an important role of the strong coupling between scales. This is shown for example by the variation of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion $\delta \beta$) to a ``sprawl'' scenario (positive feedback $\delta \beta$) as shown in Fig.~\ref{fig:fig3} below.
+ %precise successive experiments, step values and varied parameters
+
+We then turn to a grid exploration of the parameter space. Results show an important role of the strong coupling between scales. This is shown for example by the variation of macroscopic indicators trajectories when switching from a ``transit-oriented development'' scenario (negative feedback of population growth on diffusion $\delta \beta$) to a ``sprawl'' scenario (positive feedback $\delta \beta$) as shown in Fig.~\ref{fig:fig3} below.
 
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{figures/Fig3.jpg}
@@ -326,7 +328,7 @@ We show in Fig.~\ref{fig:fig4} that both macroscopic and mesoscopic indicators h
 % fig 4
 
 
-The strong coupling of scales, in particular the interaction between bottom-up and top-down feedbacks, has a non-trivial influence on model behavior, as shown in Fig.~\ref{fig:fig4} for the macroscopic hierarchy of populations. This allows investigating the influence of the macroscopic interaction decay and the mesoscopic evolution speed, under stylised scenarios for the top-down feedback. We exhibit interaction effects between $\delta \beta$ and $\delta d$, as quantitative and qualitative behavior as a function of $t_m$ changes across panels. Interaction range $d_G$ has on the contrary no significant effect. We find that increasing $t_m$ decreases macroscopic hierarchy when top-down feedback is deactivated ($\delta \beta=0$), but a cancelling of this effect when it is activated. This may have policy implications in terms of controlling urban sprawl by acting or not on $\delta \beta$, and its influence on the overall urban system.
+The strong coupling of scales, in particular the interaction between bottom-up and top-down feedbacks, has a non-trivial influence on model behaviour, as shown in Fig.~\ref{fig:fig4} for the macroscopic hierarchy of populations. We study therein the influence of the macroscopic interaction decay and the mesoscopic evolution speed, under stylised scenarios for the top-down feedback. We observe interaction effects between $\delta \beta$ and $\delta d$, as quantitative and qualitative behaviour as a function of $t_m$ changes across panels. Interaction range $d_G$ has on the contrary no significant effect. We find that increasing $t_m$ decreases macroscopic hierarchy when top-down feedback is deactivated ($\delta \beta=0$), but a cancelling of this effect when it is activated. This may have policy implications in terms of controlling urban sprawl by acting or not on $\delta \beta$, and its influence on the overall urban system.
 
 
 
@@ -337,21 +339,22 @@ The strong coupling of scales, in particular the interaction between bottom-up a
 
 
 
-We then proceed to a targeted experiment by detailing more the grid for $\delta \beta$ and $\delta \alpha$. The aim is to investigate the influence of policies taken at the level of urban areas, but which can also be constrained by a higher level of governance. We show in Fig.~\ref{fig:fig5} the influence of $\delta \beta$ on urban form. In particular, the average variation of Moran index captures the centralisation of urban areas. This centralisation exhibits a minimal value when $\delta \alpha$ is low, consistent across values of $\lambda$. This implicates that when decentralisation policies are implemented by acting on aggregation ($\delta \alpha$), the policy on urban sprawl will have an unexpected effect on centralisation. This is an illustration of complex and possibly negative interaction between policies.
+We then proceed to a targeted experiment by detailing more the grid for $\delta \beta$ and $\delta \alpha$. The aim is to investigate the influence of policies taken at the level of urban areas, but which can also be constrained by a higher level of governance. We show in Fig.~\ref{fig:fig5} the influence of $\delta \beta$ on urban form. In particular, the average variation of Moran index captures the centralisation of urban areas. It exhibits a minimal value when $\delta \alpha$ is low, consistent across values of $\lambda$. As a consequence, when decentralisation policies are implemented by acting on aggregation ($\delta \alpha$), the policy on urban sprawl will have an unexpected effect on centralisation. This illustrates complex and possibly negative interaction between policies.
+
 % influenced by upward feedback? No, rather stable when \lambda = 0 -> why? - check influence of lambda
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{figures/deltamesoSlopes-macroMesoAlphaUpdateMax_colormacroMesoBetaUpdateMax_facetmesoMacroCongestionCost-mesoMacroDecayUpdateMax_mesoBeta0_11.png}
+	\includegraphics[width=\textwidth]{figures/Fig6.jpg}
 	\caption{Relative evolution of average mescoscopic population hierarchy, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig6}}
 \end{figure}
 
-When investigating population hierarchy the mesoscopic scale, i.e. inequalities of population distribution within the urban area, we find in Fig.~\ref{fig:fig6} a U-shaped behaviour as a function of $\delta \beta$ for negative $\delta \alpha$ values, but has a plateau for positive values of $\delta \alpha$, showing also an interaction effect between policies. In terms of hierarchy, a maximal negative value may be wanted to limit inequalities (slopes are negative), and this optimum is reached for a slightly positive value of $\delta \beta$ (left columns in Fig.~\ref{fig:fig6}). This means that sprawl may be needed in some configurations to optimise this objective.
+When investigating population hierarchy at the mesoscopic scale, i.e. inequalities of population distribution within the urban area, we find in Fig.~\ref{fig:fig6} a U-shaped behaviour as a function of $\delta \beta$ for negative $\delta \alpha$ values, but has a plateau for positive values of $\delta \alpha$, showing also an interaction effect between policies. In terms of hierarchy, a maximal negative value may be wanted to limit inequalities (slopes are negative), and this optimum is reached for a slightly positive value of $\delta \beta$ (left columns in Fig.~\ref{fig:fig6}), what means that sprawl may be needed in some configurations to optimise this objective.
 
 
 
 \begin{figure}[h]
 	\begin{center}
-	\includegraphics[width=0.6\linewidth]{figures/pareto_macroHierarchy-mesoHierarchy.png}
+	\includegraphics[width=0.6\linewidth]{figures/Fig7.jpg}
 	\end{center}
 	\caption{Pareto front obtained with a NSGA2 genetic algorithm, to minimize simultaneously hierarchy at the macroscopic and mesoscopic scales. Point size gives the number of stochastic samples and colour the value of $\delta \beta$.\label{fig:fig7}}
 \end{figure}
@@ -360,23 +363,23 @@ When investigating population hierarchy the mesoscopic scale, i.e. inequalities 
 
 
 
-We finally turn to an optimization objective to investigate if compromises have to be made when targets are simultaneously aimed for at different scales. We therefore use a NSGA2 algorithm implemented in OpenMOLE, with a population of 200 individuals, run for 100,000 generations. Objectives are the average mesoscopic hierarchy which can be minimized for more compact and thus sustainable cities, at the macroscopic population hierarchy. Convergence is reached in terms of hypervolume and points in the Pareto front.
+We finally turn to an optimization objective to investigate if compromises have to be made when targets are simultaneously aimed for at different scales. We therefore use a NSGA2 algorithm (Non-dominated Sorting Genetic Algorithm)  implemented in OpenMOLE, with a population of 200 individuals, run for 100,000 generations. Objectives are the average mesoscopic hierarchy which can be minimized for more compact and thus sustainable cities, at the macroscopic population hierarchy. Convergence is reached in terms of hypervolume and points in the Pareto front.
 
-We show in Fig.~\ref{fig:fig7} the Pareto front obtained after convergence of the algorithm. This confirms that the two objectives are indeed contradictory and that compromises between scales have to be made when trying to optimise both simultaneously. Most points correspond to policies favouring sprawl, at the exception of a small set of points with low macroscopic hierarchy values, which discourage sprawl ($\delta \beta < 0$). Systems with the most equalities between cities within the system of cities correspond to the most hierarchical urban form, implying inequalities at the mesoscopic scales.
+We show in Fig.~\ref{fig:fig7} the Pareto front obtained after convergence of the algorithm. The shape of the front confirms that the two objectives are indeed contradictory and that compromises between scales have to be made when trying to optimise both simultaneously. Most points correspond to policies favouring sprawl, at the exception of a small set of points with low macroscopic hierarchy values, which discourage sprawl ($\delta \beta < 0$). Systems with the most equalities between cities within the system of cities correspond to the most hierarchical urban form, implying inequalities at the mesoscopic scales.
 
 
 
 \section{Discussion}
 
-% TODO improve discussion - link with literature: related results, interpretation regarding previous studies
+%  improve discussion - link with literature: related results, interpretation regarding previous studies
 
-% TODO limitations of the work 
+%  limitations of the work 
 
 \subsection{Theoretical and practical implications}
 
-% TODO implication of results in a broad context
+% implication of results in a broad context
 
-Our model effectively captures an interaction between downward and upward feedback. In that sense, it illustrates weak emergence in its proper sense \cite{bedau2002downward}. This suggests this view can be effectively operationalised into models of urban dynamics.
+Our model effectively captures an interaction between downward and upward feedback. In that sense, it illustrates weak emergence in its proper sense \cite{bedau2002downward}. We confirm therefore that this approach can be effectively operationalised into models of urban dynamics.
 
 In terms of model complexity and in relation to urban complexity in itself, we show that coupling simple models (each having only three parameters) already yields a complicated and complex simulation model. It also requires additional ontologies to achieve the coupling (in our case the policy processes on one side and the congestion-performance process on the other side). Therefore, we suggest this is additional evidence for a necessity of complexity and simulation models to understand urban complexity. This implies in some way the failure of reductionist epistemologies, at least to grab the multi-scalar nature of urban systems.
 % 'suggest in a way failure of reductionist empistemology (in the sense of a la Barthelemy) - at least for grabbing the multi-scalar nature of systems' (seems a tautology though
@@ -394,7 +397,7 @@ Future work also implies the use of more elaborated model exploration and valida
 % spatial sensitivity - influence of synthetic system of cities
 
 Regarding an application of the model on real systems of cities, a calibration on empirical trajectories would be needed. However, such data is difficult to obtain, and some investigations should be made on the relevant calibration targets (in particular at which scale).
-% parametrization on real systems; possibly calibration \cite{raimbault2019ilus}
+% parametrization on real systems; possibly calibration \cite{ilus}
 
 %We also did not include explicitly transportation networks in this model.
 
