@@ -307,25 +307,24 @@ We then turn to a grid exploration of the parameter space. Results show an impor
 	\caption{Macroscopic hierarchy of populations as a function of mesoscopic time steps $t_m$, for different values of interaction decay $d_G$ (colour), and of feedback parameters $\delta d$ (columns) and $\delta \beta$ (rows).\label{fig:fig3}}
 \end{figure}
 
-We show in Fig.~\ref{fig:fig4} that both macroscopic and mesoscopic indicators have a U-shaped behaviour as a function of the bottom-up feedback parameter $\delta d$. In terms of macroscopic trajectories, we see that hierarchies of accessibilities, closeness centrality and population are maximal in negative value when the mechanism is deactivated, what means that the feedback process moderates the hierarchisation of the global urban system. For the urban form, this feedback also mitigates the aggregation of population.
+We show in Fig.~\ref{fig:fig4} that both macroscopic and mesoscopic indicators have a U-shaped behaviour as a function of the bottom-up feedback parameter $\delta d$. Regarding macroscopic indicators, we see that hierarchies of accessibilities, closeness centrality and population are all minimal when the corresponding  feedback mechanism is deactivated ($\delta d = 0$), what means that the feedback process moderates the hierarchisation of the global urban system. Regarding the urban form at the mesoscopic scale, this feedback also mitigates the intra-urban hierarchy of population (since mesoscopic slope has a similar behaviour).
 
 
 
-
+%%%%%%%%%%%%%%%%%%
 \begin{figure}[h]
 	\includegraphics[width=\linewidth]{figures/Fig4.jpg}
 	\caption{Variations of indicators as a function of $\delta d$, when all other parameters are fixed to their nominal value.\label{fig:fig4}}
 \end{figure}
+%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%
 \begin{figure}[h]
 	\includegraphics[width=\linewidth]{figures/Fig5.jpg}
-	\caption{Relative evolution of average mescoscopic Moran, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig5}}
+	\caption{Relative evolution of average mesoscopic Moran, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig5}}
 \end{figure}
+%%%%%%%%%%%%%%%%%%
 
-
-% 20190506_135221_MULTISCALE_TARGETEDGRID_GRID
-
-% fig 4
 
 
 The strong coupling of scales, in particular the interaction between bottom-up and top-down feedbacks, has a non-trivial influence on model behaviour, as shown in Fig.~\ref{fig:fig4} for the macroscopic hierarchy of populations. We study therein the influence of the macroscopic interaction decay and the mesoscopic evolution speed, under stylised scenarios for the top-down feedback. We observe interaction effects between $\delta \beta$ and $\delta d$, as quantitative and qualitative behaviour as a function of $t_m$ changes across panels. Interaction range $d_G$ has on the contrary no significant effect. We find that increasing $t_m$ decreases macroscopic hierarchy when top-down feedback is deactivated ($\delta \beta=0$), but a cancelling of this effect when it is activated. This may have policy implications in terms of controlling urban sprawl by acting or not on $\delta \beta$, and its influence on the overall urban system.
@@ -345,10 +344,10 @@ We then proceed to a targeted experiment by detailing more the grid for $\delta 
 
 \begin{figure}[h]
 	\includegraphics[width=\textwidth]{figures/Fig6.jpg}
-	\caption{Relative evolution of average mescoscopic population hierarchy, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (colour), and of feedback parameters $\delta d$ (columns) and $\lambda$ (rows).\label{fig:fig6}}
+	\caption{Relative evolution of average mescoscopic population hierarchy, as a function of feedback parameter $\delta \beta$, for different values of feedback parameter $\delta \alpha$ (columns), and of feedback parameters $\delta d$ (colour) and $\lambda$ (rows).\label{fig:fig6}}
 \end{figure}
 
-When investigating population hierarchy at the mesoscopic scale, i.e. inequalities of population distribution within the urban area, we find in Fig.~\ref{fig:fig6} a U-shaped behaviour as a function of $\delta \beta$ for negative $\delta \alpha$ values, but has a plateau for positive values of $\delta \alpha$, showing also an interaction effect between policies. In terms of hierarchy, a maximal negative value may be wanted to limit inequalities (slopes are negative), and this optimum is reached for a slightly positive value of $\delta \beta$ (left columns in Fig.~\ref{fig:fig6}), what means that sprawl may be needed in some configurations to optimise this objective.
+When investigating population hierarchy at the mesoscopic scale, i.e. inequalities of population distribution within the urban area, we find in Fig.~\ref{fig:fig6} a U-shaped behaviour as a function of $\delta \beta$ for negative $\delta \alpha$ values. This behaviour disappear for positive values of $\delta \alpha$, showing also an interaction effect between policies. A maximal value of this indicator may be desirable to limit inequalities of population distribution within urban areas, and this optimum is reached for a slightly positive value of $\delta \beta$ (left columns in Fig.~\ref{fig:fig6}), what means that a slight amount of urban sprawl may be needed in some configurations to optimise this objective.
 
 
 
@@ -363,7 +362,7 @@ When investigating population hierarchy at the mesoscopic scale, i.e. inequaliti
 
 
 
-We finally turn to an optimization objective to investigate if compromises have to be made when targets are simultaneously aimed for at different scales. We therefore use a NSGA2 algorithm (Non-dominated Sorting Genetic Algorithm)  implemented in OpenMOLE, with a population of 200 individuals, run for 100,000 generations. Objectives are the average mesoscopic hierarchy which can be minimized for more compact and thus sustainable cities, at the macroscopic population hierarchy. Convergence is reached in terms of hypervolume and points in the Pareto front.
+We finally turn to an optimization objective to investigate if compromises have to be made when targets are simultaneously aimed for at different scales. We therefore use a NSGA2 algorithm - Non-dominated Sorting Genetic Algorithm - implemented in OpenMOLE, with a population of 200 individuals, run for 100,000 generations. Objectives are the average mesoscopic hierarchy which can be minimized for more compact and thus sustainable cities, at the macroscopic population hierarchy. Convergence is reached in terms of hypervolume and points in the Pareto front.
 
 We show in Fig.~\ref{fig:fig7} the Pareto front obtained after convergence of the algorithm. The shape of the front confirms that the two objectives are indeed contradictory and that compromises between scales have to be made when trying to optimise both simultaneously. Most points correspond to policies favouring sprawl, at the exception of a small set of points with low macroscopic hierarchy values, which discourage sprawl ($\delta \beta < 0$). Systems with the most equalities between cities within the system of cities correspond to the most hierarchical urban form, implying inequalities at the mesoscopic scales.
 
@@ -377,21 +376,17 @@ We show in Fig.~\ref{fig:fig7} the Pareto front obtained after convergence of th
 
 \subsection{Theoretical and practical implications}
 
-% implication of results in a broad context
+In a broad perspective, our model effectively captures an interaction between downward and upward feedback. In that sense, it illustrates weak emergence in its proper sense \citep{bedau2002downward}. We confirm therefore that this approach can be effectively operationalised into models of urban dynamics. 
+Considering with more details the simulation results we obtained, % TODO bilan des faits importants
 
-Our model effectively captures an interaction between downward and upward feedback. In that sense, it illustrates weak emergence in its proper sense \cite{bedau2002downward}. We confirm therefore that this approach can be effectively operationalised into models of urban dynamics.
+Considering urban complexity and how it can be captured within simulation models, we show that coupling simple models (each having only three parameters) already yields a complicated and complex simulation model. It also requires additional ontologies to achieve the coupling (in our case the policy processes for the bottom-up feedback and the congestion-performance process for the top-down feedback). We suggest this is additional evidence for a necessity of complex simulation models to understand urban complexity. In some way, reductionist epistemologies will thus fail to grab the multi-scalar nature of urban systems.
 
-In terms of model complexity and in relation to urban complexity in itself, we show that coupling simple models (each having only three parameters) already yields a complicated and complex simulation model. It also requires additional ontologies to achieve the coupling (in our case the policy processes on one side and the congestion-performance process on the other side). Therefore, we suggest this is additional evidence for a necessity of complexity and simulation models to understand urban complexity. This implies in some way the failure of reductionist epistemologies, at least to grab the multi-scalar nature of urban systems.
-% 'suggest in a way failure of reductionist empistemology (in the sense of a la Barthelemy) - at least for grabbing the multi-scalar nature of systems' (seems a tautology though
-
-Although a stylised and highly simplified model, we were already able to integrate parameters linked to policies. Indeed, governance processes are intrinsically multi-scalar \cite{liao2017ouverture}. Therefore, developing such models is a first step towards a progressive integration models for policy and sustainable management of territories.
+Although a stylised and highly simplified model, we were already able to integrate parameters linked to policies. Indeed, governance processes are intrinsically multi-scalar \citep{liao2017ouverture}, and developing such models is a first step towards a progressive integration of models for policy and sustainable management of territories.
 
 
 \subsection{Developments}
 
-%\subsection{Multi-modeling and concurrent processes}
-
-This model is only a first structural sketch with very restrictive assumption, in particular regarding the downward and upward feedbacks on submodel parameters. There may be no link between urban form and global insertion, or it may be due to other processes, be expressed as an other functional form. An important stage before shifting to robust knowledge will consist in (i) reviewing and making a typology of such potential processes across scales; (ii) including most in a multi-modelling fashion to compare possible concurrent mechanisms.
+The model we studied is only a first structural sketch with very restrictive assumptions,s in particular regarding the downward and upward feedbacks on submodel parameters. There may be no such direct link between urban form and global performance of urban areas, or it may be due to other processes, or captured with others functional forms. An important stage before shifting to robust knowledge will consist in (i) reviewing and making a typology of such potential processes across scales; (ii) including most in a multi-modelling framework to compare the plausibility of possible concurrent mechanisms.
 
 Future work also implies the use of more elaborated model exploration and validation methods. For example, using the diversity search integrated in OpenMOLE \cite{reuillon2013openmole} would allow unveiling the diversity of possible future urban trajectories, and possibly unexpected novel pathways towards sustainability, finding for example regimes with the strongest effect of feedback parameters on indicators related to sustainability.
 % spatial sensitivity - influence of synthetic system of cities
@@ -401,7 +396,10 @@ Regarding an application of the model on real systems of cities, a calibration o
 
 %We also did not include explicitly transportation networks in this model.
 
-Our model is a first step towards multi-scalar models of urban dynamics which effectively include a strong coupling between processes at different scales. While remaining highly stylised, we showed an important role of the coupling and unveiled for example interaction effects between different types of policies. This type of approach will need in the future to be further developed, towards multi-scalar models for sustainable policy making \cite{Rozenblat2018}. This works paves the way for such more complex models.
+
+\section{Conclusion}
+
+Our model is a first step towards multi-scalar models of urban dynamics which effectively include a strong coupling between processes at different scales. While remaining highly stylised, we showed an important role of the coupling and unveiled for example interaction effects between different types of policies. This type of approach will need in the future to be further developed, towards multi-scalar models for sustainable policy making \citep{Rozenblat2018}. This works paves the way for such more complex models.
 
 
 
