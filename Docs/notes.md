@@ -1,6 +1,10 @@
 
 
 
+## 2023/07/20
+
+These multiscale meca flux: ML - "Modélisations hybrides par méthode d'apprentissage supervisé pour le couplage multi-échelle d'écoulements de gaz faiblement raréfiés en conduites" (sout UGE le 20/07) -> check cette lit pour multiscale
+
 ## 2022/06/22
 
 
