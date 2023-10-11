@@ -16,3 +16,9 @@
 [submodule "Docs/Papers/CityGrowth/CityGrowthRegularities-chapter"]
 	path = Docs/Papers/CityGrowth/CityGrowthRegularities-chapter
 	url = git@github.com:JusteRaimbault/CityGrowthRegularities-chapter.git
+[submodule "Models/UrbanPlanning/simplu3D"]
+	path = Models/UrbanPlanning/simplu3D
+	url = https://github.com/SimPLU3D/simplu3D.git
+[submodule "Models/UrbanPlanning/simplu3D-tutorial"]
+	path = Models/UrbanPlanning/simplu3D-tutorial
+	url = https://github.com/SimPLU3D/simplu3D-tutorial.git
