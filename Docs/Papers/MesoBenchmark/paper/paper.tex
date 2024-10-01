@@ -1,212 +1,39 @@
-% Template for PLoS
-% Version 3.5 March 2018
-%
-% % % % % % % % % % % % % % % % % % % % % %
-%
-% -- IMPORTANT NOTE
-%
-% This template contains comments intended 
-% to minimize problems and delays during our production 
-% process. Please follow the template instructions
-% whenever possible.
-%
-% % % % % % % % % % % % % % % % % % % % % % % 
-%
-% Once your paper is accepted for publication, 
-% PLEASE REMOVE ALL TRACKED CHANGES in this file 
-% and leave only the final text of your manuscript. 
-% PLOS recommends the use of latexdiff to track changes during review, as this will help to maintain a clean tex file.
-% Visit https://www.ctan.org/pkg/latexdiff?lang=en for info or contact us at latex@plos.org.
-%
-%
-% There are no restrictions on package use within the LaTeX files except that 
-% no packages listed in the template may be deleted.
-%
-% Please do not include colors or graphics in the text.
-%
-% The manuscript LaTeX source should be contained within a single file (do not use \input, \externaldocument, or similar commands).
-%
-% % % % % % % % % % % % % % % % % % % % % % %
-%
-% -- FIGURES AND TABLES
-%
-% Please include tables/figure captions directly after the paragraph where they are first cited in the text.
-%
-% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
-% - Figures should be uploaded separately from your manuscript file. 
-% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
-% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
-% For figure citations, please use "Fig" instead of "Figure".
-% See http://journals.plos.org/plosone/s/figures for PLOS figure guidelines.
-%
-% Tables should be cell-based and may not contain:
-% - spacing/line breaks within cells to alter layout or alignment
-% - do not nest tabular environments (no tabular environments within tabular environments)
-% - no graphics or colored text (cell background color/shading OK)
-% See http://journals.plos.org/plosone/s/tables for table guidelines.
-%
-% For tables that exceed the width of the text column, use the adjustwidth environment as illustrated in the example table in text below.
-%
-% % % % % % % % % % % % % % % % % % % % % % % %
-%
-% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
-%
-% IMPORTANT
-% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://journals.plos.org/plosone/s/latex
-%
-% For inline equations, please be sure to include all portions of an equation in the math environment.  For example, x$^2$ is incorrect; this should be formatted as $x^2$ (or $\mathrm{x}^2$ if the romanized font is desired).
-%
-% Do not include text that is not math in the math environment. For example, CO2 should be written as CO\textsubscript{2} instead of CO$_2$.
-%
-% Please add line breaks to long display equations when possible in order to fit size of the column. 
-%
-% For inline equations, please do not include punctuation (commas, etc) within the math environment unless this is part of the equation.
-%
-% When adding superscript or subscripts outside of brackets/braces, please group using {}.  For example, change "[U(D,E,\gamma)]^2" to "{[U(D,E,\gamma)]}^2". 
-%
-% Do not use \cal for caligraphic font.  Instead, use \mathcal{}
-%
-% % % % % % % % % % % % % % % % % % % % % % % % 
-%
-% Please contact latex@plos.org with any questions.
-%
-% % % % % % % % % % % % % % % % % % % % % % % %
-
-\documentclass[10pt,letterpaper]{article}
-\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
-%\documentclass[10pt]{article}
-%\usepackage[margin=2cm]{geometry}
-
-% amsmath and amssymb packages, useful for mathematical formulas and symbols
-\usepackage{amsmath,amssymb}
-
-% Use adjustwidth environment to exceed column width (see example table in text)
-\usepackage{changepage}
-
-% Use Unicode characters when possible
-\usepackage[utf8x]{inputenc}
-
-% textcomp package and marvosym package for additional characters
-\usepackage{textcomp,marvosym}
-
-% cite package, to clean up citations in the main text. Do not remove.
-\usepackage{cite}
-
-% Use nameref to cite supporting information files (see Supporting Information section for more info)
-\usepackage{nameref,hyperref}
-
-% line numbers
-\usepackage[right]{lineno}
-
-% ligatures disabled
-\usepackage{microtype}
-\DisableLigatures[f]{encoding = *, family = * }
-
-% color can be used to apply background shading to table cells only
-\usepackage[table]{xcolor}
-
-% array package and thick rules for tables
-\usepackage{array}
-
-% create "+" rule type for thick vertical lines
-\newcolumntype{+}{!{\vrule width 2pt}}
-
-% create \thickcline for thick horizontal lines of variable length
-\newlength\savedwidth
-\newcommand\thickcline[1]{%
-  \noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
-  \cline{#1}%
-  \noalign{\vskip\arrayrulewidth}%
-  \noalign{\global\arrayrulewidth\savedwidth}%
-}
-
-% \thickhline command for thick horizontal lines that span the table
-\newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
-\hline
-\noalign{\global\arrayrulewidth\savedwidth}}
+\documentclass[referee,lineno,pdflatex,sn-apa]{sn-jnl}
 
 
-% Remove comment for double spacing
-\usepackage{setspace} 
-\doublespacing
+\jyear{2024}%
 
-% Text layout
-\raggedright
-\setlength{\parindent}{0.5cm}
-\textwidth 5.25in 
-\textheight 8.75in
-
-% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
-% Captions will be left justified
-\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
-\renewcommand{\figurename}{Fig}
-
-% Use the PLoS provided BiBTeX style
-\bibliographystyle{plos2015}
-
-% Remove brackets from numbering in List of References
-\makeatletter
-\renewcommand{\@biblabel}[1]{\quad#1.}
-\makeatother
-
-
-
-% Header and Footer with logo
-\usepackage{lastpage,fancyhdr,graphicx}
-\usepackage{epstopdf}
-\pagestyle{myheadings}
-\pagestyle{fancy}
-\fancyhf{}
-\setlength{\headheight}{27.023pt}
-%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
-\rfoot{\thepage/\pageref{LastPage}}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
-\fancyheadoffset[L]{2.25in}
-\fancyfootoffset[L]{2.25in}
-\lfoot{\today}
-
-%% Include all macros below
-
-\newcommand{\lorem}{{\bf LOREM}}
-\newcommand{\ipsum}{{\bf IPSUM}}
-
-%% END MACROS SECTION
-
+\raggedbottom
 
 \begin{document}
-\vspace*{0.2in}
 
-% Title must be 250 characters or less.
-\begin{flushleft}
-{\Large
-\textbf\newline{A comparison of simple models for urban morphogenesis} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
-}
-\newline
-% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
-\\
-Juste Raimbault\textsuperscript{1,2,3,*}
-\bigskip\\
-\textsuperscript{1} Center for Advanced Spatial Analysis, University College London
-\\
-\textsuperscript{2} UPS CNRS 3611 ISC-PIF
-\\
-\textsuperscript{3} UMR CNRS 8504 G{\'e}ographie-cit{\'e}s
-\bigskip\\
-* juste.raimbault@polytechnique.edu
+\title[A comparison of simple models for urban morphogenesis]{A comparison of simple models for urban morphogenesis}
+
+\author{}
+%\author*[1,2,3,4]{\pfx{Dr} \fnm{Juste} \sur{Raimbault} }\email{juste.raimbault@ign.fr}% \dgr{PhD} % orcid 0000-0003-0768-9480
+
+%\affil*[1]{\orgdiv{LASTIG}, \orgname{Univ. Gustave Eiffel, IGN-ENSG}} %, \orgaddress{\street{73 avenue de Paris}, \city{Saint-Mand{\'e}}, \postcode{93160}, \country{France}}
+%\affil[2]{\orgdiv{Center for Advanced Spatial Analysis}, \orgname{UCL}} % , \orgaddress{\street{90 Tottenham Court Road}, \city{London}, \postcode{}, \country{UK}}
+%\affil[3]{\orgdiv{UPS CNRS 3611 ISC-PIF}, \orgname{CNRS}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
+%\affil[4]{\orgdiv{UMR CNRS 8504 G{\'e}ographie-cit{\'e}s}, \orgname{Universit{\'e} Paris 1}} % , \orgaddress{\street{Place Nationale}, \city{Paris}, \postcode{75013}, \country{France}}
 
 
 
-\end{flushleft}
-
-% Please keep the abstract below 300 words
-\section*{Abstract}
-\vspace{1cm}
-The spatial distribution of population and activities within urban areas, or urban form at the mesoscopic scale, is the outcome of multiple antagonist processes. We propose in this paper to benchmark different models of urban morphogenesis, to systematically compare the urban forms they can produce. Different types of approaches are included, such as a reaction-diffusion model, a gravity-based model, and correlated percolation. Applying a diversity search algorithm, we estimate the feasible space of each model within a space of urban form indicators, in comparison of empirical values for worldwide urban areas. We find a complementarity of the different types of processes, advocating for a plurality of urban models.
-% urban morphogenesis; reaction-diffusion; correlated percolation; gravity model; novelty search
 
 
-\linenumbers
+% Target journal : Computational Urban Science https://link.springer.com/journal/43762/submission-guidelines
+
+% TODO Reviews Plos One
+
+
+
+
+\abstract{The spatial distribution of population and activities within urban areas, or urban form at the mesoscopic scale, is the outcome of multiple antagonist processes. We propose in this paper to benchmark different models of urban morphogenesis, to systematically compare the urban forms they can produce. Different types of approaches are included, such as a reaction-diffusion model, a gravity-based model, and correlated percolation. Applying a diversity search algorithm, we estimate the feasible space of each model within a space of urban form indicators, in comparison of empirical values for worldwide urban areas. We find a complementarity of the different types of processes, advocating for a plurality of urban models.}
+
+\keywords{Urban morphogenesis; Reaction-diffusion; Correlated percolation; Gravity model; Novelty search}
+
+
+\maketitle
 
 
 
@@ -222,7 +49,8 @@ Batty, M. (2001). Polynucleated urban landscapes. Urban studies, 38(4), 635-655.
 
 \cite{bithellsystematic} benchmark abm covid
 
-\cite{jun2020modling} entropy and urban growth
+\cite{jun2020modling} entropy and urban growth
+
 
 \cite{Nicholse2100769118} reproducibility - benchmarks - sequence of studies
 
@@ -439,15 +267,6 @@ This work is a first step towards a systematic benchmark of simple urban morphog
 We have implemented and systematically compared four very different simple models for urban morphogenesis, including reaction-diffusion, correlated percolation, exponential mixture and a gravitational aggregation model. We applied a diversity search algorithm to obtain the feasible morphological space. The results confirm a complementarity between the models and the relevance of a plurality in urban modeling approaches.
 
 
-%\section*{Supporting information}
-
-
-
-%\section*{Acknowledgments}
-
-
-
-\nolinenumbers
 
 
 \bibliography{biblio}
@@ -464,7 +283,8 @@ We have implemented and systematically compared four very different simple model
 % style file and paste the contents of your .bbl file
 % here. See http://journals.plos.org/plosone/s/latex for 
 % step-by-step instructions.
-% 
+% 
+
 
 
 
