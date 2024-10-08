@@ -7,7 +7,7 @@
 
 \begin{document}
 
-\title[Multi-scalar urban dynamics model]{Strong coupling between scales in a multi-scalar model of urban dynamics}
+\title[Multi-scalar model of urban dynamics]{Strong coupling between scales in a multi-scalar model of urban dynamics}
 
 \author{}
 %\author*[1,2,3,4]{\pfx{Dr} \fnm{Juste} \sur{Raimbault} }\email{juste.raimbault@ign.fr}% \dgr{PhD} % orcid 0000-0003-0768-9480
@@ -54,9 +54,7 @@
 
 \cite{Ludeschere1922872118} nw sci / climate numerical sims: sort of multiscale
 
-\cite{lockerby2015asynchronous} physics multiscale simulations
-+ multiscale traffic models (Nancy?)
-
+% multiscale traffic models (Nancy?) -> ? - not found -> more lit joueiai2014multiscale ok
 
 \cite{vinci2021population} : link macro migration - meso structure (polycentrism)
 
@@ -77,17 +75,21 @@ Territorial dynamics, and more particularly urban dynamics, have according to \c
 
 Multi-scalar models of urban dynamics are however still at their beginnings. \cite{murcio2015urban} consider population flows at different spatial ranges from the urban area to the country, but does not incorporate distinct ontologies and processes for the different scales. \cite{batty2005agents} however suggests that a similar formalism can be applied to urban processes at different scales. Multi-level statistical models capture some information at imbricated scales \citep{shu2020modelling}, although they can not be used as dynamical simulation models. Similarly, multi-level cellular automata (CA) models for urban growth include factors influencing urban expansion at multiple scales \citep{xu2019directional}. \cite{cheng2003modelling} propose a general framework for such approaches. \cite{torrens2001cellular} suggest that hybrid models coupling CA with other formalisms is a crucial development in the field. \cite{white2006modeling} introduces a CA with variable grid size to account for heterogeneities across scales. \cite{zhu2020dynamic} couple an agent-based model with a CA at multiple scales. \cite{yu2018modeling} embed a local CA into a regional intercity model and a macroscopic potential model. \cite{ford2019multi} couple at different scales an urban development model with a flooding risk model to forecast the future impact of extreme climate events on the London metropolitan region. \cite{xu2020urban} develop an agent-based model of urban expansion with both macro and micro agents. \cite{raimbault:halshs-02013006} suggests that integrating network dynamics at the link level in a macroscopic urban system models is a way to implement a multi-scale model, as done by \cite{raimbault2020hierarchy} which explores hierarchy properties of cities and networks in this context.
 
-In disciplines that are neighbour to urban modelling, methods have been developed for multi-scale models. For example in spatial epidemiology, \cite{banos2015importance} combines agent-based modelling for local diffusion dynamics with differential equations at the population scale. The NetLogo software for agent-based modelling includes a specific extension for multi-scale modelling \cite{hjorth2020levelspace}. Multi-scale models have also been used for the simulation of crowd dynamics \cite{crociani2016multi}. The study of traffic is also made more accurate by coupling macroscopic and microscopic models \cite{boulet2020coupling}. The management of ecosystems  requires integrating across actors and scales \citep{belem2013organizational}. These non-exhaustive illustrations highlight how the integration of scales is a crucial feature and issue in the understanding of complex systems \citep{chavalarias2009french}.
+In disciplines that are neighbour to urban modelling, methods have been developed for multi-scale models. For example in spatial epidemiology, \cite{banos2015importance} combines agent-based modelling for local diffusion dynamics with differential equations at the population scale. The NetLogo software for agent-based modelling includes a specific extension for multi-scale modelling \cite{hjorth2020levelspace}. Multi-scale models have also been used for the simulation of crowd dynamics \cite{crociani2016multi}. The study of traffic is also made more accurate by coupling macroscopic and microscopic models \citep{boulet2020coupling,joueiai2014multiscale}.
+Urban climate \citep{rasheed2009multiscale}
+The management of ecosystems requires integrating across actors and scales \citep{belem2013organizational}. These non-exhaustive illustrations highlight how the integration of scales is a crucial feature but difficult issue to adress for the understanding of urban and social complex systems \citep{chavalarias2009french}.
 
-In other disciplines such as physics or engineering, the methodology and application of multi-scale modelling is much more mature.
+In other disciplines such as physics or engineering, the methodology and application of multi-scale modelling has been studied more extensively. \cite{lockerby2015asynchronous}
 % TODO examples physics
 
 % TODO emphasize more the research problem
+% rq positioning: not large model but simple whih can be understood (cf requiem for large scale models)
+% \citep{batty2014can}
 
 
 This paper contributes to the open question of multi-scalar models of urban dynamics by introducing a new simulation model that integrates a strong coupling between the mesoscopic scale and the macroscopic scale. The dynamics within each scale influence the other and reciprocally in an iterative way. More precisely, the model is simple in its components as we focus on the spatial structure of processes rather than on their multi-dimensionality. Therefore, we take into account only population variables, but both at the macroscopic scale of the system of cities and at the mesoscopic scale of the metropolitan area with an urban morphogenesis model. Our contribution is novel regarding previous works in particular regarding the following points: (i) the stylised model explicitly couples distinct scales and ontologies in a strong manner, most models operating only a weak coupling between scales (i.e. no reciprocal and dynamical feedbacks); (ii) the behaviour of the model is systematically studied on synthetic systems of cities using model exploration methods.
  
-% rq positioning: not large model but simple whih can be understood (cf requiem for large scale models)
+
  
 The rest of this paper is organised as follows: we first describe the model; we then develop its exploration on synthetic systems of cities, and optimization using a genetic algorithm; we finally discuss developments and implications of this work.
 
